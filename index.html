@@ -399,10 +399,10 @@
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
       color: #334155;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.63rem;
-      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 0.65rem;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -410,6 +410,43 @@
       border-color: var(--accent-blue);
       color: var(--accent-blue);
       background: #eff6ff;
+    }
+    .scale-control-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #f1f5f9;
+      padding: 2px 4px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+    }
+    .scale-step-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      border: none;
+      background: #ffffff;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 0.8rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      transition: all 0.15s ease;
+    }
+    .scale-step-btn:hover {
+      background: var(--accent-blue);
+      color: #ffffff;
+    }
+    .scale-val {
+      font-weight: 700;
+      font-size: 0.68rem;
+      color: var(--accent-blue);
+      min-width: 38px;
+      text-align: center;
     }
 
     /* Left Side Quick Palette - Minimalist White Column */
@@ -1011,9 +1048,14 @@
         <!-- Ruler Vector Icon -->
         <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h3v8z"/></svg>
       </span>
-      <span class="dim-tag">1:1 SCALE</span>
-      <span id="dimText">42.5 x 45.0 x 21.3 cm</span>
-      <button class="scale-toggle-btn" id="scaleToggleBtn" type="button" aria-label="Toggle 2.5x Close-up Zoom">Zoom 2.5x</button>
+      <span class="dim-tag">1:1 REAL SIZE</span>
+      <span id="dimText">37.7 x 43.7 x 46.0 cm</span>
+      <div class="scale-control-group" title="Adjust 3D Size">
+        <button class="scale-step-btn" id="scaleDownBtn" type="button" aria-label="Scale Down 10%" title="Scale Down 10%">-</button>
+        <span class="scale-val" id="scalePctText">100%</span>
+        <button class="scale-step-btn" id="scaleUpBtn" type="button" aria-label="Scale Up 10%" title="Scale Up 10%">+</button>
+      </div>
+      <button class="scale-toggle-btn" id="scaleResetBtn" type="button" aria-label="Reset to Real Life 1:1 Scale" title="Reset to Real-World 1:1 Scale">1:1 Reset</button>
     </div>
   </div>
 
@@ -1105,9 +1147,9 @@
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
-    src="models/assembled_pc.glb?v=3"
-    ios-src="models/assembled_pc.usdz?v=3"
-    scale="0.46 0.46 0.46"
+    src="models/assembled_pc.glb?v=4"
+    ios-src="models/assembled_pc.usdz?v=4"
+    scale="1 1 1"
     ar
     ar-modes="webxr scene-viewer quick-look"
     ar-scale="auto"
@@ -1132,15 +1174,15 @@
   <div class="bottom-selector-wrap">
     <div class="active-spec-pill">
       <span class="spec-name" id="activePartTitle">Nethuna Gaming Rig (Fully Built)</span>
-      <span class="spec-desc" id="activePartDesc">42.5 x 45.0 x 21.3 cm - Fully Assembled with RTX 4080 &amp; Z790</span>
+      <span class="spec-desc" id="activePartDesc">37.7 x 43.7 x 46.0 cm - Fully Assembled with RTX 4080 &amp; Z790</span>
     </div>
 
     <div class="component-strip" id="compStrip">
       <!-- 0. Fully Assembled Gaming PC (Default & Primary Hero Item) -->
       <div class="comp-item featured active" 
            data-model="models/assembled_pc.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-scale="1.0"
+           data-dims="37.7 x 43.7 x 46.0 cm"
            data-step="6"
            data-title="Nethuna Gaming Rig (Fully Built)" 
            data-desc="All Components Installed: Z790 + RTX 4080 + Kraken 360 + DDR5 + i9">
@@ -1154,8 +1196,8 @@
       <!-- 1. Step 1: Chassis (Empty) -->
       <div class="comp-item" 
            data-model="models/case.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-scale="1.0"
+           data-dims="37.7 x 43.7 x 46.0 cm"
            data-step="1"
            data-title="Build Step 1: Chassis (Empty)" 
            data-desc="Nethuna Mid-Tower Chassis - Dual Tempered Glass (Empty)">
@@ -1169,8 +1211,8 @@
       <!-- 2. Step 2: + Motherboard -->
       <div class="comp-item" 
            data-model="models/stage2_mobo.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-scale="1.0"
+           data-dims="37.7 x 43.7 x 46.0 cm"
            data-step="2"
            data-title="Build Step 2: Motherboard Installed" 
            data-desc="ROG Z790 Hero ATX Board Mounted to Chassis Standoffs">
@@ -1184,8 +1226,8 @@
       <!-- 3. Step 3: + CPU & RAM -->
       <div class="comp-item" 
            data-model="models/stage3_cpu_ram.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-scale="1.0"
+           data-dims="37.7 x 43.7 x 46.0 cm"
            data-step="3"
            data-title="Build Step 3: CPU &amp; RAM Inserted" 
            data-desc="Intel Core i9-14900K in Socket + Dominator DDR5 in Slots">
@@ -1199,8 +1241,8 @@
       <!-- 4. Step 4: + 360mm Cooler -->
       <div class="comp-item" 
            data-model="models/stage4_cooler.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-scale="1.0"
+           data-dims="37.7 x 43.7 x 46.0 cm"
            data-step="4"
            data-title="Build Step 4: 360mm Cooler Mounted" 
            data-desc="Kraken Elite 360 Radiator &amp; Fans Mounted on Top Ceiling">
@@ -1214,8 +1256,8 @@
       <!-- 5. Step 5: + RTX 4080 GPU -->
       <div class="comp-item" 
            data-model="models/stage5_gpu.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-scale="1.0"
+           data-dims="37.7 x 43.7 x 46.0 cm"
            data-step="5"
            data-title="Build Step 5: RTX 4080 GPU Slotted" 
            data-desc="Triple Axial-Fan GPU Locked into Primary PCIe 5.0 Slot">
@@ -1226,11 +1268,11 @@
         <span class="comp-item-text">Step 5: + GPU</span>
       </div>
 
-      <!-- 4. Individual Part: GPU -->
+      <!-- 6. Individual Part: GPU -->
       <div class="comp-item" 
            data-model="models/gpu.glb" 
-           data-scale="0.34"
-           data-dims="33.3 x 11.1 x 18.7 cm"
+           data-scale="1.0"
+           data-dims="31.0 x 13.3 x 3.2 cm"
            data-title="GeForce RTX 4080 Super" 
            data-desc="Triple Axial-Tech Fans - 16GB GDDR6X - PCIe 4.0">
         <span class="comp-item-icon">
@@ -1240,11 +1282,11 @@
         <span class="comp-item-text">RTX 4080 GPU</span>
       </div>
 
-      <!-- 5. Individual Part: Motherboard -->
+      <!-- 7. Individual Part: Motherboard -->
       <div class="comp-item" 
            data-model="models/motherboard.glb" 
-           data-scale="0.31"
-           data-dims="27.3 x 22.1 x 30.3 cm"
+           data-scale="1.0"
+           data-dims="30.2 x 30.5 x 4.9 cm"
            data-title="ROG Maximus Z790 Hero" 
            data-desc="ATX Form Factor - LGA 1700 - PCIe 5.0 - DDR5">
         <span class="comp-item-icon">
@@ -1254,11 +1296,11 @@
         <span class="comp-item-text">Motherboard</span>
       </div>
 
-      <!-- 6. Individual Part: CPU -->
+      <!-- 8. Individual Part: CPU -->
       <div class="comp-item" 
            data-model="models/cpu.glb" 
-           data-scale="0.05"
-           data-dims="4.7 x 1.0 x 4.9 cm"
+           data-scale="1.0"
+           data-dims="4.5 x 3.8 x 0.2 cm"
            data-title="Intel Core i9-14900K" 
            data-desc="24 Cores - 32 Threads - LGA 1700 Socket Chip">
         <span class="comp-item-icon">
@@ -1268,11 +1310,11 @@
         <span class="comp-item-text">Core i9 CPU</span>
       </div>
 
-      <!-- 7. Individual Part: RAM -->
+      <!-- 9. Individual Part: RAM -->
       <div class="comp-item" 
            data-model="models/ram.glb" 
-           data-scale="0.03"
-           data-dims="13.4 x 3.5 x 6.2 cm"
+           data-scale="1.0"
+           data-dims="13.3 x 4.0 x 0.5 cm"
            data-title="Dominator Titanium DDR5" 
            data-desc="64GB 6000MHz CL30 - Dual Channel RGB">
         <span class="comp-item-icon">
@@ -1282,11 +1324,11 @@
         <span class="comp-item-text">DDR5 RAM</span>
       </div>
 
-      <!-- 8. Individual Part: Cooler -->
+      <!-- 10. Individual Part: Cooler -->
       <div class="comp-item" 
            data-model="models/cooler.glb" 
-           data-scale="0.40"
-           data-dims="39.2 x 19.6 x 36.8 cm"
+           data-scale="1.0"
+           data-dims="13.5 x 12.6 x 6.8 cm"
            data-title="Kraken Elite 360 RGB" 
            data-desc="360mm Radiator - LCD Waterblock - 3x 120mm Fans">
         <span class="comp-item-icon">
@@ -1296,11 +1338,11 @@
         <span class="comp-item-text">AIO Cooler</span>
       </div>
 
-      <!-- 9. Individual Part: PSU -->
+      <!-- 11. Individual Part: PSU -->
       <div class="comp-item" 
            data-model="models/psu.glb" 
-           data-scale="0.0125"
-           data-dims="15.0 x 19.3 x 8.9 cm"
+           data-scale="1.0"
+           data-dims="16.0 x 12.4 x 7.3 cm"
            data-title="1000W Modular PSU" 
            data-desc="ATX 3.0 - 80+ Gold Efficiency - PCIe 5.0 12VHPWR">
         <span class="comp-item-icon">
@@ -1358,7 +1400,10 @@
     const activePartTitle = document.getElementById("activePartTitle");
     const activePartDesc = document.getElementById("activePartDesc");
     const dimText = document.getElementById("dimText");
-    const scaleToggleBtn = document.getElementById("scaleToggleBtn");
+    const scaleDownBtn = document.getElementById("scaleDownBtn");
+    const scaleUpBtn = document.getElementById("scaleUpBtn");
+    const scaleResetBtn = document.getElementById("scaleResetBtn");
+    const scalePctText = document.getElementById("scalePctText");
     const resetCamBtn = document.getElementById("resetCamBtn");
     const rotLeftBtn = document.getElementById("rotLeftBtn");
     const rotRightBtn = document.getElementById("rotRightBtn");
@@ -1380,8 +1425,8 @@
 
     let isAutoRotating = true;
     let audioCtx = null;
-    let currentBaseScale = 0.46;
-    let isZoomed = false;
+    let currentBaseScale = 1.0;
+    let currentScaleFactor = 1.0;
     let isPanModeActive = false;
     let isPointerPanning = false;
     let panStartX = 0;
@@ -1451,11 +1496,13 @@
     }
 
     // Apply Exact Physical Scale
-    function applyModelScale(baseFactor) {
-      currentBaseScale = parseFloat(baseFactor);
-      const mult = isZoomed ? 2.5 : 1.0;
-      const s = (currentBaseScale * mult).toFixed(4);
-      arViewer.setAttribute("scale", `${s} ${s} ${s}`);
+    function applyModelScale(baseFactor = 1.0) {
+      currentBaseScale = parseFloat(baseFactor) || 1.0;
+      const finalScale = (currentBaseScale * currentScaleFactor).toFixed(4);
+      arViewer.setAttribute("scale", `${finalScale} ${finalScale} ${finalScale}`);
+      if (scalePctText) {
+        scalePctText.textContent = `${Math.round(currentScaleFactor * 100)}%`;
+      }
     }
 
     function updateProgressUI(pct, title) {
@@ -1515,14 +1562,26 @@
     // Initial load show
     showLoader("PREPARING 3D RIG");
 
-    // Zoom Toggle Button (for macro close-up inspection)
-    scaleToggleBtn.addEventListener("click", () => {
-      isZoomed = !isZoomed;
-      scaleToggleBtn.textContent = isZoomed ? "Reset 1:1" : "Zoom 2.5x";
-      scaleToggleBtn.style.background = isZoomed ? "rgba(37, 99, 235, 0.15)" : "#f1f5f9";
-      scaleToggleBtn.style.color = isZoomed ? "var(--accent-blue)" : "#334155";
-      applyModelScale(currentBaseScale);
+    // Interactive Scale Controls (+ / - / Reset 1:1)
+    scaleDownBtn.addEventListener("click", () => {
       playSfx('click');
+      currentScaleFactor = Math.max(0.2, +(currentScaleFactor - 0.1).toFixed(1));
+      applyModelScale(currentBaseScale);
+      showToast(`SCALE: ${Math.round(currentScaleFactor * 100)}%`);
+    });
+
+    scaleUpBtn.addEventListener("click", () => {
+      playSfx('click');
+      currentScaleFactor = Math.min(3.0, +(currentScaleFactor + 0.1).toFixed(1));
+      applyModelScale(currentBaseScale);
+      showToast(`SCALE: ${Math.round(currentScaleFactor * 100)}%`);
+    });
+
+    scaleResetBtn.addEventListener("click", () => {
+      playSfx('snap');
+      currentScaleFactor = 1.0;
+      applyModelScale(currentBaseScale);
+      showToast("SCALE RESET TO 100% (1:1 LIFE SIZE)");
     });
 
     // DIRECT NATIVE AR LAUNCH (Apple Quick Look / Android Scene Viewer)
@@ -1548,7 +1607,7 @@
       const title = item.dataset.title;
       const desc = item.dataset.desc;
       const dims = item.dataset.dims;
-      const scale = item.dataset.scale;
+      const scale = item.dataset.scale || 1.0;
 
       activePartTitle.textContent = title;
       activePartDesc.textContent = `${dims} - ${desc}`;
@@ -1562,10 +1621,7 @@
 
       showLoader(`LOADING ${title.toUpperCase()}`);
 
-      isZoomed = false;
-      scaleToggleBtn.textContent = "Zoom 2.5x";
-      scaleToggleBtn.style.background = "#f1f5f9";
-      scaleToggleBtn.style.color = "#334155";
+      currentScaleFactor = 1.0;
       applyModelScale(scale);
 
       curTargetX = 0;
@@ -1573,7 +1629,7 @@
       curTargetZ = 0;
       if (typeof updateCameraTarget === "function") updateCameraTarget();
 
-      const cacheBust = "?v=3";
+      const cacheBust = "?v=4";
       const modelUrl = model.includes("?") ? model : (model + cacheBust);
       arViewer.src = modelUrl;
       const usdzModel = model.replace(/\.glb$/, '.usdz') + cacheBust;
@@ -1589,45 +1645,55 @@
 
     const stepBuildBtn = document.getElementById("stepBuildBtn");
     const stepBuildBtnLabel = document.getElementById("stepBuildBtnLabel");
-    let currentBuildStep = 6;
 
-    const buildSteps = [
-      { step: 1, model: "models/case.glb", nextBtn: "+ INSTALL MOTHERBOARD", toast: "STEP 1: EMPTY CHASSIS READY" },
-      { step: 2, model: "models/stage2_mobo.glb", nextBtn: "+ INSERT CPU & RAM", toast: "STEP 2: MOTHERBOARD INSTALLED!" },
-      { step: 3, model: "models/stage3_cpu_ram.glb", nextBtn: "+ MOUNT 360MM COOLER", toast: "STEP 3: CORE i9 & DDR5 RAM INSERTED!" },
-      { step: 4, model: "models/stage4_cooler.glb", nextBtn: "+ SLOT-IN RTX 4080", toast: "STEP 4: 360MM LIQUID COOLER MOUNTED!" },
-      { step: 5, model: "models/stage5_gpu.glb", nextBtn: "+ CONNECT 1000W PSU", toast: "STEP 5: GEFORCE RTX 4080 LOCKED IN!" },
-      { step: 6, model: "models/assembled_pc.glb", nextBtn: "RESET TO EMPTY CHASSIS", toast: "STEP 6: PSU CONNECTED - BUILD COMPLETE!" }
-    ];
+    const compToStageMap = {
+      "case.glb": { nextModel: "models/stage2_mobo.glb", label: "+ INSTALL MOTHERBOARD", toast: "STEP 2: MOTHERBOARD INSTALLED!" },
+      "motherboard.glb": { nextModel: "models/stage2_mobo.glb", label: "FIT MOTHERBOARD TO CASING", toast: "MOTHERBOARD MOUNTED ON CHASSIS TRAY!" },
+      "cpu.glb": { nextModel: "models/stage3_cpu_ram.glb", label: "FIT CPU INTO CASING", toast: "INTEL CORE i9 INSERTED INTO SOCKET!" },
+      "ram.glb": { nextModel: "models/stage3_cpu_ram.glb", label: "FIT RAM INTO CASING", toast: "DDR5 RAM LOCKED INTO SLOTS!" },
+      "cooler.glb": { nextModel: "models/stage4_cooler.glb", label: "FIT COOLER INTO CASING", toast: "360MM COOLER MOUNTED OVER CPU!" },
+      "gpu.glb": { nextModel: "models/stage5_gpu.glb", label: "SLOT GPU INTO CASING", toast: "GEFORCE RTX 4080 LOCKED INTO PCIE SLOT!" },
+      "psu.glb": { nextModel: "models/assembled_pc.glb", label: "CONNECT PSU TO CASING", toast: "1000W POWER SUPPLY WIRED IN!" },
+      "stage2_mobo.glb": { nextModel: "models/stage3_cpu_ram.glb", label: "+ INSERT CPU & RAM", toast: "STEP 3: CORE i9 & DDR5 RAM INSERTED!" },
+      "stage3_cpu_ram.glb": { nextModel: "models/stage4_cooler.glb", label: "+ MOUNT 360MM COOLER", toast: "STEP 4: 360MM COOLER MOUNTED!" },
+      "stage4_cooler.glb": { nextModel: "models/stage5_gpu.glb", label: "+ SLOT-IN RTX 4080", toast: "STEP 5: GEFORCE RTX 4080 LOCKED IN!" },
+      "stage5_gpu.glb": { nextModel: "models/assembled_pc.glb", label: "+ CONNECT 1000W PSU", toast: "STEP 6: PSU CONNECTED - BUILD COMPLETE!" },
+      "assembled_pc.glb": { nextModel: "models/case.glb", label: "RESET TO EMPTY CHASSIS", toast: "RESET TO EMPTY CHASSIS READY" }
+    };
 
     function updateStepButtonLabel(modelSrc) {
-      const match = buildSteps.find(s => modelSrc.includes(s.model.replace("models/", "")));
+      const filename = modelSrc.split("?")[0].replace("models/", "");
+      const match = compToStageMap[filename];
       if (match) {
-        currentBuildStep = match.step;
-        stepBuildBtnLabel.textContent = match.nextBtn;
+        stepBuildBtnLabel.textContent = match.label;
       } else {
-        stepBuildBtnLabel.textContent = "+ INSTALL INTO CHASSIS";
+        stepBuildBtnLabel.textContent = "FIT INTO CASING";
       }
     }
 
     stepBuildBtn.addEventListener("click", () => {
-      let targetStepNum;
-      if (currentBuildStep >= 6) {
-        targetStepNum = 1;
-      } else {
-        targetStepNum = currentBuildStep + 1;
-      }
-      const targetStep = buildSteps.find(s => s.step === targetStepNum);
-      if (targetStep) {
-        const item = document.querySelector(`.comp-item[data-model="${targetStep.model}"]`);
+      const currentSrc = arViewer.src || "";
+      const filename = currentSrc.split("?")[0].replace("models/", "");
+      const match = compToStageMap[filename];
+      if (match && match.nextModel) {
+        const item = document.querySelector(`.comp-item[data-model="${match.nextModel}"]`);
         if (item) {
           loadComponent(item, true);
-          showToast(targetStep.toast);
+          showToast(match.toast);
         }
       }
     });
 
     // AUTO-BUILD SEQUENCE (Automated 6-Step Assembly of Full PC)
+    const buildSteps = [
+      { model: "models/case.glb", toast: "STEP 1: EMPTY CHASSIS READY" },
+      { model: "models/stage2_mobo.glb", toast: "STEP 2: MOTHERBOARD INSTALLED!" },
+      { model: "models/stage3_cpu_ram.glb", toast: "STEP 3: CORE i9 & DDR5 RAM INSERTED!" },
+      { model: "models/stage4_cooler.glb", toast: "STEP 4: 360MM COOLER MOUNTED!" },
+      { model: "models/stage5_gpu.glb", toast: "STEP 5: GEFORCE RTX 4080 LOCKED IN!" },
+      { model: "models/assembled_pc.glb", toast: "STEP 6: PSU CONNECTED - BUILD COMPLETE!" }
+    ];
+
     autoBuildBtn.addEventListener("click", () => {
       playSfx('boot');
       showToast("STARTING COMPLETE 6-STEP AUTO-ASSEMBLY...");
