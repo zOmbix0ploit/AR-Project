@@ -237,8 +237,9 @@ function loadAllParts() {
   });
 
   // Load the complete 1:1 assembled PC master model containing all 15 components
-  loader.load('models/assembled_pc.glb?v=10', (gltf) => {
+  loader.load('models/assembled_pc.glb?v=11', (gltf) => {
     const rigScene = gltf.scene;
+    const savedTransforms = getCachedTransforms();
 
     PARTS_CONFIG.forEach((cfg) => {
       let partObj = null;

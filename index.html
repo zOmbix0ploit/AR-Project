@@ -1819,8 +1819,8 @@
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
-    src="models/case.glb?v=10"
-    ios-src="models/case.usdz?v=10"
+    src="models/case.glb?v=11"
+    ios-src="models/case.usdz?v=11"
     scale="1 1 1"
     ar
     ar-modes="webxr scene-viewer quick-look"
@@ -3133,7 +3133,7 @@
             if (heroItem) {
               loadComponent(heroItem, true);
             } else {
-              arViewer.src = "models/assembled_pc.glb?v=10";
+              arViewer.src = "models/assembled_pc.glb?v=11";
             }
             showToast("REVERTED TO FACTORY ASSEMBLED RIG");
           });
@@ -3151,7 +3151,7 @@
         window.addEventListener('custom-rig-cleared', () => {
           window.__customRigBlobUrl = null;
           if (customRigBadge) customRigBadge.classList.remove("active");
-          arViewer.src = "models/assembled_pc.glb?v=10";
+          arViewer.src = "models/assembled_pc.glb?v=11";
         });
       } catch (err) {
         console.warn("Could not check IndexedDB for saved rig:", err);
