@@ -1571,8 +1571,8 @@
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
-    src="models/assembled_pc.glb?v=6"
-    ios-src="models/assembled_pc.usdz?v=6"
+    src="models/assembled_pc.glb?v=8"
+    ios-src="models/assembled_pc.usdz?v=8"
     scale="1 1 1"
     ar
     ar-modes="webxr scene-viewer quick-look"
@@ -2177,7 +2177,7 @@
         activePartTitle.textContent = "Nethuna Custom Gaming Rig";
         activePartDesc.textContent = `${dims} - User Calibrated Build (Saved in Browser)`;
       } else {
-        const cacheBust = "?v=6";
+        const cacheBust = "?v=8";
         const modelUrl = model.includes("?") ? model : (model + cacheBust);
         arViewer.src = modelUrl;
         const usdzModel = model.replace(/\.glb$/, '.usdz') + cacheBust;
@@ -2548,7 +2548,7 @@
             if (heroItem) {
               loadComponent(heroItem, true);
             } else {
-              arViewer.src = "models/assembled_pc.glb?v=6";
+              arViewer.src = "models/assembled_pc.glb?v=8";
             }
             showToast("REVERTED TO FACTORY ASSEMBLED RIG");
           });
@@ -2566,7 +2566,7 @@
         window.addEventListener('custom-rig-cleared', () => {
           window.__customRigBlobUrl = null;
           if (customRigBadge) customRigBadge.classList.remove("active");
-          arViewer.src = "models/assembled_pc.glb?v=6";
+          arViewer.src = "models/assembled_pc.glb?v=8";
         });
       } catch (err) {
         console.warn("Could not check IndexedDB for saved rig:", err);
