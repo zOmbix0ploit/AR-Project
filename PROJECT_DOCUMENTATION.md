@@ -42,14 +42,15 @@
 ---
 
 ### 3. Details of 3D Models
-The project features 7 modular, high-detail 3D models configured with realistic materials and optimized polycounts for fluid mobile performance:
-1. **Titan Mid-Tower Computer Case (`computer case 3d model.glb`):** Dual-chamber tempered glass chassis with motherboard tray and PSU shroud.
-2. **ROG Maximus Z790 Gaming Motherboard (`gaming motherboard 3d model.glb`):** ATX form factor with VRM heatsinks, LGA socket, and PCIe 5.0 lane.
-3. **Intel Core i9-14900K Processor (`prosser.glb`):** Desktop CPU chip with integrated heat spreader and substrate.
-4. **Dominator Titanium DDR5 RAM (`Ram.glb`):** Dual-channel high-frequency memory modules with illuminated light bars.
-5. **Kraken 360 RGB Liquid CPU Cooler (`rgb cpu cooler 3d model.glb`):** 360mm high-density radiator, braided sleeved tubing, and LCD waterblock.
-6. **GeForce RTX 4080 Super Graphics Card (`graphics card 3d model.glb`):** Triple-fan cooling shroud, copper heatpipes, and PCIe connector.
-7. **Modular 1000W Power Supply (`powersupply.glb`):** 80-Plus Gold power supply with honeycomb ventilation.
+The project features 8 modular, high-detail 3D models configured with realistic materials and optimized polycounts for fluid mobile performance:
+1. **Titan Mid-Tower Computer Case (`models/case.glb`):** Dual-chamber tempered glass chassis with motherboard tray and PSU shroud.
+2. **ROG Maximus Z790 Gaming Motherboard (`models/motherboard.glb`):** ATX form factor with VRM heatsinks, LGA socket, and PCIe 5.0 lane.
+3. **Intel Core i9-14900K Processor (`models/cpu.glb`):** Desktop CPU chip with integrated heat spreader and substrate.
+4. **Dominator Titanium DDR5 RAM (`models/ram.glb`):** Dual-channel high-frequency memory modules with illuminated light bars.
+5. **Kraken 360 RGB Liquid CPU Cooler (`models/cooler.glb`):** 360mm high-density radiator, braided sleeved tubing, and LCD waterblock.
+6. **GeForce RTX 4080 Super Graphics Card (`models/gpu.glb`):** Triple-fan cooling shroud, copper heatpipes, and PCIe connector.
+7. **Modular 1000W Power Supply (`models/psu.glb`):** 80-Plus Gold power supply with honeycomb ventilation.
+8. **ARGB PWM 120mm Case Fans (`models/fan.glb`):** 7x addressable RGB fans arranged precisely (3 front intake, 1 rear exhaust, 3 bottom intake) in the final Step 6 assembled rig (`models/assembled_pc.glb`).
 
 ---
 

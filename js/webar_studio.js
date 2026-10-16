@@ -64,7 +64,14 @@ const PARTS_CONFIG = [
   { id: 'ram2',   name: 'DDR5 RAM #2',   model: 'models/ram.glb',         pos: [0.0346, 0.066, -0.0258],  rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
   { id: 'cooler', name: 'CPU Cooler',    model: 'models/cooler.glb',      pos: [-0.0254, 0.066, -0.005],  rot: [1.6743, 0, 0],      scale: [0.632, 1, 0.574] },
   { id: 'gpu',    name: 'RTX 4080 GPU',  model: 'models/gpu.glb',         pos: [0.0062, -0.0259, 0.0062], rot: [0.0945, 1.5685, 1.4668], scale: [1, 1, 1] },
-  { id: 'psu',    name: '1000W ATX PSU', model: 'models/psu.glb',         pos: [-0.1158, -0.130, 0.0294], rot: [0, 1.5483, 0],     scale: [1, 0.768, 0.689] }
+  { id: 'psu',    name: '1000W ATX PSU', model: 'models/psu.glb',         pos: [-0.1158, -0.130, 0.0294], rot: [0, 1.5483, 0],     scale: [1, 0.768, 0.689] },
+  { id: 'fan_f1', name: 'Front Fan #1 (Bottom)', model: 'models/fan.glb', pos: [0.175, -0.1654, -0.010], rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
+  { id: 'fan_f2', name: 'Front Fan #2 (Middle)', model: 'models/fan.glb', pos: [0.175, -0.0604, -0.010], rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
+  { id: 'fan_f3', name: 'Front Fan #3 (Top)',    model: 'models/fan.glb', pos: [0.175,  0.0446, -0.010], rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
+  { id: 'fan_r1', name: 'Rear Exhaust Fan',      model: 'models/fan.glb', pos: [-0.165, -0.0004, -0.030],rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
+  { id: 'fan_b1', name: 'Bottom Fan #1 (Rear)',  model: 'models/fan.glb', pos: [-0.105, -0.165, 0.0504], rot: [-Math.PI / 2, 0, 0], scale: [1, 1, 1] },
+  { id: 'fan_b2', name: 'Bottom Fan #2 (Middle)',model: 'models/fan.glb', pos: [ 0.000, -0.165, 0.0504], rot: [-Math.PI / 2, 0, 0], scale: [1, 1, 1] },
+  { id: 'fan_b3', name: 'Bottom Fan #3 (Front)', model: 'models/fan.glb', pos: [ 0.105, -0.165, 0.0504], rot: [-Math.PI / 2, 0, 0], scale: [1, 1, 1] }
 ];
 
 function initStudio() {

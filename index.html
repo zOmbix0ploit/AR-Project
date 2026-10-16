@@ -1571,8 +1571,8 @@
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
-    src="models/assembled_pc.glb?v=8"
-    ios-src="models/assembled_pc.usdz?v=8"
+    src="models/assembled_pc.glb?v=9"
+    ios-src="models/assembled_pc.usdz?v=9"
     scale="1 1 1"
     ar
     ar-modes="webxr scene-viewer quick-look"
@@ -1598,7 +1598,7 @@
   <div class="bottom-selector-wrap">
     <div class="active-spec-pill">
       <span class="spec-name" id="activePartTitle">Nethuna Gaming Rig (Fully Built)</span>
-      <span class="spec-desc" id="activePartDesc">37.7 x 43.7 x 46.0 cm - Fully Assembled with RTX 4080 &amp; Z790</span>
+      <span class="spec-desc" id="activePartDesc">37.7 x 43.7 x 46.0 cm - Fully Assembled with 7x ARGB Fans, RTX 4080 &amp; Z790</span>
     </div>
 
     <div class="component-strip" id="compStrip">
@@ -1609,7 +1609,7 @@
            data-dims="37.7 x 43.7 x 46.0 cm"
            data-step="6"
            data-title="Nethuna Gaming Rig (Fully Built)" 
-           data-desc="All Components Installed: Z790 + RTX 4080 + Kraken 360 + DDR5 + i9">
+           data-desc="All Components Installed: Z790 + RTX 4080 + Kraken 360 + DDR5 + i9 + PSU + 7x ARGB Fans">
         <span class="comp-item-icon">
           <!-- Desktop Gaming Computer Complete Rig Icon -->
           <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
@@ -1774,6 +1774,20 @@
           <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v12h16V6H4zm8 1a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 8h2v2H6V8zm0 6h2v2H6v-2z"/></svg>
         </span>
         <span class="comp-item-text">1000W PSU</span>
+      </div>
+
+      <!-- 12. Individual Part: ARGB Case Fans -->
+      <div class="comp-item" 
+           data-model="models/fan.glb" 
+           data-scale="1.0"
+           data-dims="12.0 x 12.0 x 2.5 cm"
+           data-title="ARGB PWM 120mm Case Fan" 
+           data-desc="120mm ARGB Hydraulic Bearing - 7x Installed (3 Front, 1 Rear, 3 Bottom)">
+        <span class="comp-item-icon">
+          <!-- Fan Turbine Icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-10a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm-1-5h2v3h-2zm0 11h2v3h-2zm6-6h3v2h-3zm-11 0h3v2H6z"/></svg>
+        </span>
+        <span class="comp-item-text">ARGB Fans (x7)</span>
       </div>
     </div>
   </div>
@@ -2177,7 +2191,7 @@
         activePartTitle.textContent = "Nethuna Custom Gaming Rig";
         activePartDesc.textContent = `${dims} - User Calibrated Build (Saved in Browser)`;
       } else {
-        const cacheBust = "?v=8";
+        const cacheBust = "?v=9";
         const modelUrl = model.includes("?") ? model : (model + cacheBust);
         arViewer.src = modelUrl;
         const usdzModel = model.replace(/\.glb$/, '.usdz') + cacheBust;
@@ -2205,10 +2219,11 @@
       "cooler.glb": { nextModel: "models/stage4_cooler.glb", label: "FIT COOLER INTO CASING", toast: "360MM COOLER MOUNTED OVER CPU!" },
       "gpu.glb": { nextModel: "models/stage5_gpu.glb", label: "SLOT GPU INTO CASING", toast: "GEFORCE RTX 4080 LOCKED INTO PCIE SLOT!" },
       "psu.glb": { nextModel: "models/assembled_pc.glb", label: "CONNECT PSU TO CASING", toast: "1000W POWER SUPPLY WIRED IN!" },
+      "fan.glb": { nextModel: "models/assembled_pc.glb", label: "MOUNT 7x FANS TO CHASSIS", toast: "7x ARGB FANS MOUNTED INTO CHASSIS!" },
       "stage2_mobo.glb": { nextModel: "models/stage3_cpu_ram.glb", label: "+ INSERT CPU & RAM", toast: "STEP 3: CORE i9 & DDR5 RAM INSERTED!" },
       "stage3_cpu_ram.glb": { nextModel: "models/stage4_cooler.glb", label: "+ MOUNT 360MM COOLER", toast: "STEP 4: 360MM COOLER MOUNTED!" },
       "stage4_cooler.glb": { nextModel: "models/stage5_gpu.glb", label: "+ SLOT-IN RTX 4080", toast: "STEP 5: GEFORCE RTX 4080 LOCKED IN!" },
-      "stage5_gpu.glb": { nextModel: "models/assembled_pc.glb", label: "+ CONNECT 1000W PSU", toast: "STEP 6: PSU CONNECTED - BUILD COMPLETE!" },
+      "stage5_gpu.glb": { nextModel: "models/assembled_pc.glb", label: "+ CONNECT PSU & 7x FANS", toast: "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!" },
       "assembled_pc.glb": { nextModel: "models/case.glb", label: "RESET TO EMPTY CHASSIS", toast: "RESET TO EMPTY CHASSIS READY" }
     };
 
@@ -2242,7 +2257,7 @@
       { model: "models/stage3_cpu_ram.glb", toast: "STEP 3: CORE i9 & DDR5 RAM INSERTED!" },
       { model: "models/stage4_cooler.glb", toast: "STEP 4: 360MM COOLER MOUNTED!" },
       { model: "models/stage5_gpu.glb", toast: "STEP 5: GEFORCE RTX 4080 LOCKED IN!" },
-      { model: "models/assembled_pc.glb", toast: "STEP 6: PSU CONNECTED - BUILD COMPLETE!" }
+      { model: "models/assembled_pc.glb", toast: "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!" }
     ];
 
     autoBuildBtn.addEventListener("click", () => {
@@ -2548,7 +2563,7 @@
             if (heroItem) {
               loadComponent(heroItem, true);
             } else {
-              arViewer.src = "models/assembled_pc.glb?v=8";
+              arViewer.src = "models/assembled_pc.glb?v=9";
             }
             showToast("REVERTED TO FACTORY ASSEMBLED RIG");
           });
@@ -2566,7 +2581,7 @@
         window.addEventListener('custom-rig-cleared', () => {
           window.__customRigBlobUrl = null;
           if (customRigBadge) customRigBadge.classList.remove("active");
-          arViewer.src = "models/assembled_pc.glb?v=8";
+          arViewer.src = "models/assembled_pc.glb?v=9";
         });
       } catch (err) {
         console.warn("Could not check IndexedDB for saved rig:", err);
