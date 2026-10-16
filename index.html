@@ -92,6 +92,33 @@
       top: 0;
       left: 0;
       background: radial-gradient(circle at 50% 36%, #ffffff 0%, #f8fafc 55%, #e2e8f0 100%);
+      transition: background 0.35s ease;
+    }
+
+    /* When Live In-Browser Camera AR is Active, make 3D viewport transparent to reveal camera feed */
+    body.camera-active {
+      background-color: #000000 !important;
+    }
+    body.camera-active model-viewer {
+      background: transparent !important;
+      --poster-color: transparent !important;
+    }
+    body.camera-active .ambient-glow-1,
+    body.camera-active .ambient-glow-2 {
+      display: none !important;
+    }
+    body.camera-active #startCameraArBtn {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+      border-color: #34d399 !important;
+      box-shadow: 0 4px 18px rgba(5, 150, 105, 0.45) !important;
+      color: #ffffff !important;
+    }
+    body.camera-active #startCameraArBtn svg {
+      animation: pulseArIcon 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseArIcon {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
     }
 
     /* Ambient Soft Studio Highlights */
@@ -583,6 +610,9 @@
       -webkit-user-select: none;
       outline: none;
       z-index: 15;
+    }
+    .ar-slot-hotspot * {
+      pointer-events: none;
     }
     .ar-slot-hotspot[hidden] {
       display: none !important;
@@ -1513,7 +1543,7 @@
 <body>
 
   <!-- Live Camera Video Feed for Pass-Through WebAR -->
-  <video id="cameraFeed" playsinline muted></video>
+  <video id="cameraFeed" playsinline muted autoplay></video>
 
   <!-- Ambient Glows -->
   <div class="ambient-glow-1"></div>
@@ -2355,15 +2385,9 @@
       showToast("SCALE RESET TO 100% (1:1 LIFE SIZE)");
     });
 
-    // DIRECT NATIVE AR LAUNCH (Apple Quick Look / Android Scene Viewer)
+    // INTERACTIVE ROOM CAMERA AR LAUNCH (Tap slots & casing to assemble live)
     startCameraArBtn.addEventListener("click", () => {
-      playSfx('boot');
-      if (arViewer.canActivateAR) {
-        arViewer.activateAR();
-      } else {
-        qrDialog.showModal();
-        generateQr();
-      }
+      toggleRoomCamera();
     });
 
     // Load a Component / Assembly Stage
@@ -2384,7 +2408,9 @@
       activePartDesc.textContent = `${dims} - ${desc}`;
       dimText.textContent = dims;
 
-      if (model.includes("assembled_pc")) {
+      if (isCameraPassActive) {
+        arLaunchBtnLabel.textContent = "EXIT CAMERA AR";
+      } else if (model.includes("assembled_pc")) {
         arLaunchBtnLabel.textContent = "VIEW FULL RIG IN AR";
       } else {
         arLaunchBtnLabel.textContent = "VIEW IN AR";
@@ -2537,15 +2563,15 @@
     arViewer.addEventListener("pointerup", (e) => {
       const dist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
       const duration = Date.now() - tapStartTime;
-      // Filter out camera orbit / dragging gestures
-      if (dist > 10 || duration > 450) return;
+      // Filter out camera orbit / dragging gestures (25px tolerance for mobile finger touch)
+      if (dist > 25 || duration > 500) return;
       if (e.target !== arViewer) return;
 
       const currentSrc = arViewer.src || "";
       const filename = currentSrc.split("?")[0].replace("models/", "");
 
       if (filename === "case.glb") {
-        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: MOTHERBOARD INSTALLED INTO TRAY!");
+        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: ROG MAXIMUS Z790 MOTHERBOARD MOUNTED!");
       } else if (filename === "stage2_mobo.glb") {
         advanceToNextStage("models/stage3_cpu_ram.glb", "STEP 3: CORE i9 CPU & DDR5 RAM INSERTED!");
       } else if (filename === "stage3_cpu_ram.glb") {
@@ -2554,6 +2580,18 @@
         advanceToNextStage("models/stage5_gpu.glb", "STEP 5: GEFORCE RTX 4080 LOCKED INTO PCIE SLOT!");
       } else if (filename === "stage5_gpu.glb") {
         advanceToNextStage("models/assembled_pc.glb", "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!");
+      } else if (filename === "assembled_pc.glb") {
+        advanceToNextStage("models/case.glb", "RESET TO STEP 1: CHASSIS READY FOR ASSEMBLY!");
+      } else if (filename === "motherboard.glb") {
+        advanceToNextStage("models/stage2_mobo.glb", "MOTHERBOARD MOUNTED ON CHASSIS TRAY!");
+      } else if (filename === "cpu.glb" || filename === "ram.glb") {
+        advanceToNextStage("models/stage3_cpu_ram.glb", "CORE i9 CPU & DDR5 RAM INSERTED!");
+      } else if (filename === "cooler.glb") {
+        advanceToNextStage("models/stage4_cooler.glb", "360MM LIQUID COOLER MOUNTED!");
+      } else if (filename === "gpu.glb") {
+        advanceToNextStage("models/stage5_gpu.glb", "GEFORCE RTX 4080 LOCKED IN!");
+      } else if (filename === "psu.glb" || filename === "fan.glb") {
+        advanceToNextStage("models/assembled_pc.glb", "PSU & 7x ARGB FANS ASSEMBLED!");
       }
     });
 
@@ -2606,10 +2644,16 @@
         }
         cameraFeed.classList.remove("active");
         cameraPassToggleBtn.classList.remove("active");
+        document.body.classList.remove("camera-active");
         camPassLabel.textContent = "ROOM CAMERA";
+        if (arViewer.src && arViewer.src.includes("assembled_pc")) {
+          arLaunchBtnLabel.textContent = "VIEW FULL RIG IN AR";
+        } else {
+          arLaunchBtnLabel.textContent = "VIEW IN AR";
+        }
         isCameraPassActive = false;
         playSfx('click');
-        showToast("ROOM CAMERA OFF");
+        showToast("ROOM CAMERA OFF - STUDIO LIGHTING RESTORED");
       } else {
         // Start Camera
         try {
@@ -2626,12 +2670,30 @@
           await cameraFeed.play().catch(() => {});
           cameraFeed.classList.add("active");
           cameraPassToggleBtn.classList.add("active");
+          document.body.classList.add("camera-active");
           camPassLabel.textContent = "EXIT CAMERA";
+          arLaunchBtnLabel.textContent = "EXIT CAMERA AR";
           isCameraPassActive = true;
-          showToast("LIVE ROOM CAMERA ACTIVE - SNAP PARTS INTO CASE!");
+
+          // If currently viewing a detached individual component, switch to casing step so user can assemble inside case
+          const currentSrc = arViewer.src || "";
+          if (!currentSrc.includes("case.glb") && !currentSrc.includes("stage") && !currentSrc.includes("assembled_pc")) {
+            const caseItem = document.querySelector('.comp-item[data-model="models/case.glb"]');
+            if (caseItem) loadComponent(caseItem, false);
+          }
+
+          showToast("ROOM AR ACTIVE: TAP GLOWING SLOTS OR CASING TO ASSEMBLE PARTS!");
         } catch (err) {
           console.warn("Camera access notice:", err);
-          showToast("CAMERA ACCESS DENIED OR UNAVAILABLE");
+          document.body.classList.remove("camera-active");
+          isCameraPassActive = false;
+          if (arViewer.canActivateAR) {
+            arViewer.activateAR();
+          } else {
+            showToast("CAMERA ACCESS DENIED OR UNAVAILABLE - SCAN QR FOR MOBILE AR");
+            qrDialog.showModal();
+            generateQr();
+          }
         }
       }
     }
