@@ -55,16 +55,16 @@ let isStudioActive = false;
 const loader = new GLTFLoader();
 const exporter = new GLTFExporter();
 
-// Standard 1:1 Initial Hardware Configs
+// Standard 1:1 Initial Hardware Configs (Calibrated from Visual 3D Rig)
 const PARTS_CONFIG = [
-  { id: 'case',   name: 'PC Chassis',    model: 'models/case.glb',        pos: [0, 0, 0],               rot: [0, 0, 0],            scale: [1, 1, 1] },
-  { id: 'mobo',   name: 'Motherboard',   model: 'models/motherboard.glb', pos: [-0.014, 0.006, -0.070], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
-  { id: 'cpu',    name: 'Core i9 CPU',   model: 'models/cpu.glb',         pos: [-0.014, 0.066, -0.050], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
-  { id: 'ram1',   name: 'DDR5 RAM #1',   model: 'models/ram.glb',         pos: [0.048, 0.066, -0.045],  rot: [0, 0, 0],            scale: [1, 1, 1] },
-  { id: 'ram2',   name: 'DDR5 RAM #2',   model: 'models/ram.glb',         pos: [0.060, 0.066, -0.045],  rot: [0, 0, 0],            scale: [1, 1, 1] },
-  { id: 'cooler', name: 'CPU Cooler',    model: 'models/cooler.glb',      pos: [-0.014, 0.066, -0.005], rot: [0, 0, 0],            scale: [1, 1, 1] },
-  { id: 'gpu',    name: 'RTX 4080 GPU',  model: 'models/gpu.glb',         pos: [-0.014, -0.045, -0.015],rot: [0, Math.PI / 2, 0],  scale: [1, 1, 1] },
-  { id: 'psu',    name: '1000W ATX PSU', model: 'models/psu.glb',         pos: [-0.040, -0.160, -0.040],rot: [0, 0, 0],            scale: [1, 1, 1] }
+  { id: 'case',   name: 'PC Chassis',    model: 'models/case.glb',        pos: [0.0035, -0.0042, -0.0006], rot: [-0.5345, 0.6556, 0.3463], scale: [1.262, 1.242, 1.238] },
+  { id: 'mobo',   name: 'Motherboard',   model: 'models/motherboard.glb', pos: [-0.014, 0.006, -0.0287],  rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
+  { id: 'cpu',    name: 'Core i9 CPU',   model: 'models/cpu.glb',         pos: [-0.0281, 0.066, -0.0413], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
+  { id: 'ram1',   name: 'DDR5 RAM #1',   model: 'models/ram.glb',         pos: [0.0215, 0.066, -0.0240],  rot: [Math.PI / 2, -0.011, -0.0012], scale: [1, 1, 1] },
+  { id: 'ram2',   name: 'DDR5 RAM #2',   model: 'models/ram.glb',         pos: [0.0346, 0.066, -0.0258],  rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
+  { id: 'cooler', name: 'CPU Cooler',    model: 'models/cooler.glb',      pos: [-0.0254, 0.066, -0.005],  rot: [1.6743, 0, 0],      scale: [0.632, 1, 0.574] },
+  { id: 'gpu',    name: 'RTX 4080 GPU',  model: 'models/gpu.glb',         pos: [0.0062, -0.0259, 0.0062], rot: [0.0945, 1.5685, 1.4668], scale: [1, 1, 1] },
+  { id: 'psu',    name: '1000W ATX PSU', model: 'models/psu.glb',         pos: [-0.1158, -0.130, 0.0294], rot: [0, 1.5483, 0],     scale: [1, 0.768, 0.689] }
 ];
 
 function initStudio() {
@@ -363,12 +363,12 @@ function snapSelected(pos, rotDeg) {
   updateInspectorFromObject(selectedObject);
 }
 
-snapMoboTrayBtn.addEventListener('click', () => snapSelected([-0.014, 0.006, -0.070], [90, 0, 0]));
-snapCpuSocketBtn.addEventListener('click', () => snapSelected([-0.014, 0.066, -0.050], [90, 0, 0]));
-snapRamSlotsBtn.addEventListener('click', () => snapSelected([0.048, 0.066, -0.045], [0, 0, 0]));
-snapCoolerMountBtn.addEventListener('click', () => snapSelected([-0.014, 0.066, -0.005], [0, 0, 0]));
-snapPcieSlotBtn.addEventListener('click', () => snapSelected([-0.014, -0.045, -0.015], [0, 90, 0]));
-snapPsuShroudBtn.addEventListener('click', () => snapSelected([-0.040, -0.160, -0.040], [0, 0, 0]));
+snapMoboTrayBtn.addEventListener('click', () => snapSelected([-0.014, 0.006, -0.0287], [90, 0, 0]));
+snapCpuSocketBtn.addEventListener('click', () => snapSelected([-0.0281, 0.066, -0.0413], [90, 0, 0]));
+snapRamSlotsBtn.addEventListener('click', () => snapSelected([0.0215, 0.066, -0.0240], [90, 0, 0]));
+snapCoolerMountBtn.addEventListener('click', () => snapSelected([-0.0254, 0.066, -0.005], [95.9, 0, 0]));
+snapPcieSlotBtn.addEventListener('click', () => snapSelected([0.0062, -0.0259, 0.0062], [5.4, 89.9, 84.0]));
+snapPsuShroudBtn.addEventListener('click', () => snapSelected([-0.1158, -0.130, 0.0294], [0, 88.7, 0]));
 
 resetPartTransformBtn.addEventListener('click', () => {
   if (!selectedObject || !selectedObject.userData || !selectedObject.userData.config) return;
