@@ -10,7 +10,8 @@
 * **Student Name:** [Your Name Here]
 * **Student ID / Reg No:** [Your Student ID]
 * **Date of Submission:** October 2026
-* **WebAR Live Link:** [Your Published GitHub Pages / Vercel Link]
+* **GitHub Repository:** https://github.com/zOmbix0ploit/AR-Project
+* **WebAR Live Link (GitHub Pages):** https://zombix0ploit.github.io/AR-Project/
 
 ---
 
