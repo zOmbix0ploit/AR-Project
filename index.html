@@ -565,6 +565,127 @@
       color: var(--accent-blue);
     }
 
+    /* 3D AR Interactive Component Slot Hotspots */
+    .ar-slot-hotspot {
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      position: relative;
+      pointer-events: auto;
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+      transform-origin: center center;
+      user-select: none;
+      -webkit-user-select: none;
+      outline: none;
+      z-index: 15;
+    }
+    .ar-slot-hotspot[hidden] {
+      display: none !important;
+    }
+    .ar-slot-hotspot:hover,
+    .ar-slot-hotspot:active {
+      transform: scale(1.12);
+    }
+    .hotspot-pulse {
+      position: absolute;
+      top: 50%;
+      left: 17px;
+      transform: translate(-50%, -50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.35);
+      border: 1.5px solid var(--accent-blue);
+      animation: hotspotBeaconPulse 2s infinite ease-out;
+      pointer-events: none;
+    }
+    @keyframes hotspotBeaconPulse {
+      0% {
+        transform: translate(-50%, -50%) scale(0.6);
+        opacity: 0.95;
+      }
+      70% {
+        transform: translate(-50%, -50%) scale(1.4);
+        opacity: 0.2;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0;
+      }
+    }
+    .hotspot-pin {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 16px rgba(37, 99, 235, 0.75), 0 4px 10px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+    .hotspot-pin svg {
+      width: 17px;
+      height: 17px;
+      fill: #ffffff;
+    }
+    .hotspot-annotation {
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      padding: 6px 12px;
+      border-radius: 11px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      text-align: left;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hotspot-action {
+      font-size: 0.6rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #60a5fa;
+      text-transform: uppercase;
+    }
+    .hotspot-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 1px;
+    }
+
+    @media (max-width: 640px) {
+      .hotspot-pin {
+        width: 30px;
+        height: 30px;
+      }
+      .hotspot-pin svg {
+        width: 15px;
+        height: 15px;
+      }
+      .hotspot-annotation {
+        padding: 4px 9px;
+      }
+      .hotspot-action {
+        font-size: 0.55rem;
+      }
+      .hotspot-title {
+        font-size: 0.68rem;
+      }
+    }
+
     /* Bottom Hardware Selector Strip (Mobile Optimized) */
     .bottom-selector-wrap {
       position: absolute;
@@ -1571,8 +1692,8 @@
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
-    src="models/assembled_pc.glb?v=10"
-    ios-src="models/assembled_pc.usdz?v=10"
+    src="models/case.glb?v=10"
+    ios-src="models/case.usdz?v=10"
     scale="1 1 1"
     ar
     ar-modes="webxr scene-viewer quick-look"
@@ -1592,18 +1713,113 @@
     environment-image="neutral"
     camera-orbit="45deg 75deg 105%"
     alt="Nethuna-WebAR 3D Augmented Reality Component">
+
+    <!-- Interactive 3D Component Slot Hotspots (Tap Slot to Install/Replace Part) -->
+    <!-- Slot 1: Motherboard Tray -->
+    <button class="ar-slot-hotspot" 
+            id="hotspotMobo" 
+            slot="hotspot-mobo" 
+            data-position="-0.014m 0.006m -0.0287m" 
+            data-normal="0m 1m 0m" 
+            type="button" 
+            aria-label="Install ROG Motherboard to Chassis Tray">
+      <div class="hotspot-pulse"></div>
+      <div class="hotspot-pin">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h4v4H8V8zm0 6h2v2H8v-2zm6-6h2v6h-2V8z"/></svg>
+      </div>
+      <div class="hotspot-annotation">
+        <span class="hotspot-action">+ TAP TO INSTALL</span>
+        <span class="hotspot-title">ROG Maximus Z790 Motherboard</span>
+      </div>
+    </button>
+
+    <!-- Slot 2: CPU & RAM Sockets -->
+    <button class="ar-slot-hotspot" 
+            id="hotspotCpuRam" 
+            slot="hotspot-cpu-ram" 
+            data-position="-0.010m 0.066m -0.035m" 
+            data-normal="0m 1m 0m" 
+            type="button" 
+            hidden 
+            aria-label="Insert Core i9 CPU and DDR5 RAM">
+      <div class="hotspot-pulse"></div>
+      <div class="hotspot-pin">
+        <svg viewBox="0 0 24 24"><path d="M6 2h2v2h8V2h2v2h2a2 2 0 0 1 2 2v2h2v2h-2v4h2v2h-2v2a2 2 0 0 1-2 2h-2v2h-2v-2H8v2H6v-2H4a2 2 0 0 1-2-2v-2H0v-2h2v-4H0V8h2V6a2 2 0 0 1 2-2h2V2zm0 4v12h12V6H6zm3 3h6v6H9V9z"/></svg>
+      </div>
+      <div class="hotspot-annotation">
+        <span class="hotspot-action">+ TAP TO INSERT</span>
+        <span class="hotspot-title">Core i9 CPU &amp; DDR5 RAM</span>
+      </div>
+    </button>
+
+    <!-- Slot 3: Top Radiator Cooler Mount -->
+    <button class="ar-slot-hotspot" 
+            id="hotspotCooler" 
+            slot="hotspot-cooler" 
+            data-position="-0.025m 0.085m -0.005m" 
+            data-normal="0m 1m 0m" 
+            type="button" 
+            hidden 
+            aria-label="Mount 360mm Liquid CPU Cooler">
+      <div class="hotspot-pulse"></div>
+      <div class="hotspot-pin">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-10a2 2 0 1 0 2 2 2 2 0 0 0-2-2z"/></svg>
+      </div>
+      <div class="hotspot-annotation">
+        <span class="hotspot-action">+ TAP TO MOUNT</span>
+        <span class="hotspot-title">Kraken 360 Liquid Cooler</span>
+      </div>
+    </button>
+
+    <!-- Slot 4: PCIe 5.0 GPU Lane -->
+    <button class="ar-slot-hotspot" 
+            id="hotspotGpu" 
+            slot="hotspot-gpu" 
+            data-position="0.006m -0.026m 0.006m" 
+            data-normal="0m 1m 0m" 
+            type="button" 
+            hidden 
+            aria-label="Slot-in GeForce RTX 4080 GPU">
+      <div class="hotspot-pulse"></div>
+      <div class="hotspot-pin">
+        <svg viewBox="0 0 24 24"><path d="M2 7h20v10H2V7zm2 2v6h16V9H4zm3 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-5 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM5 18h14v2H5v-2z"/></svg>
+      </div>
+      <div class="hotspot-annotation">
+        <span class="hotspot-action">+ TAP TO SLOT IN</span>
+        <span class="hotspot-title">GeForce RTX 4080 GPU</span>
+      </div>
+    </button>
+
+    <!-- Slot 5: PSU Shroud & ARGB Fans -->
+    <button class="ar-slot-hotspot" 
+            id="hotspotPsuFans" 
+            slot="hotspot-psu-fans" 
+            data-position="-0.080m -0.130m 0.029m" 
+            data-normal="0m 1m 0m" 
+            type="button" 
+            hidden 
+            aria-label="Connect 1000W PSU & 7x ARGB Fans">
+      <div class="hotspot-pulse"></div>
+      <div class="hotspot-pin">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v12h16V6H4zm8 1a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 8h2v2H6V8zm0 6h2v2H6v-2z"/></svg>
+      </div>
+      <div class="hotspot-annotation">
+        <span class="hotspot-action">+ TAP TO CONNECT</span>
+        <span class="hotspot-title">1000W PSU &amp; 7x ARGB Fans</span>
+      </div>
+    </button>
   </model-viewer>
 
   <!-- Bottom Hardware Selector Strip (Pure SVG Icons, Zero Emojis) -->
   <div class="bottom-selector-wrap">
     <div class="active-spec-pill">
-      <span class="spec-name" id="activePartTitle">Nethuna Gaming Rig (Fully Built)</span>
-      <span class="spec-desc" id="activePartDesc">37.7 x 43.7 x 46.0 cm - Fully Assembled with 7x ARGB Fans, RTX 4080 &amp; Z790</span>
+      <span class="spec-name" id="activePartTitle">Build Step 1: Chassis (Empty)</span>
+      <span class="spec-desc" id="activePartDesc">37.7 x 43.7 x 46.0 cm - Nethuna Mid-Tower (Tap slot or chassis to install parts)</span>
     </div>
 
     <div class="component-strip" id="compStrip">
-      <!-- 0. Fully Assembled Gaming PC (Default & Primary Hero Item) -->
-      <div class="comp-item featured active" 
+      <!-- 0. Fully Assembled Gaming PC -->
+      <div class="comp-item featured" 
            data-model="models/assembled_pc.glb" 
            data-scale="1.0"
            data-dims="37.7 x 43.7 x 46.0 cm"
@@ -1617,8 +1833,8 @@
         <span class="comp-item-text">Full Built PC</span>
       </div>
 
-      <!-- 1. Step 1: Chassis (Empty) -->
-      <div class="comp-item" 
+      <!-- 1. Step 1: Chassis (Empty - Default Initial Model) -->
+      <div class="comp-item active" 
            data-model="models/case.glb" 
            data-scale="1.0"
            data-dims="37.7 x 43.7 x 46.0 cm"
@@ -2115,7 +2331,7 @@
     });
 
     // Initial load show
-    showLoader("PREPARING 3D RIG");
+    showLoader("PREPARING 3D CHASSIS");
 
     // Interactive Scale Controls (+ / - / Reset 1:1)
     scaleDownBtn.addEventListener("click", () => {
@@ -2200,6 +2416,7 @@
         if (customBadge) customBadge.classList.remove("active");
       }
       updateStepButtonLabel(model);
+      updateAssemblyHotspots(model);
     }
 
     compItems.forEach(item => {
@@ -2249,6 +2466,99 @@
         }
       }
     });
+
+    // 3D Assembly Hotspots & Interactive Tap-to-Replace Controller
+    const hotspotMobo = document.getElementById("hotspotMobo");
+    const hotspotCpuRam = document.getElementById("hotspotCpuRam");
+    const hotspotCooler = document.getElementById("hotspotCooler");
+    const hotspotGpu = document.getElementById("hotspotGpu");
+    const hotspotPsuFans = document.getElementById("hotspotPsuFans");
+
+    function updateAssemblyHotspots(modelSrc) {
+      const filename = modelSrc.split("?")[0].replace("models/", "");
+      if (hotspotMobo) hotspotMobo.hidden = (filename !== "case.glb");
+      if (hotspotCpuRam) hotspotCpuRam.hidden = (filename !== "stage2_mobo.glb");
+      if (hotspotCooler) hotspotCooler.hidden = (filename !== "stage3_cpu_ram.glb");
+      if (hotspotGpu) hotspotGpu.hidden = (filename !== "stage4_cooler.glb");
+      if (hotspotPsuFans) hotspotPsuFans.hidden = (filename !== "stage5_gpu.glb");
+    }
+
+    function advanceToNextStage(targetModel, toastMsg) {
+      const item = document.querySelector(`.comp-item[data-model="${targetModel}"]`);
+      if (item) {
+        loadComponent(item, true);
+        showToast(toastMsg);
+      }
+    }
+
+    if (hotspotMobo) {
+      hotspotMobo.addEventListener("click", (e) => {
+        e.stopPropagation();
+        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: ROG MAXIMUS Z790 MOTHERBOARD MOUNTED!");
+      });
+    }
+
+    if (hotspotCpuRam) {
+      hotspotCpuRam.addEventListener("click", (e) => {
+        e.stopPropagation();
+        advanceToNextStage("models/stage3_cpu_ram.glb", "STEP 3: CORE i9-14900K CPU & DDR5 RAM INSERTED!");
+      });
+    }
+
+    if (hotspotCooler) {
+      hotspotCooler.addEventListener("click", (e) => {
+        e.stopPropagation();
+        advanceToNextStage("models/stage4_cooler.glb", "STEP 4: KRAKEN 360 LIQUID COOLER MOUNTED!");
+      });
+    }
+
+    if (hotspotGpu) {
+      hotspotGpu.addEventListener("click", (e) => {
+        e.stopPropagation();
+        advanceToNextStage("models/stage5_gpu.glb", "STEP 5: GEFORCE RTX 4080 GPU LOCKED IN!");
+      });
+    }
+
+    if (hotspotPsuFans) {
+      hotspotPsuFans.addEventListener("click", (e) => {
+        e.stopPropagation();
+        advanceToNextStage("models/assembled_pc.glb", "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!");
+      });
+    }
+
+    // Direct Tap on 3D Model / Viewport to Auto-Replace & Advance Next Component
+    let tapStartX = 0, tapStartY = 0, tapStartTime = 0;
+    arViewer.addEventListener("pointerdown", (e) => {
+      tapStartX = e.clientX;
+      tapStartY = e.clientY;
+      tapStartTime = Date.now();
+    });
+
+    arViewer.addEventListener("pointerup", (e) => {
+      const dist = Math.hypot(e.clientX - tapStartX, e.clientY - tapStartY);
+      const duration = Date.now() - tapStartTime;
+      // Filter out camera orbit / dragging gestures
+      if (dist > 10 || duration > 450) return;
+      if (e.target !== arViewer) return;
+
+      const currentSrc = arViewer.src || "";
+      const filename = currentSrc.split("?")[0].replace("models/", "");
+
+      if (filename === "case.glb") {
+        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: MOTHERBOARD INSTALLED INTO TRAY!");
+      } else if (filename === "stage2_mobo.glb") {
+        advanceToNextStage("models/stage3_cpu_ram.glb", "STEP 3: CORE i9 CPU & DDR5 RAM INSERTED!");
+      } else if (filename === "stage3_cpu_ram.glb") {
+        advanceToNextStage("models/stage4_cooler.glb", "STEP 4: 360MM COOLER MOUNTED OVER CPU!");
+      } else if (filename === "stage4_cooler.glb") {
+        advanceToNextStage("models/stage5_gpu.glb", "STEP 5: GEFORCE RTX 4080 LOCKED INTO PCIE SLOT!");
+      } else if (filename === "stage5_gpu.glb") {
+        advanceToNextStage("models/assembled_pc.glb", "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!");
+      }
+    });
+
+    // Initialize assembly hotspots on casing
+    updateAssemblyHotspots("models/case.glb");
 
     // AUTO-BUILD SEQUENCE (Automated 6-Step Assembly of Full PC)
     const buildSteps = [
