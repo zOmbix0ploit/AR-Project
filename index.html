@@ -828,8 +828,8 @@
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
-    src="models/assembled_pc.glb"
-    ios-src="models/assembled_pc.usdz"
+    src="models/assembled_pc.glb?v=3"
+    ios-src="models/assembled_pc.usdz?v=3"
     scale="0.46 0.46 0.46"
     ar
     ar-modes="quick-look scene-viewer webxr"
@@ -1235,8 +1235,10 @@
       scaleToggleBtn.textContent = "Zoom 2.5x";
       applyModelScale(scale);
 
-      arViewer.src = model;
-      const usdzModel = model.replace(/\.glb$/, '.usdz');
+      const cacheBust = "?v=3";
+      const modelUrl = model.includes("?") ? model : (model + cacheBust);
+      arViewer.src = modelUrl;
+      const usdzModel = model.replace(/\.glb$/, '.usdz') + cacheBust;
       arViewer.setAttribute('ios-src', usdzModel);
       updateStepButtonLabel(model);
 
