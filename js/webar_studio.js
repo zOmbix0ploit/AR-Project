@@ -55,23 +55,23 @@ let isStudioActive = false;
 const loader = new GLTFLoader();
 const exporter = new GLTFExporter();
 
-// Standard 1:1 Initial Hardware Configs (Calibrated from Visual 3D Rig)
+// Standard 1:1 Hardware Configs mapped directly to nodes in assembled_pc.glb
 const PARTS_CONFIG = [
-  { id: 'case',   name: 'PC Chassis',    model: 'models/case.glb',        pos: [0.0035, -0.0042, -0.0006], rot: [-0.5345, 0.6556, 0.3463], scale: [1.262, 1.242, 1.238] },
-  { id: 'mobo',   name: 'Motherboard',   model: 'models/motherboard.glb', pos: [-0.014, 0.006, -0.0287],  rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
-  { id: 'cpu',    name: 'Core i9 CPU',   model: 'models/cpu.glb',         pos: [-0.0281, 0.066, -0.0413], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
-  { id: 'ram1',   name: 'DDR5 RAM #1',   model: 'models/ram.glb',         pos: [0.0215, 0.066, -0.0240],  rot: [Math.PI / 2, -0.011, -0.0012], scale: [1, 1, 1] },
-  { id: 'ram2',   name: 'DDR5 RAM #2',   model: 'models/ram.glb',         pos: [0.0346, 0.066, -0.0258],  rot: [Math.PI / 2, 0, 0], scale: [1, 1, 1] },
-  { id: 'cooler', name: 'CPU Cooler',    model: 'models/cooler.glb',      pos: [-0.0254, 0.066, -0.005],  rot: [1.6743, 0, 0],      scale: [0.632, 1, 0.574] },
-  { id: 'gpu',    name: 'RTX 4080 GPU',  model: 'models/gpu.glb',         pos: [0.0062, -0.0259, 0.0062], rot: [0.0945, 1.5685, 1.4668], scale: [1, 1, 1] },
-  { id: 'psu',    name: '1000W ATX PSU', model: 'models/psu.glb',         pos: [-0.1158, -0.130, 0.0294], rot: [0, 1.5483, 0],     scale: [1, 0.768, 0.689] },
-  { id: 'fan_f1', name: 'Front Fan #1 (Bottom)', model: 'models/fan.glb', pos: [0.175, -0.1654, -0.010], rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
-  { id: 'fan_f2', name: 'Front Fan #2 (Middle)', model: 'models/fan.glb', pos: [0.175, -0.0604, -0.010], rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
-  { id: 'fan_f3', name: 'Front Fan #3 (Top)',    model: 'models/fan.glb', pos: [0.175,  0.0446, -0.010], rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
-  { id: 'fan_r1', name: 'Rear Exhaust Fan',      model: 'models/fan.glb', pos: [-0.165, -0.0004, -0.030],rot: [0, Math.PI / 2, 0], scale: [1, 1, 1] },
-  { id: 'fan_b1', name: 'Bottom Fan #1 (Rear)',  model: 'models/fan.glb', pos: [-0.105, -0.165, 0.0504], rot: [-Math.PI / 2, 0, 0], scale: [1, 1, 1] },
-  { id: 'fan_b2', name: 'Bottom Fan #2 (Middle)',model: 'models/fan.glb', pos: [ 0.000, -0.165, 0.0504], rot: [-Math.PI / 2, 0, 0], scale: [1, 1, 1] },
-  { id: 'fan_b3', name: 'Bottom Fan #3 (Front)', model: 'models/fan.glb', pos: [ 0.105, -0.165, 0.0504], rot: [-Math.PI / 2, 0, 0], scale: [1, 1, 1] }
+  { id: 'case',   node: 'Studio_case',               name: 'PC Chassis' },
+  { id: 'mobo',   node: 'Studio_mobo',               name: 'Motherboard' },
+  { id: 'cpu',    node: 'Studio_cpu',                name: 'Core i9 CPU' },
+  { id: 'ram1',   node: 'Studio_ram1',               name: 'DDR5 RAM #1' },
+  { id: 'ram2',   node: 'Studio_ram2',               name: 'DDR5 RAM #2' },
+  { id: 'cooler', node: 'Studio_cooler',             name: 'Kraken 360 Cooler' },
+  { id: 'gpu',    node: 'Studio_gpu',                name: 'RTX 4080 GPU' },
+  { id: 'psu',    node: 'Studio_psu',                name: '1000W ATX PSU' },
+  { id: 'fan_f1', node: 'Studio_fan_front_bottom',    name: 'Front Fan #1 (Bottom)' },
+  { id: 'fan_f2', node: 'Studio_fan_front_mid',       name: 'Front Fan #2 (Middle)' },
+  { id: 'fan_f3', node: 'Studio_fan_front_top',       name: 'Front Fan #3 (Top)' },
+  { id: 'fan_r1', node: 'Studio_fan_rear',            name: 'Rear Exhaust Fan' },
+  { id: 'fan_b1', node: 'Studio_fan_bottom_rear',     name: 'Bottom Fan #1 (Rear)' },
+  { id: 'fan_b2', node: 'Studio_fan_bottom_mid',      name: 'Bottom Fan #2 (Middle)' },
+  { id: 'fan_b3', node: 'Studio_fan_bottom_front',    name: 'Bottom Fan #3 (Front)' }
 ];
 
 function initStudio() {
@@ -201,7 +201,7 @@ function loadAllParts() {
   const savedTransforms = getCachedTransforms();
 
   PARTS_CONFIG.forEach((cfg) => {
-    // Create UI item
+    // Create UI item in left hierarchy panel
     const itemEl = document.createElement('div');
     itemEl.className = 'part-list-item';
     itemEl.dataset.partId = cfg.id;
@@ -234,37 +234,56 @@ function loadAllParts() {
         }
       }
     });
+  });
 
-    // Load 3D Asset
-    loader.load(cfg.model, (gltf) => {
-      const partRoot = gltf.scene;
-      partRoot.name = `Studio_${cfg.id}`;
-      partRoot.userData = { partId: cfg.id, config: cfg };
+  // Load the complete 1:1 assembled PC master model containing all 15 components
+  loader.load('models/assembled_pc.glb?v=10', (gltf) => {
+    const rigScene = gltf.scene;
+
+    PARTS_CONFIG.forEach((cfg) => {
+      let partObj = null;
+      rigScene.traverse((child) => {
+        if (!partObj && child.name === cfg.node) {
+          partObj = child;
+        }
+      });
+
+      if (!partObj) {
+        console.warn(`Part node ${cfg.node} not found in model.`);
+        return;
+      }
+
+      partObj.userData = { partId: cfg.id, config: cfg };
+
+      // Store factory default transforms for reset
+      cfg.initialPos = [partObj.position.x, partObj.position.y, partObj.position.z];
+      cfg.initialRot = [partObj.rotation.x, partObj.rotation.y, partObj.rotation.z];
+      cfg.initialScale = [partObj.scale.x, partObj.scale.y, partObj.scale.z];
 
       // Apply saved position, rotation, scale if user previously customized it
       const saved = savedTransforms && savedTransforms[cfg.id];
       if (saved) {
-        partRoot.position.set(...saved.pos);
-        partRoot.rotation.set(...saved.rot);
-        partRoot.scale.set(...saved.scale);
+        partObj.position.set(...saved.pos);
+        partObj.rotation.set(...saved.rot);
+        partObj.scale.set(...saved.scale);
         if (typeof saved.visible === 'boolean') {
-          partRoot.visible = saved.visible;
-          visBtn.classList.toggle('visible', saved.visible);
+          partObj.visible = saved.visible;
+          const visBtn = document.querySelector(`.part-list-item[data-part-id="${cfg.id}"] .part-vis-btn`);
+          if (visBtn) visBtn.classList.toggle('visible', saved.visible);
         }
-      } else {
-        partRoot.position.set(...cfg.pos);
-        partRoot.rotation.set(...cfg.rot);
-        partRoot.scale.set(...cfg.scale);
       }
 
-      scene.add(partRoot);
-      partsRegistry[cfg.id] = partRoot;
-
-      // Default select motherboard or chassis
-      if (cfg.id === 'mobo' && !selectedObject) {
-        selectPart('mobo');
-      }
+      partsRegistry[cfg.id] = partObj;
     });
+
+    scene.add(rigScene);
+
+    // Default select Front Fan #1 or Motherboard
+    if (partsRegistry['fan_f1']) {
+      selectPart('fan_f1');
+    } else if (partsRegistry['mobo']) {
+      selectPart('mobo');
+    }
   });
 }
 
@@ -380,9 +399,11 @@ snapPsuShroudBtn.addEventListener('click', () => snapSelected([-0.1158, -0.130, 
 resetPartTransformBtn.addEventListener('click', () => {
   if (!selectedObject || !selectedObject.userData || !selectedObject.userData.config) return;
   const cfg = selectedObject.userData.config;
-  selectedObject.position.set(...cfg.pos);
-  selectedObject.rotation.set(...cfg.rot);
-  selectedObject.scale.set(...cfg.scale);
+  if (cfg.initialPos) {
+    selectedObject.position.set(...cfg.initialPos);
+    selectedObject.rotation.set(...cfg.initialRot);
+    selectedObject.scale.set(...cfg.initialScale);
+  }
   updateInspectorFromObject(selectedObject);
 });
 
@@ -561,11 +582,13 @@ if (studioResetAllBtn) {
 
     PARTS_CONFIG.forEach(cfg => {
       const obj = partsRegistry[cfg.id];
-      if (obj) {
-        obj.position.set(...cfg.pos);
-        obj.rotation.set(...cfg.rot);
-        obj.scale.set(...cfg.scale);
+      if (obj && cfg.initialPos) {
+        obj.position.set(...cfg.initialPos);
+        obj.rotation.set(...cfg.initialRot);
+        obj.scale.set(...cfg.initialScale);
         obj.visible = true;
+        const visBtn = document.querySelector(`.part-list-item[data-part-id="${cfg.id}"] .part-vis-btn`);
+        if (visBtn) visBtn.classList.add('visible');
       }
     });
 

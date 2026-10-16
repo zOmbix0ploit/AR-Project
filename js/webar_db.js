@@ -72,13 +72,23 @@ export async function saveRigToDB(glbBlob, transforms) {
 export async function loadRigFromDB() {
   try {
     const db = await openDB();
-    return new Promise((resolve, reject) => {
+    const record = await new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, 'readonly');
       const store = tx.objectStore(STORE_NAME);
       const req = store.get(RIG_KEY);
       req.onsuccess = () => resolve(req.result || null);
       req.onerror = () => reject(req.error);
     });
+
+    if (record) {
+      // If saved rig lacks 7 fans, purge legacy record so user sees new assembled rig
+      if (!record.transforms || !record.transforms.fan_f1) {
+        console.log("Purging outdated custom rig to load latest 7x ARGB Fan rig...");
+        await deleteRigFromDB();
+        return null;
+      }
+    }
+    return record;
   } catch (err) {
     console.warn('Could not read custom rig from IndexedDB:', err);
     return null;
@@ -122,7 +132,14 @@ export async function deleteRigFromDB() {
 export function getCachedTransforms() {
   try {
     const raw = localStorage.getItem('webar_user_transforms');
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && !parsed.fan_f1) {
+      localStorage.removeItem('webar_user_transforms');
+      localStorage.removeItem('webar_has_custom_rig');
+      return null;
+    }
+    return parsed;
   } catch (_) {
     return null;
   }

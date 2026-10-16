@@ -1571,8 +1571,8 @@
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
-    src="models/assembled_pc.glb?v=9"
-    ios-src="models/assembled_pc.usdz?v=9"
+    src="models/assembled_pc.glb?v=10"
+    ios-src="models/assembled_pc.usdz?v=10"
     scale="1 1 1"
     ar
     ar-modes="webxr scene-viewer quick-look"
@@ -2191,7 +2191,7 @@
         activePartTitle.textContent = "Nethuna Custom Gaming Rig";
         activePartDesc.textContent = `${dims} - User Calibrated Build (Saved in Browser)`;
       } else {
-        const cacheBust = "?v=9";
+        const cacheBust = "?v=10";
         const modelUrl = model.includes("?") ? model : (model + cacheBust);
         arViewer.src = modelUrl;
         const usdzModel = model.replace(/\.glb$/, '.usdz') + cacheBust;
@@ -2540,16 +2540,22 @@
 
         const savedRecord = await loadRigFromDB();
         if (savedRecord && savedRecord.blob) {
-          const customUrl = URL.createObjectURL(savedRecord.blob);
-          window.__customRigBlobUrl = customUrl;
+          if (!savedRecord.transforms || !savedRecord.transforms.fan_f1) {
+            console.log("Purging outdated custom rig to display new 7x ARGB Fan rig...");
+            await deleteRigFromDB();
+            window.__customRigBlobUrl = null;
+          } else {
+            const customUrl = URL.createObjectURL(savedRecord.blob);
+            window.__customRigBlobUrl = customUrl;
 
-          // If current model is assembled_pc (default initial hero item)
-          if (!arViewer.src || arViewer.src.includes("assembled_pc.glb")) {
-            arViewer.src = customUrl;
-            if (customRigBadge) customRigBadge.classList.add("active");
-            activePartTitle.textContent = "Nethuna Custom Gaming Rig";
-            activePartDesc.textContent = "User Calibrated 3D WebAR Build (Loaded from Browser Storage)";
-            showToast("CUSTOM SAVED RIG RESTORED!");
+            // If current model is assembled_pc (default initial hero item)
+            if (!arViewer.src || arViewer.src.includes("assembled_pc.glb")) {
+              arViewer.src = customUrl;
+              if (customRigBadge) customRigBadge.classList.add("active");
+              activePartTitle.textContent = "Nethuna Custom Gaming Rig";
+              activePartDesc.textContent = "User Calibrated 3D WebAR Build (Loaded from Browser Storage)";
+              showToast("CUSTOM SAVED RIG RESTORED!");
+            }
           }
         }
 
@@ -2563,7 +2569,7 @@
             if (heroItem) {
               loadComponent(heroItem, true);
             } else {
-              arViewer.src = "models/assembled_pc.glb?v=9";
+              arViewer.src = "models/assembled_pc.glb?v=10";
             }
             showToast("REVERTED TO FACTORY ASSEMBLED RIG");
           });
@@ -2581,7 +2587,7 @@
         window.addEventListener('custom-rig-cleared', () => {
           window.__customRigBlobUrl = null;
           if (customRigBadge) customRigBadge.classList.remove("active");
-          arViewer.src = "models/assembled_pc.glb?v=9";
+          arViewer.src = "models/assembled_pc.glb?v=10";
         });
       } catch (err) {
         console.warn("Could not check IndexedDB for saved rig:", err);
@@ -2589,6 +2595,6 @@
     })();
   </script>
   <!-- In-Browser Visual 3D WebAR Creator Studio Module -->
-  <script type="module" src="js/webar_studio.js"></script>
+  <script type="module" src="js/webar_studio.js?v=10"></script>
 </body>
 </html>
