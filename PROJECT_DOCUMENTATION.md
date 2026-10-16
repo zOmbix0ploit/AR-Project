@@ -5,7 +5,7 @@
 ---
 
 # PROJECT DOCUMENTATION REPORT
-## Project Title: TitanRig AR – Next-Gen Interactive PC Building & Hardware Visualizer
+## Project Title: Nethuna-WebAR – Next-Gen Interactive PC Building & Hardware Visualizer
 
 * **Student Name:** [Your Name Here]
 * **Student ID / Reg No:** [Your Student ID]
@@ -17,9 +17,9 @@
 
 ### 1. Project Concept and Purpose (5 Marks)
 * **Concept:**  
-  "TitanRig AR" is an interactive, web-based augmented reality (WebAR) application designed to allow users to visualize, assemble, and inspect computer hardware components in real-world 1:1 physical scale directly inside their web browser without requiring any mobile app downloads.
+  "Nethuna-WebAR" is an interactive, web-based augmented reality (WebAR) application designed to allow users to visualize, assemble, and inspect computer hardware components in real-world 1:1 physical scale directly inside their web browser without requiring any mobile app downloads.
 * **Purpose:**  
-  Building a custom computer often leads to compatibility uncertainties regarding dimensions, component spacing (e.g., whether a 336mm GPU or 360mm radiator fits in a mid-tower case), and aesthetic coordination. TitanRig AR solves this by empowering users to project true-to-life 3D hardware onto their physical desk or floor before purchasing or assembling.
+  Building a custom computer often leads to compatibility uncertainties regarding dimensions, component spacing (e.g., whether a 336mm GPU or 360mm radiator fits in a mid-tower case), and aesthetic coordination. Nethuna-WebAR solves this by empowering users to project true-to-life 3D hardware onto their physical desk or floor before purchasing or assembling.
 * **Target Audience:**  
   - PC gamers, enthusiasts, and hardware builders looking to plan setups.
   - STEM students and educators learning computer hardware architecture.
@@ -54,7 +54,7 @@ The project features 7 modular, high-detail 3D models configured with realistic 
 ---
 
 ### 4. Interactive Features Developed (10 Marks)
-TitanRig AR incorporates multiple rich interactive features that fulfill and exceed the assignment requirements:
+Nethuna-WebAR incorporates multiple rich interactive features that fulfill and exceed the assignment requirements:
 1. **Interactive Component Switcher (Step-by-Step Assembly):**  
    Users can tap between Step 01 through Step 07 via an on-screen horizontal carousel to inspect each component in 360 degrees.
 2. **Dynamic RGB Theme Customizer:**  

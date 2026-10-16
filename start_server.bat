@@ -1,7 +1,7 @@
 @echo off
-title TitanRig WebAR Local Server
+title Nethuna-WebAR Local Server
 echo ========================================================
-echo       Starting TitanRig WebAR Local Server...
+echo       Starting Nethuna-WebAR Local Server...
 echo ========================================================
 echo.
 echo Opening browser at http://localhost:8000 ...
