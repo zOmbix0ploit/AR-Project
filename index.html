@@ -455,6 +455,78 @@
       height: 17px;
       fill: currentColor;
     }
+    .palette-btn.active {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      background: #eff6ff;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Floating Position & Orientation D-pad Dock */
+    .position-dock {
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      padding: 0.65rem 0.55rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.25s ease;
+    }
+    .dock-title {
+      font-size: 0.58rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 0.15rem;
+    }
+    .dpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 34px);
+      grid-template-rows: repeat(3, 34px);
+      gap: 4px;
+      place-items: center;
+    }
+    .dpad-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid var(--border-medium);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    .dpad-btn:hover, .dpad-btn:active {
+      background: #eff6ff;
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      transform: scale(0.96);
+    }
+    .dpad-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+    .dpad-center-btn {
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: var(--accent-blue);
+    }
 
     /* Bottom Hardware Selector Strip (Mobile Optimized) */
     .bottom-selector-wrap {
@@ -844,6 +916,20 @@
         width: 35px;
         height: 35px;
       }
+      .position-dock {
+        right: 0.6rem;
+        padding: 0.45rem 0.35rem;
+      }
+      .dpad-grid {
+        grid-template-columns: repeat(3, 28px);
+        grid-template-rows: repeat(3, 28px);
+        gap: 3px;
+      }
+      .dpad-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+      }
       .bottom-selector-wrap {
         bottom: calc(0.55rem + var(--safe-bottom));
         padding: 0 0.5rem;
@@ -938,11 +1024,27 @@
     <span id="toastMsg">PC ASSEMBLED</span>
   </div>
 
-  <!-- Left Quick Controls -->
+  <!-- Left Quick Controls (Transform, Rotation & Orientation) -->
   <div class="left-palette">
-    <!-- Camera Reset -->
-    <button class="palette-btn" id="resetCamBtn" type="button" aria-label="Reset 3D Camera View" title="Reset 3D View">
+    <!-- Camera Reset & Center -->
+    <button class="palette-btn" id="resetCamBtn" type="button" aria-label="Reset 3D Camera View" title="Reset & Center View">
       <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+    </button>
+    <!-- Rotate Counter-Clockwise 45° -->
+    <button class="palette-btn" id="rotLeftBtn" type="button" aria-label="Rotate Left 45 Degrees" title="Rotate Left 45°">
+      <svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.2 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
+    </button>
+    <!-- Rotate Clockwise 45° -->
+    <button class="palette-btn" id="rotRightBtn" type="button" aria-label="Rotate Right 45 Degrees" title="Rotate Right 45°">
+      <svg viewBox="0 0 24 24"><path d="M11.5 8c2.65 0 5.05.99 6.9 2.6L22 7v9h-9l3.62-3.62c-1.39-1.2-3.16-1.88-5.12-1.88-3.54 0-6.55 2.31-7.6 5.5l-2.37-.78C2.92 11.03 6.85 8 11.5 8z"/></svg>
+    </button>
+    <!-- Preset Angle Switcher (Front / Side / Top / Isometric) -->
+    <button class="palette-btn" id="presetAngleBtn" type="button" aria-label="Switch Camera Angle" title="Cycle Angle (Front / Side / Top / 45°)">
+      <svg viewBox="0 0 24 24"><path d="M19 12h-2v3h-3v2h5v-5zM7 9h3V7H5v5h2V9zm14-6H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z"/></svg>
+    </button>
+    <!-- 1-Finger Pan/Move Position Mode Toggle -->
+    <button class="palette-btn" id="panModeToggleBtn" type="button" aria-label="Toggle Move/Position Mode" title="Toggle Drag to Move vs Orbit">
+      <svg viewBox="0 0 24 24"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
     </button>
     <!-- Auto-Rotate -->
     <button class="palette-btn" id="autoRotateBtn" type="button" aria-label="Toggle Auto-Rotation" title="Toggle Auto-Rotation">
@@ -952,6 +1054,32 @@
     <button class="palette-btn" id="soundBtn" type="button" aria-label="Play Power Sound Effect" title="Play Power Chime">
       <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
     </button>
+  </div>
+
+  <!-- Floating Position & Direction D-Pad Dock -->
+  <div class="position-dock" id="positionDock" title="Nudge 3D Position & Target">
+    <span class="dock-title">POSITION</span>
+    <div class="dpad-grid">
+      <div></div>
+      <button class="dpad-btn" id="moveUpBtn" type="button" aria-label="Nudge Up" title="Move Up (Y+)">
+        <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+      </button>
+      <div></div>
+      <button class="dpad-btn" id="moveLeftBtn" type="button" aria-label="Nudge Left" title="Move Left (X-)">
+        <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+      </button>
+      <button class="dpad-btn dpad-center-btn" id="centerPosBtn" type="button" aria-label="Center Model" title="Center Position">
+        1:1
+      </button>
+      <button class="dpad-btn" id="moveRightBtn" type="button" aria-label="Nudge Right" title="Move Right (X+)">
+        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+      </button>
+      <div></div>
+      <button class="dpad-btn" id="moveDownBtn" type="button" aria-label="Nudge Down" title="Move Down (Y-)">
+        <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+      </button>
+      <div></div>
+    </div>
   </div>
 
   <!-- Animated Modern Loading Overlay -->
@@ -981,16 +1109,20 @@
     ios-src="models/assembled_pc.usdz?v=3"
     scale="0.46 0.46 0.46"
     ar
-    ar-modes="quick-look scene-viewer webxr"
+    ar-modes="webxr scene-viewer quick-look"
     ar-scale="auto"
-    ar-placement="floor"
     camera-controls
-    touch-action="pan-y"
+    touch-action="none"
+    min-camera-orbit="auto 0deg auto"
+    max-camera-orbit="auto 180deg auto"
+    min-field-of-view="10deg"
+    max-field-of-view="110deg"
+    interpolation-decay="200"
     auto-rotate
     rotation-per-second="15deg"
-    shadow-intensity="1.5"
-    shadow-softness="0.8"
-    exposure="1.0"
+    shadow-intensity="1.2"
+    shadow-softness="0.85"
+    exposure="1.06"
     environment-image="neutral"
     camera-orbit="45deg 75deg 105%"
     alt="Nethuna-WebAR 3D Augmented Reality Component">
@@ -1228,8 +1360,17 @@
     const dimText = document.getElementById("dimText");
     const scaleToggleBtn = document.getElementById("scaleToggleBtn");
     const resetCamBtn = document.getElementById("resetCamBtn");
+    const rotLeftBtn = document.getElementById("rotLeftBtn");
+    const rotRightBtn = document.getElementById("rotRightBtn");
+    const presetAngleBtn = document.getElementById("presetAngleBtn");
+    const panModeToggleBtn = document.getElementById("panModeToggleBtn");
     const autoRotateBtn = document.getElementById("autoRotateBtn");
     const soundBtn = document.getElementById("soundBtn");
+    const moveUpBtn = document.getElementById("moveUpBtn");
+    const moveDownBtn = document.getElementById("moveDownBtn");
+    const moveLeftBtn = document.getElementById("moveLeftBtn");
+    const moveRightBtn = document.getElementById("moveRightBtn");
+    const centerPosBtn = document.getElementById("centerPosBtn");
     const qrBtn = document.getElementById("qrBtn");
     const qrDialog = document.getElementById("qrDialog");
     const closeQrBtn = document.getElementById("closeQrBtn");
@@ -1241,6 +1382,15 @@
     let audioCtx = null;
     let currentBaseScale = 0.46;
     let isZoomed = false;
+    let isPanModeActive = false;
+    let isPointerPanning = false;
+    let panStartX = 0;
+    let panStartY = 0;
+    let baseTargetX = 0;
+    let baseTargetY = 0;
+    let curTargetX = 0;
+    let curTargetY = 0;
+    let curTargetZ = 0;
     let isCameraPassActive = false;
     let cameraStream = null;
     let autoBuildTimer = null;
@@ -1418,6 +1568,11 @@
       scaleToggleBtn.style.color = "#334155";
       applyModelScale(scale);
 
+      curTargetX = 0;
+      curTargetY = 0;
+      curTargetZ = 0;
+      if (typeof updateCameraTarget === "function") updateCameraTarget();
+
       const cacheBust = "?v=3";
       const modelUrl = model.includes("?") ? model : (model + cacheBust);
       arViewer.src = modelUrl;
@@ -1541,11 +1696,148 @@
 
     cameraPassToggleBtn.addEventListener("click", toggleRoomCamera);
 
-    // Camera Controls
+    // Camera & Transform Controls
+    function updateCameraTarget() {
+      arViewer.cameraTarget = `${curTargetX.toFixed(2)}m ${curTargetY.toFixed(2)}m ${curTargetZ.toFixed(2)}m`;
+    }
+
+    function getCurOrbitDeg() {
+      try {
+        const o = arViewer.getCameraOrbit();
+        if (o) {
+          return {
+            theta: (o.theta * 180 / Math.PI),
+            phi: (o.phi * 180 / Math.PI),
+            radius: o.radius
+          };
+        }
+      } catch (e) {}
+      return { theta: 45, phi: 75, radius: '105%' };
+    }
+
     resetCamBtn.addEventListener("click", () => {
       playSfx('click');
+      curTargetX = 0;
+      curTargetY = 0;
+      curTargetZ = 0;
+      updateCameraTarget();
       arViewer.cameraOrbit = "45deg 75deg 105%";
       arViewer.fieldOfView = "auto";
+      showToast("CAMERA & POSITION RESET");
+    });
+
+    // Rotate Left 45°
+    rotLeftBtn.addEventListener("click", () => {
+      playSfx('click');
+      const cur = getCurOrbitDeg();
+      const radStr = typeof cur.radius === 'number' ? (cur.radius.toFixed(2) + 'm') : (cur.radius || '105%');
+      arViewer.cameraOrbit = `${(cur.theta - 45).toFixed(1)}deg ${cur.phi.toFixed(1)}deg ${radStr}`;
+      showToast("ROTATED -45°");
+    });
+
+    // Rotate Right 45°
+    rotRightBtn.addEventListener("click", () => {
+      playSfx('click');
+      const cur = getCurOrbitDeg();
+      const radStr = typeof cur.radius === 'number' ? (cur.radius.toFixed(2) + 'm') : (cur.radius || '105%');
+      arViewer.cameraOrbit = `${(cur.theta + 45).toFixed(1)}deg ${cur.phi.toFixed(1)}deg ${radStr}`;
+      showToast("ROTATED +45°");
+    });
+
+    // Preset Angles (Cycle Front, Iso, Side, Rear, Top)
+    const anglePresets = [
+      { name: "ISOMETRIC 3/4", orbit: "45deg 65deg 105%" },
+      { name: "FRONT VIEW", orbit: "0deg 75deg 105%" },
+      { name: "RIGHT SIDE", orbit: "90deg 75deg 105%" },
+      { name: "REAR 3/4 VIEW", orbit: "135deg 65deg 105%" },
+      { name: "TOP-DOWN VIEW", orbit: "0deg 12deg 115%" }
+    ];
+    let presetIdx = 0;
+    presetAngleBtn.addEventListener("click", () => {
+      playSfx('click');
+      presetIdx = (presetIdx + 1) % anglePresets.length;
+      const p = anglePresets[presetIdx];
+      arViewer.cameraOrbit = p.orbit;
+      showToast(`CAMERA: ${p.name}`);
+    });
+
+    // Pan / Drag-to-Move Position Mode Toggle
+    panModeToggleBtn.addEventListener("click", () => {
+      playSfx('click');
+      isPanModeActive = !isPanModeActive;
+      if (isPanModeActive) {
+        arViewer.removeAttribute("camera-controls");
+        panModeToggleBtn.style.background = "rgba(37, 99, 235, 0.15)";
+        panModeToggleBtn.style.color = "var(--accent-blue)";
+        arViewer.style.cursor = "move";
+        showToast("POSITION MODE: DRAG ANYWHERE TO MOVE");
+      } else {
+        arViewer.setAttribute("camera-controls", "");
+        panModeToggleBtn.style.background = "";
+        panModeToggleBtn.style.color = "";
+        arViewer.style.cursor = "";
+        showToast("ORBIT MODE: DRAG TO ROTATE");
+      }
+    });
+
+    arViewer.addEventListener("pointerdown", (e) => {
+      if (!isPanModeActive) return;
+      isPointerPanning = true;
+      panStartX = e.clientX;
+      panStartY = e.clientY;
+      baseTargetX = curTargetX;
+      baseTargetY = curTargetY;
+      arViewer.style.cursor = "grabbing";
+    });
+
+    window.addEventListener("pointermove", (e) => {
+      if (!isPointerPanning || !isPanModeActive) return;
+      const dx = (e.clientX - panStartX) * 0.0018;
+      const dy = (e.clientY - panStartY) * 0.0018;
+      curTargetX = baseTargetX - dx;
+      curTargetY = baseTargetY + dy;
+      updateCameraTarget();
+    });
+
+    window.addEventListener("pointerup", () => {
+      if (isPointerPanning) {
+        isPointerPanning = false;
+        arViewer.style.cursor = isPanModeActive ? "move" : "";
+      }
+    });
+
+    // Position D-Pad Directional Nudges
+    moveUpBtn.addEventListener("click", () => {
+      playSfx('click');
+      curTargetY -= 0.06;
+      updateCameraTarget();
+    });
+
+    moveDownBtn.addEventListener("click", () => {
+      playSfx('click');
+      curTargetY += 0.06;
+      updateCameraTarget();
+    });
+
+    moveLeftBtn.addEventListener("click", () => {
+      playSfx('click');
+      curTargetX += 0.06;
+      updateCameraTarget();
+    });
+
+    moveRightBtn.addEventListener("click", () => {
+      playSfx('click');
+      curTargetX -= 0.06;
+      updateCameraTarget();
+    });
+
+    centerPosBtn.addEventListener("click", () => {
+      playSfx('snap');
+      curTargetX = 0;
+      curTargetY = 0;
+      curTargetZ = 0;
+      updateCameraTarget();
+      showToast("POSITION RE-CENTERED (1:1)");
     });
 
     autoRotateBtn.addEventListener("click", () => {
