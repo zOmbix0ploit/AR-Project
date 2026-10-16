@@ -975,6 +975,357 @@
         padding: 0.48rem 0.8rem;
       }
     }
+
+    /* 3D Studio Launch Button in Header */
+    .btn-studio-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 9px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s ease;
+    }
+    .btn-studio-launch:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    }
+    .btn-studio-launch svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* In-Browser Visual 3D WebAR Creator Studio Modal */
+    .studio-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #090d16;
+      display: flex;
+      flex-direction: column;
+      font-family: inherit;
+      color: #e2e8f0;
+    }
+    .studio-topbar {
+      height: 52px;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      z-index: 10;
+      gap: 0.8rem;
+    }
+    .studio-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+    .studio-brand svg {
+      width: 18px;
+      height: 18px;
+      fill: #3b82f6;
+    }
+    .studio-gizmo-modes {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(30, 41, 59, 0.8);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .gizmo-mode-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .gizmo-mode-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .gizmo-mode-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
+    }
+    .studio-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .studio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .studio-btn svg {
+      width: 13px;
+      height: 13px;
+      fill: currentColor;
+    }
+    .studio-btn.primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .studio-btn.primary:hover {
+      background: #1d4ed8;
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.4);
+    }
+    .studio-btn.secondary {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .studio-btn.secondary:hover {
+      background: #475569;
+    }
+    .studio-btn.close {
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      padding: 0.4rem;
+      border-radius: 8px;
+    }
+    .studio-btn.close:hover {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    .studio-btn.danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .studio-btn.danger:hover {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    .studio-viewport-wrap {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    #studioCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .studio-parts-panel {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      bottom: 2.5rem;
+      width: 230px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    .panel-header {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(30, 41, 59, 0.4);
+    }
+    .parts-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .part-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.65rem;
+      border-radius: 7px;
+      font-size: 0.74rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .part-list-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+    }
+    .part-list-item.selected {
+      background: rgba(37, 99, 235, 0.25);
+      border: 1px solid #3b82f6;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .part-vis-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+    }
+    .part-vis-btn.visible {
+      color: #3b82f6;
+    }
+    .part-vis-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+    .studio-inspector-panel {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      width: 270px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      max-height: calc(100% - 3.5rem);
+      overflow-y: auto;
+    }
+    .selected-part-name {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: #60a5fa;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.4rem;
+    }
+    .inspector-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .inspector-section label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .axis-input-row {
+      display: grid;
+      grid-template-columns: 16px 1fr 16px 1fr 16px 1fr;
+      align-items: center;
+      gap: 4px;
+    }
+    .axis-badge {
+      font-size: 0.62rem;
+      font-weight: 800;
+      text-align: center;
+      border-radius: 3px;
+      padding: 2px 0;
+    }
+    .axis-badge.x { color: #f87171; }
+    .axis-badge.y { color: #4ade80; }
+    .axis-badge.z { color: #60a5fa; }
+    .axis-input-row input {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      font-size: 0.72rem;
+      font-family: monospace;
+      padding: 4px 5px;
+      border-radius: 5px;
+      text-align: right;
+      width: 100%;
+    }
+    .axis-input-row input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+    .snap-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .snap-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .snap-btn:hover {
+      border-color: #3b82f6;
+      color: #ffffff;
+      background: rgba(37, 99, 235, 0.2);
+    }
+    .studio-hint-bar {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.64rem;
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .studio-parts-panel {
+        width: 160px;
+        left: 0.5rem;
+      }
+      .studio-inspector-panel {
+        width: 200px;
+        right: 0.5rem;
+      }
+      .studio-hint-bar {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1000,6 +1351,11 @@
     </div>
 
     <div class="header-actions">
+      <!-- In-Browser Visual 3D WebAR Creator Studio Launch Button -->
+      <button class="btn-studio-launch" id="openStudioBtn" type="button" aria-label="Open 3D WebAR Creator Studio" title="Open Visual 3D Calibration Studio">
+        <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
+        <span>3D STUDIO</span>
+      </button>
       <!-- Specs Modal Button -->
       <button class="btn-icon" id="specsBtn" type="button" aria-label="Component Specifications" title="Component Specs">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -1376,6 +1732,115 @@
     </div>
     <div id="specsModalBody" class="specs-modal-content"></div>
   </dialog>
+
+  <!-- In-Browser Visual 3D WebAR Creator Studio (Gizmos, Transforms, Live Snapping & Exporter) -->
+  <div class="studio-modal" id="studioModal" style="display: none;">
+    <!-- Studio Header Bar -->
+    <div class="studio-topbar">
+      <div class="studio-brand">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>WebAR 3D Creator Studio</span>
+      </div>
+      <!-- Mode toggles -->
+      <div class="studio-gizmo-modes">
+        <button class="gizmo-mode-btn active" id="gizmoTranslateBtn" title="Translate / Move [W]">Move (W)</button>
+        <button class="gizmo-mode-btn" id="gizmoRotateBtn" title="Rotate / Pitch Yaw Roll [E]">Rotate (E)</button>
+        <button class="gizmo-mode-btn" id="gizmoScaleBtn" title="Scale / Resize [R]">Scale (R)</button>
+        <button class="gizmo-mode-btn" id="gizmoSpaceBtn" title="Toggle Local / World Space">Space: Local</button>
+      </div>
+      <div class="studio-topbar-actions">
+        <button class="studio-btn primary" id="studioApplyBtn" title="Apply Calibrated 3D Model to WebAR Viewer">
+          <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+          APPLY TO WEBAR
+        </button>
+        <button class="studio-btn secondary" id="studioExportBtn" title="Export & Download Calibrated GLB">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          DOWNLOAD GLB
+        </button>
+        <button class="studio-btn close" id="closeStudioBtn" title="Close Studio">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3D Canvas Area -->
+    <div class="studio-viewport-wrap">
+      <canvas id="studioCanvas"></canvas>
+
+      <!-- Left Parts Hierarchy Panel -->
+      <div class="studio-parts-panel">
+        <div class="panel-header">HARDWARE COMPONENTS</div>
+        <div class="parts-list" id="studioPartsList"></div>
+      </div>
+
+      <!-- Right Transform Inspector Panel -->
+      <div class="studio-inspector-panel" id="studioInspector">
+        <div class="panel-header">TRANSFORM INSPECTOR</div>
+        <div class="selected-part-name" id="selectedPartTitle">Select a Component</div>
+
+        <!-- Position -->
+        <div class="inspector-section">
+          <label>Position (Meters)</label>
+          <div class="axis-input-row">
+            <span class="axis-badge x">X</span>
+            <input type="number" id="inpPosX" step="0.005" value="0.000">
+            <span class="axis-badge y">Y</span>
+            <input type="number" id="inpPosY" step="0.005" value="0.000">
+            <span class="axis-badge z">Z</span>
+            <input type="number" id="inpPosZ" step="0.005" value="0.000">
+          </div>
+        </div>
+
+        <!-- Rotation -->
+        <div class="inspector-section">
+          <label>Rotation (Degrees)</label>
+          <div class="axis-input-row">
+            <span class="axis-badge x">X</span>
+            <input type="number" id="inpRotX" step="5" value="0">
+            <span class="axis-badge y">Y</span>
+            <input type="number" id="inpRotY" step="5" value="0">
+            <span class="axis-badge z">Z</span>
+            <input type="number" id="inpRotZ" step="5" value="0">
+          </div>
+        </div>
+
+        <!-- Scale -->
+        <div class="inspector-section">
+          <label>Scale Factor</label>
+          <div class="axis-input-row">
+            <span class="axis-badge x">X</span>
+            <input type="number" id="inpScaleX" step="0.05" value="1.00">
+            <span class="axis-badge y">Y</span>
+            <input type="number" id="inpScaleY" step="0.05" value="1.00">
+            <span class="axis-badge z">Z</span>
+            <input type="number" id="inpScaleZ" step="0.05" value="1.00">
+          </div>
+        </div>
+
+        <!-- Smart Alignments / Snap Targets -->
+        <div class="inspector-section">
+          <label>Intelligent Snap Mounts</label>
+          <div class="snap-buttons-grid">
+            <button class="snap-btn" id="snapMoboTrayBtn" type="button">Snap to Chassis Tray</button>
+            <button class="snap-btn" id="snapCpuSocketBtn" type="button">Snap to CPU Socket</button>
+            <button class="snap-btn" id="snapRamSlotsBtn" type="button">Snap to DDR5 Slots</button>
+            <button class="snap-btn" id="snapCoolerMountBtn" type="button">Snap to Cooler Mount</button>
+            <button class="snap-btn" id="snapPcieSlotBtn" type="button">Snap to PCIe Slot</button>
+            <button class="snap-btn" id="snapPsuShroudBtn" type="button">Snap to PSU Basement</button>
+          </div>
+        </div>
+
+        <button class="studio-btn danger" id="resetPartTransformBtn" type="button" style="width: 100%; margin-top: 0.35rem;">
+          Reset Selected Transform
+        </button>
+      </div>
+
+      <!-- Bottom Hint Bar -->
+      <div class="studio-hint-bar">
+        Left Click + Drag: Orbit Camera | Right Click + Drag: Pan | Scroll: Zoom | Gizmo handles: Move/Rotate/Scale | [W][E][R] Hotkeys
+      </div>
+    </div>
+  </div>
 
   <script>
     const arViewer = document.getElementById("arViewer");
@@ -1965,5 +2430,7 @@
       }
     });
   </script>
+  <!-- In-Browser Visual 3D WebAR Creator Studio Module -->
+  <script type="module" src="js/webar_studio.js"></script>
 </body>
 </html>
