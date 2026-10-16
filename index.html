@@ -2636,46 +2636,54 @@
       if (hotspotPsuFans) hotspotPsuFans.hidden = (filename !== "stage5_gpu.glb");
     }
 
-    function advanceToNextStage(targetModel, toastMsg) {
+    function advanceToNextStage(targetModel, toastMsg, animTrack) {
       const item = document.querySelector(`.comp-item[data-model="${targetModel}"]`);
       if (item) {
         loadComponent(item, true);
         showToast(toastMsg);
+        if (animTrack && arViewer) {
+          setTimeout(() => {
+            try {
+              arViewer.animationName = animTrack;
+              arViewer.play({ repetitions: 1 });
+            } catch (_) {}
+          }, 150);
+        }
       }
     }
 
     if (hotspotMobo) {
       hotspotMobo.addEventListener("click", (e) => {
         e.stopPropagation();
-        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: ROG MAXIMUS Z790 MOTHERBOARD MOUNTED!");
+        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: ROG MAXIMUS Z790 MOTHERBOARD MOUNTED!", "Install_Motherboard");
       });
     }
 
     if (hotspotCpuRam) {
       hotspotCpuRam.addEventListener("click", (e) => {
         e.stopPropagation();
-        advanceToNextStage("models/stage3_cpu_ram.glb", "STEP 3: CORE i9-14900K CPU & DDR5 RAM INSERTED!");
+        advanceToNextStage("models/stage3_cpu_ram.glb", "STEP 3: CORE i9-14900K CPU & DDR5 RAM INSERTED!", "Install_CPU_RAM");
       });
     }
 
     if (hotspotCooler) {
       hotspotCooler.addEventListener("click", (e) => {
         e.stopPropagation();
-        advanceToNextStage("models/stage4_cooler.glb", "STEP 4: KRAKEN 360 LIQUID COOLER MOUNTED!");
+        advanceToNextStage("models/stage4_cooler.glb", "STEP 4: AMD CPU AIR COOLER MOUNTED!", "Install_Cooler");
       });
     }
 
     if (hotspotGpu) {
       hotspotGpu.addEventListener("click", (e) => {
         e.stopPropagation();
-        advanceToNextStage("models/stage5_gpu.glb", "STEP 5: GEFORCE RTX 4080 GPU LOCKED IN!");
+        advanceToNextStage("models/stage5_gpu.glb", "STEP 5: MSI GEFORCE RTX 4080 GPU LOCKED IN!", "Install_GPU");
       });
     }
 
     if (hotspotPsuFans) {
       hotspotPsuFans.addEventListener("click", (e) => {
         e.stopPropagation();
-        advanceToNextStage("models/assembled_pc.glb", "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!");
+        advanceToNextStage("models/assembled_pc.glb", "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!", "Install_PSU_Fans");
       });
     }
 
@@ -2698,27 +2706,27 @@
       const filename = currentSrc.split("?")[0].replace("models/", "");
 
       if (filename === "case.glb") {
-        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: ROG MAXIMUS Z790 MOTHERBOARD MOUNTED!");
+        advanceToNextStage("models/stage2_mobo.glb", "STEP 2: ROG MAXIMUS Z790 MOTHERBOARD MOUNTED!", "Install_Motherboard");
       } else if (filename === "stage2_mobo.glb") {
-        advanceToNextStage("models/stage3_cpu_ram.glb", "STEP 3: CORE i9 CPU & DDR5 RAM INSERTED!");
+        advanceToNextStage("models/stage3_cpu_ram.glb", "STEP 3: CORE i9 CPU & DDR5 RAM INSERTED!", "Install_CPU_RAM");
       } else if (filename === "stage3_cpu_ram.glb") {
-        advanceToNextStage("models/stage4_cooler.glb", "STEP 4: 360MM COOLER MOUNTED OVER CPU!");
+        advanceToNextStage("models/stage4_cooler.glb", "STEP 4: AMD CPU AIR COOLER MOUNTED!", "Install_Cooler");
       } else if (filename === "stage4_cooler.glb") {
-        advanceToNextStage("models/stage5_gpu.glb", "STEP 5: GEFORCE RTX 4080 LOCKED INTO PCIE SLOT!");
+        advanceToNextStage("models/stage5_gpu.glb", "STEP 5: MSI GEFORCE RTX 4080 LOCKED INTO PCIE SLOT!", "Install_GPU");
       } else if (filename === "stage5_gpu.glb") {
-        advanceToNextStage("models/assembled_pc.glb", "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!");
+        advanceToNextStage("models/assembled_pc.glb", "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!", "Install_PSU_Fans");
       } else if (filename === "assembled_pc.glb") {
-        advanceToNextStage("models/case.glb", "RESET TO STEP 1: CHASSIS READY FOR ASSEMBLY!");
+        advanceToNextStage("models/case.glb", "RESET TO STEP 1: CHASSIS READY FOR ASSEMBLY!", "Rig_Reset_Empty");
       } else if (filename === "motherboard.glb") {
-        advanceToNextStage("models/stage2_mobo.glb", "MOTHERBOARD MOUNTED ON CHASSIS TRAY!");
+        advanceToNextStage("models/stage2_mobo.glb", "MOTHERBOARD MOUNTED ON CHASSIS TRAY!", "Install_Motherboard");
       } else if (filename === "cpu.glb" || filename === "ram.glb") {
-        advanceToNextStage("models/stage3_cpu_ram.glb", "CORE i9 CPU & DDR5 RAM INSERTED!");
+        advanceToNextStage("models/stage3_cpu_ram.glb", "CORE i9 CPU & DDR5 RAM INSERTED!", "Install_CPU_RAM");
       } else if (filename === "cooler.glb") {
-        advanceToNextStage("models/stage4_cooler.glb", "360MM LIQUID COOLER MOUNTED!");
+        advanceToNextStage("models/stage4_cooler.glb", "AMD CPU AIR COOLER MOUNTED!", "Install_Cooler");
       } else if (filename === "gpu.glb") {
-        advanceToNextStage("models/stage5_gpu.glb", "GEFORCE RTX 4080 LOCKED IN!");
+        advanceToNextStage("models/stage5_gpu.glb", "MSI GEFORCE RTX 4080 LOCKED IN!", "Install_GPU");
       } else if (filename === "psu.glb" || filename === "fan.glb") {
-        advanceToNextStage("models/assembled_pc.glb", "PSU & 7x ARGB FANS ASSEMBLED!");
+        advanceToNextStage("models/assembled_pc.glb", "PSU & 7x ARGB FANS ASSEMBLED!", "Install_PSU_Fans");
       }
     });
 
