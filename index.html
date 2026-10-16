@@ -8,7 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <title>Nethuna-WebAR – 1:1 True Scale PC Builder</title>
   <meta name="description" content="Build, assemble, and inspect custom PC hardware in true 1:1 physical scale inside Augmented Reality.">
-  <meta name="theme-color" content="#07090f">
+  <meta name="theme-color" content="#f8fafc">
 
   <!-- Google Fonts: Orbitron & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,18 +23,24 @@
 
   <style>
     :root {
-      --bg-dark: #07090f;
-      --bg-panel: rgba(13, 17, 30, 0.88);
-      --border-cyan: rgba(0, 240, 255, 0.32);
-      --border-subtle: rgba(255, 255, 255, 0.1);
-      --glow-cyan: rgba(0, 240, 255, 0.55);
-      --glow-magenta: rgba(255, 0, 127, 0.55);
-      --accent-cyan: #00f0ff;
-      --accent-magenta: #ff007f;
-      --accent-purple: #8b5cf6;
-      --accent-green: #10b981;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-glass: rgba(255, 255, 255, 0.88);
+      --bg-surface-elevated: rgba(255, 255, 255, 0.95);
+      --border-subtle: rgba(15, 23, 42, 0.08);
+      --border-medium: rgba(15, 23, 42, 0.14);
+      --border-accent: #2563eb;
+      --accent-blue: #2563eb;
+      --accent-blue-hover: #1d4ed8;
+      --accent-emerald: #059669;
+      --accent-violet: #6366f1;
+      --accent-amber: #d97706;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 16px 36px -4px rgba(15, 23, 42, 0.12), 0 6px 14px -2px rgba(15, 23, 42, 0.05);
       --font-display: 'Orbitron', -apple-system, sans-serif;
       --font-body: 'Inter', -apple-system, sans-serif;
       --safe-top: env(safe-area-inset-top, 0px);
@@ -54,7 +60,7 @@
       height: 100%;
       height: 100dvh;
       overflow: hidden;
-      background-color: var(--bg-dark);
+      background-color: var(--bg-base);
       color: var(--text-main);
       font-family: var(--font-body);
       position: fixed;
@@ -75,7 +81,7 @@
       display: block;
     }
 
-    /* Full-Screen 3D & WebAR Viewport */
+    /* Full-Screen 3D & WebAR Viewport - Clean Studio Lighting */
     model-viewer {
       width: 100vw;
       height: 100dvh;
@@ -85,84 +91,85 @@
       position: absolute;
       top: 0;
       left: 0;
-      background: transparent;
+      background: radial-gradient(circle at 50% 36%, #ffffff 0%, #f8fafc 55%, #e2e8f0 100%);
     }
 
-    /* Ambient Tech Gradients */
+    /* Ambient Soft Studio Highlights */
     .ambient-glow-1 {
       position: fixed;
-      top: -100px;
-      left: 10%;
-      width: min(450px, 80vw);
-      height: min(450px, 80vw);
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, transparent 70%);
+      top: -80px;
+      left: 15%;
+      width: min(420px, 75vw);
+      height: min(420px, 75vw);
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.07) 0%, transparent 70%);
       pointer-events: none;
       z-index: 1;
     }
     .ambient-glow-2 {
       position: fixed;
-      bottom: -100px;
-      right: 10%;
-      width: min(450px, 80vw);
-      height: min(450px, 80vw);
-      background: radial-gradient(circle, rgba(255, 0, 127, 0.1) 0%, transparent 70%);
+      bottom: -80px;
+      right: 15%;
+      width: min(420px, 75vw);
+      height: min(420px, 75vw);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
       pointer-events: none;
       z-index: 1;
     }
 
-    /* Top Navigation Header */
+    /* Top Navigation Header - Modern Frosted Light Glass */
     header {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       z-index: 20;
-      padding: calc(0.75rem + var(--safe-top)) 1rem 0.6rem 1rem;
+      padding: calc(0.75rem + var(--safe-top)) 1.25rem 0.65rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(180deg, rgba(7, 9, 15, 0.95) 0%, rgba(7, 9, 15, 0) 100%);
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
       pointer-events: auto;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.7rem;
     }
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #6366f1);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 16px var(--glow-cyan);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
       flex-shrink: 0;
     }
     .brand-icon svg {
       width: 20px;
       height: 20px;
-      fill: #fff;
+      fill: #ffffff;
     }
     .brand-text h1 {
       font-family: var(--font-display);
       font-size: clamp(0.95rem, 3.5vw, 1.15rem);
       font-weight: 900;
       letter-spacing: 1.2px;
-      background: linear-gradient(90deg, #fff 40%, var(--accent-cyan) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #0f172a;
       line-height: 1.1;
     }
     .brand-text span {
       font-size: 0.62rem;
-      color: var(--accent-cyan);
+      color: #2563eb;
       text-transform: uppercase;
       letter-spacing: 1.8px;
-      font-weight: 600;
+      font-weight: 700;
       display: block;
     }
 
@@ -173,11 +180,9 @@
     }
 
     .btn-icon {
-      background: var(--bg-panel);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--border-cyan);
-      color: var(--text-main);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      color: var(--text-muted);
       width: 38px;
       height: 38px;
       border-radius: 10px;
@@ -186,12 +191,14 @@
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
       flex-shrink: 0;
     }
     .btn-icon:hover {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 12px var(--glow-cyan);
-      transform: translateY(-2px);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+      transform: translateY(-1px);
     }
     .btn-icon svg {
       width: 18px;
@@ -202,14 +209,14 @@
     /* Top Action Bar (Dual AR Launchers & Scale Status) */
     .top-action-bar {
       position: absolute;
-      top: calc(4.1rem + var(--safe-top));
+      top: calc(4.3rem + var(--safe-top));
       left: 50%;
       transform: translateX(-50%);
       z-index: 25;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
       width: max-content;
       max-width: 96vw;
       pointer-events: none;
@@ -218,128 +225,127 @@
     .action-btn-row {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
       pointer-events: auto;
       flex-wrap: wrap;
       justify-content: center;
     }
 
-    /* Native AR (Quick Look / Scene Viewer) Button */
+    /* Native AR (Quick Look / Scene Viewer) Button - Vibrant Royal Blue */
     .ar-camera-launch-btn {
-      background: linear-gradient(135deg, #00f0ff, #8b5cf6);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      padding: 0.65rem 1.25rem;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 0.65rem 1.3rem;
       border-radius: 26px;
       font-family: var(--font-display);
       font-size: clamp(0.72rem, 2.5vw, 0.82rem);
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
       cursor: pointer;
-      box-shadow: 0 6px 20px var(--glow-cyan);
-      animation: pulseArBtn 2.2s infinite;
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.32);
+      animation: pulseArBtn 2.4s infinite;
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       white-space: nowrap;
     }
     .ar-camera-launch-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.8);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
     }
     .ar-camera-launch-btn svg {
       width: 17px;
       height: 17px;
-      fill: #fff;
+      fill: #ffffff;
       flex-shrink: 0;
     }
 
-    /* Auto-Build Rig Action Button */
-    .auto-build-btn {
-      background: linear-gradient(135deg, #ff007f, #8b5cf6);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      padding: 0.65rem 1.25rem;
-      border-radius: 26px;
-      font-family: var(--font-display);
-      font-size: clamp(0.72rem, 2.5vw, 0.82rem);
-      font-weight: 800;
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      box-shadow: 0 6px 20px var(--glow-magenta);
-      transition: all 0.25s ease;
-      white-space: nowrap;
-    }
-    .auto-build-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 8px 26px rgba(255, 0, 127, 0.8);
-    }
-    .auto-build-btn svg {
-      width: 17px;
-      height: 17px;
-      fill: #fff;
-      flex-shrink: 0;
-    }
-
-    /* Step-by-Step Install Next Part Button */
+    /* Step-by-Step Install Next Part Button - Crisp Emerald */
     .step-build-btn {
-      background: linear-gradient(135deg, #10b981, #00f0ff);
-      color: #07090f;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      padding: 0.65rem 1.15rem;
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.65rem 1.2rem;
       border-radius: 26px;
       font-family: var(--font-display);
       font-size: clamp(0.70rem, 2.4vw, 0.78rem);
       font-weight: 800;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.7px;
       display: flex;
       align-items: center;
       gap: 0.45rem;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
-      transition: all 0.25s ease;
+      box-shadow: 0 6px 18px rgba(5, 150, 105, 0.3);
+      transition: all 0.22s ease;
       white-space: nowrap;
     }
     .step-build-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.75);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 22px rgba(5, 150, 105, 0.45);
     }
     .step-build-btn svg {
       width: 16px;
       height: 16px;
-      fill: #07090f;
+      fill: #ffffff;
       flex-shrink: 0;
     }
 
-    /* Live Pass-through Camera Toggle Button */
-    .camera-live-toggle-btn {
-      background: var(--bg-panel);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--border-cyan);
-      color: var(--accent-cyan);
-      padding: 0.65rem 1.05rem;
+    /* Auto-Build Rig Action Button - Crisp Indigo */
+    .auto-build-btn {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.65rem 1.2rem;
       border-radius: 26px;
       font-family: var(--font-display);
       font-size: clamp(0.70rem, 2.4vw, 0.78rem);
-      font-weight: 700;
-      letter-spacing: 0.8px;
+      font-weight: 800;
+      letter-spacing: 0.7px;
       display: flex;
       align-items: center;
       gap: 0.45rem;
       cursor: pointer;
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+      transition: all 0.22s ease;
+      white-space: nowrap;
+    }
+    .auto-build-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 22px rgba(99, 102, 241, 0.45);
+    }
+    .auto-build-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #ffffff;
+      flex-shrink: 0;
+    }
+
+    /* Live Pass-through Camera Toggle Button - Clean Light White */
+    .camera-live-toggle-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      color: var(--text-main);
+      padding: 0.65rem 1.1rem;
+      border-radius: 26px;
+      font-family: var(--font-display);
+      font-size: clamp(0.70rem, 2.4vw, 0.78rem);
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
       transition: all 0.22s ease;
       white-space: nowrap;
     }
     .camera-live-toggle-btn:hover, .camera-live-toggle-btn.active {
-      background: rgba(0, 240, 255, 0.22);
-      border-color: var(--accent-cyan);
-      color: #fff;
-      box-shadow: 0 0 16px var(--glow-cyan);
+      background: #eff6ff;
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
     }
     .camera-live-toggle-btn svg {
       width: 16px;
@@ -350,94 +356,99 @@
 
     @keyframes pulseArBtn {
       0%, 100% {
-        box-shadow: 0 6px 20px rgba(0, 240, 255, 0.4);
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
       }
       50% {
-        box-shadow: 0 10px 30px rgba(0, 240, 255, 0.85), 0 0 18px rgba(139, 92, 246, 0.5);
+        box-shadow: 0 8px 26px rgba(37, 99, 235, 0.55), 0 0 12px rgba(99, 102, 241, 0.3);
       }
     }
 
-    /* Dimension Status Badge */
+    /* Dimension Status Badge - Clean Light Card */
     .dimension-badge {
       pointer-events: auto;
-      background: rgba(13, 17, 30, 0.88);
+      background: var(--bg-surface-elevated);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--border-cyan);
+      border: 1px solid var(--border-medium);
       border-radius: 20px;
-      padding: 0.32rem 0.85rem;
-      font-size: clamp(0.66rem, 2.4vw, 0.73rem);
-      color: var(--accent-cyan);
+      padding: 0.35rem 0.95rem;
+      font-size: clamp(0.66rem, 2.4vw, 0.74rem);
+      color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
       white-space: nowrap;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow-sm);
     }
     .dim-icon svg {
       width: 14px;
       height: 14px;
-      fill: var(--accent-cyan);
+      fill: var(--accent-blue);
       display: block;
     }
     .dim-tag {
-      background: rgba(16, 185, 129, 0.18);
-      color: var(--accent-green);
-      padding: 2px 6px;
+      background: #ecfdf5;
+      color: #059669;
+      padding: 2px 7px;
       border-radius: 6px;
       font-weight: 700;
-      font-size: 0.60rem;
-      border: 1px solid rgba(16, 185, 129, 0.4);
+      font-size: 0.62rem;
+      border: 1px solid rgba(5, 150, 105, 0.25);
     }
     .scale-toggle-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      padding: 2px 7px;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      padding: 2px 8px;
       border-radius: 10px;
       font-size: 0.63rem;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
     .scale-toggle-btn:hover {
-      border-color: var(--accent-cyan);
-      background: rgba(0, 240, 255, 0.2);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      background: #eff6ff;
     }
 
-    /* Left Side Quick Palette */
+    /* Left Side Quick Palette - Minimalist White Column */
     .left-palette {
       position: absolute;
-      left: 1rem;
+      left: 1.25rem;
       top: 50%;
       transform: translateY(-50%);
       z-index: 20;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      background: var(--bg-panel);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--border-cyan);
-      padding: 0.45rem;
-      border-radius: 12px;
+      gap: 0.55rem;
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      padding: 0.5rem;
+      border-radius: 14px;
+      box-shadow: var(--shadow-md);
     }
     .palette-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-medium);
+      background: var(--bg-surface);
+      color: var(--text-muted);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
     }
     .palette-btn:hover {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      background: #eff6ff;
+      transform: scale(1.05);
     }
     .palette-btn svg {
       width: 17px;
@@ -448,41 +459,41 @@
     /* Bottom Hardware Selector Strip (Mobile Optimized) */
     .bottom-selector-wrap {
       position: absolute;
-      bottom: calc(0.75rem + var(--safe-bottom));
+      bottom: calc(0.85rem + var(--safe-bottom));
       left: 0;
       right: 0;
       z-index: 25;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0 0.65rem;
+      gap: 0.5rem;
+      padding: 0 0.85rem;
       pointer-events: auto;
     }
 
     .active-spec-pill {
-      background: var(--bg-panel);
+      background: var(--bg-surface-elevated);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--border-cyan);
-      border-radius: 12px;
-      padding: 0.35rem 0.95rem;
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      padding: 0.4rem 1.1rem;
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      gap: 0.75rem;
+      box-shadow: var(--shadow-md);
       max-width: 95vw;
     }
     .spec-name {
       font-family: var(--font-display);
       font-weight: 700;
       font-size: clamp(0.74rem, 2.6vw, 0.84rem);
-      color: var(--accent-cyan);
+      color: var(--text-main);
       white-space: nowrap;
     }
     .spec-desc {
       color: var(--text-muted);
-      font-size: clamp(0.66rem, 2.3vw, 0.73rem);
+      font-size: clamp(0.66rem, 2.3vw, 0.74rem);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -490,11 +501,11 @@
 
     .component-strip {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.55rem;
       overflow-x: auto;
       width: 100%;
       max-width: 98vw;
-      padding: 0.35rem 0.2rem;
+      padding: 0.4rem 0.25rem;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
@@ -506,39 +517,38 @@
     .comp-item {
       flex: 0 0 auto;
       scroll-snap-align: center;
-      background: var(--bg-panel);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 0.5rem 0.85rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: 13px;
+      padding: 0.55rem 0.95rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
       cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.22s ease;
-      min-height: 42px;
+      color: #334155;
+      transition: all 0.2s ease;
+      min-height: 44px;
+      box-shadow: var(--shadow-sm);
     }
     .comp-item:hover {
-      border-color: var(--accent-cyan);
-      color: #fff;
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
       transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
     .comp-item.active {
-      border-color: var(--accent-cyan);
-      background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(139, 92, 246, 0.25));
-      color: #fff;
-      box-shadow: 0 0 16px var(--glow-cyan);
+      border: 2px solid var(--accent-blue);
+      background: #eff6ff;
+      color: #1e40af;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);
     }
     .comp-item.featured {
-      border-color: var(--accent-magenta);
-      box-shadow: 0 0 12px rgba(255, 0, 127, 0.4);
+      border-color: rgba(99, 102, 241, 0.4);
     }
     .comp-item.featured.active {
-      border-color: var(--accent-cyan);
-      background: linear-gradient(135deg, rgba(255, 0, 127, 0.35), rgba(0, 240, 255, 0.35));
-      box-shadow: 0 0 20px var(--glow-cyan);
+      border: 2px solid var(--accent-blue);
+      background: #eff6ff;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.22);
     }
     .comp-item-icon {
       width: 18px;
@@ -554,36 +564,36 @@
       fill: currentColor;
     }
     .comp-item-text {
-      font-size: 0.76rem;
+      font-size: 0.77rem;
       font-weight: 600;
       white-space: nowrap;
     }
 
-    /* Notification Toast */
+    /* Notification Toast - Clean Minimalist Banner */
     .toast-banner {
       position: absolute;
-      top: calc(9.2rem + var(--safe-top));
+      top: calc(9.4rem + var(--safe-top));
       left: 50%;
       transform: translateX(-50%) translateY(-20px);
       z-index: 30;
-      background: rgba(13, 17, 30, 0.94);
+      background: var(--bg-surface-elevated);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--accent-cyan);
+      border: 1px solid var(--accent-blue);
       border-radius: 20px;
-      padding: 0.45rem 1.2rem;
-      color: var(--accent-cyan);
+      padding: 0.45rem 1.25rem;
+      color: #1d4ed8;
       font-family: var(--font-display);
       font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       display: flex;
       align-items: center;
       gap: 0.6rem;
       opacity: 0;
       pointer-events: none;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 30px rgba(0, 240, 255, 0.45);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.16);
     }
     .toast-banner.show {
       opacity: 1;
@@ -592,61 +602,177 @@
     .toast-banner svg {
       width: 16px;
       height: 16px;
-      fill: var(--accent-cyan);
+      fill: var(--accent-blue);
     }
 
-    /* Loading Overlay */
+    /* Animated High-Precision Loading Overlay */
     .loading-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      position: fixed;
+      inset: 0;
+      background: rgba(248, 250, 252, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+      opacity: 1;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      pointer-events: auto;
+    }
+
+    .loading-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 22px;
+      padding: 2rem 2.2rem;
+      box-shadow: var(--shadow-lg);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.8rem;
-      pointer-events: none;
-      z-index: 10;
-      transition: opacity 0.3s ease;
-    }
-    .spinner {
-      width: 44px;
-      height: 44px;
-      border: 3px solid rgba(0, 240, 255, 0.15);
-      border-top-color: var(--accent-cyan);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text {
-      font-family: var(--font-display);
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      color: var(--accent-cyan);
+      gap: 1.1rem;
+      max-width: 90vw;
+      width: 360px;
+      text-align: center;
+      animation: cardEnter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* Dialogs & Modals (Zero Inline Styles) */
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .loading-ring-wrap {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      display: grid;
+      place-items: center;
+    }
+
+    .loading-ring-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: #e2e8f0;
+      stroke-width: 8;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke: var(--accent-blue);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 263.89;
+      stroke-dashoffset: 263.89;
+      transition: stroke-dashoffset 0.25s ease-out;
+    }
+
+    .loading-pct {
+      position: absolute;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+
+    .loading-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .loading-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.86rem;
+      letter-spacing: 0.8px;
+      color: var(--text-main);
+    }
+
+    .loading-bar-wrap {
+      width: 100%;
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loading-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb, #38bdf8);
+      border-radius: 99px;
+      transition: width 0.25s ease-out;
+      position: relative;
+    }
+
+    .loading-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .loading-sub {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ring-fill, .loading-bar-fill {
+        transition: none;
+      }
+      .loading-bar-fill::after {
+        animation: none;
+      }
+    }
+
+    /* Dialogs & Modals - Clean Light Cards */
     dialog {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(10, 14, 26, 0.96);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-cyan);
-      border-radius: 18px;
-      padding: 1.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 1.6rem;
       color: var(--text-main);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px var(--glow-cyan);
+      box-shadow: var(--shadow-lg);
       max-width: 90vw;
       width: 420px;
       z-index: 100;
       outline: none;
     }
     dialog::backdrop {
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(6px);
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .dialog-header {
       display: flex;
@@ -657,7 +783,8 @@
     .dialog-header h3 {
       font-family: var(--font-display);
       font-size: 1.1rem;
-      color: var(--accent-cyan);
+      font-weight: 800;
+      color: var(--text-main);
     }
     .close-btn {
       background: none;
@@ -665,8 +792,11 @@
       color: var(--text-muted);
       cursor: pointer;
       font-size: 1.4rem;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.15s;
     }
-    .close-btn:hover { color: #fff; }
+    .close-btn:hover { color: var(--text-main); }
 
     .modal-body-centered {
       display: flex;
@@ -676,29 +806,34 @@
       padding: 0.5rem 0;
     }
     .qr-code-box {
-      background: #fff;
+      background: #ffffff;
       padding: 12px;
       border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #e2e8f0;
     }
     .modal-hint-text {
       font-size: 0.82rem;
       color: var(--text-muted);
       text-align: center;
-      line-height: 1.4;
+      line-height: 1.45;
     }
     .specs-modal-content {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-      color: #cbd5e1;
+      gap: 0.65rem;
+      font-size: 0.86rem;
+      color: #334155;
       line-height: 1.5;
     }
 
     /* Mobile Compact Layout Adjustments */
     @media (max-width: 640px) {
+      header {
+        padding: calc(0.6rem + var(--safe-top)) 0.9rem 0.55rem 0.9rem;
+      }
       .top-action-bar {
-        top: calc(3.8rem + var(--safe-top));
+        top: calc(4.0rem + var(--safe-top));
       }
       .left-palette {
         left: 0.6rem;
@@ -706,15 +841,15 @@
         padding: 0.35rem;
       }
       .palette-btn {
-        width: 34px;
-        height: 34px;
+        width: 35px;
+        height: 35px;
       }
       .bottom-selector-wrap {
-        bottom: calc(0.45rem + var(--safe-bottom));
-        padding: 0 0.4rem;
+        bottom: calc(0.55rem + var(--safe-bottom));
+        padding: 0 0.5rem;
       }
       .comp-item {
-        padding: 0.45rem 0.75rem;
+        padding: 0.48rem 0.8rem;
       }
     }
   </style>
@@ -819,10 +954,24 @@
     </button>
   </div>
 
-  <!-- Loading Overlay -->
+  <!-- Animated Modern Loading Overlay -->
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-    <div class="loading-text" id="loadingText">LOADING RIG ASSETS...</div>
+    <div class="loading-card">
+      <div class="loading-ring-wrap">
+        <svg class="loading-ring-svg" viewBox="0 0 100 100">
+          <circle class="ring-bg" cx="50" cy="50" r="42" />
+          <circle class="ring-fill" id="ringFill" cx="50" cy="50" r="42" />
+        </svg>
+        <div class="loading-pct" id="loadingPct">0%</div>
+      </div>
+      <div class="loading-info">
+        <div class="loading-title" id="loadingTitle">PREPARING 3D HARDWARE</div>
+        <div class="loading-bar-wrap">
+          <div class="loading-bar-fill" id="loadingBarFill"></div>
+        </div>
+        <div class="loading-sub" id="loadingSub">Loading 1:1 true-scale hardware assets...</div>
+      </div>
+    </div>
   </div>
 
   <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
@@ -1066,7 +1215,13 @@
     const toastMsg = document.getElementById("toastMsg");
 
     const loadingOverlay = document.getElementById("loadingOverlay");
-    const loadingText = document.getElementById("loadingText");
+    const ringFill = document.getElementById("ringFill");
+    const loadingPct = document.getElementById("loadingPct");
+    const loadingTitle = document.getElementById("loadingTitle");
+    const loadingBarFill = document.getElementById("loadingBarFill");
+    const loadingSub = document.getElementById("loadingSub");
+    const CIRCUMFERENCE = 263.89;
+    let loadSafetyTimeout = null;
     const compItems = document.querySelectorAll(".comp-item");
     const activePartTitle = document.getElementById("activePartTitle");
     const activePartDesc = document.getElementById("activePartDesc");
@@ -1153,41 +1308,69 @@
       arViewer.setAttribute("scale", `${s} ${s} ${s}`);
     }
 
+    function updateProgressUI(pct, title) {
+      if (title && loadingTitle) loadingTitle.textContent = title;
+      const cleanPct = Math.min(100, Math.max(0, Math.round(pct)));
+      if (loadingPct) loadingPct.textContent = `${cleanPct}%`;
+      if (loadingBarFill) loadingBarFill.style.width = `${cleanPct}%`;
+      if (ringFill) {
+        const offset = CIRCUMFERENCE - (cleanPct / 100) * CIRCUMFERENCE;
+        ringFill.style.strokeDashoffset = offset;
+      }
+      if (cleanPct >= 100) {
+        if (loadingSub) loadingSub.textContent = "Finalizing 1:1 metric AR calibration...";
+      } else {
+        if (loadingSub) loadingSub.textContent = "Loading 1:1 true-scale hardware assets...";
+      }
+    }
+
+    function showLoader(title) {
+      clearTimeout(loadSafetyTimeout);
+      loadingOverlay.style.display = "flex";
+      requestAnimationFrame(() => {
+        loadingOverlay.style.opacity = "1";
+      });
+      updateProgressUI(8, title || "DOWNLOADING 3D HARDWARE");
+      loadSafetyTimeout = setTimeout(() => {
+        dismissLoader();
+      }, 30000);
+    }
+
     function dismissLoader() {
+      clearTimeout(loadSafetyTimeout);
+      updateProgressUI(100);
       loadingOverlay.style.opacity = "0";
       setTimeout(() => {
         loadingOverlay.style.display = "none";
-      }, 300);
+      }, 350);
     }
 
-    // Model Loading Progress Handler
+    // Model Loading Progress Handler - Real-time smooth updates
     arViewer.addEventListener("progress", (e) => {
       const pct = Math.round((e.detail.totalProgress || 0) * 100);
-      loadingText.textContent = `CALIBRATING 1:1 SCALE (${pct}%)...`;
-      if (pct >= 100) {
-        dismissLoader();
-      }
+      updateProgressUI(pct);
     });
 
     arViewer.addEventListener("load", () => {
-      dismissLoader();
+      updateProgressUI(100);
+      setTimeout(dismissLoader, 300);
     });
 
     arViewer.addEventListener("error", (e) => {
-      dismissLoader();
       console.warn("Model notice:", e);
+      if (loadingSub) loadingSub.textContent = "Asset ready with system fallback";
+      setTimeout(dismissLoader, 600);
     });
 
-    // Safety timeout: never let the screen stay stuck on loader
-    setTimeout(() => {
-      dismissLoader();
-    }, 4000);
+    // Initial load show
+    showLoader("PREPARING 3D RIG");
 
     // Zoom Toggle Button (for macro close-up inspection)
     scaleToggleBtn.addEventListener("click", () => {
       isZoomed = !isZoomed;
       scaleToggleBtn.textContent = isZoomed ? "Reset 1:1" : "Zoom 2.5x";
-      scaleToggleBtn.style.background = isZoomed ? "rgba(0, 240, 255, 0.3)" : "rgba(255, 255, 255, 0.08)";
+      scaleToggleBtn.style.background = isZoomed ? "rgba(37, 99, 235, 0.15)" : "#f1f5f9";
+      scaleToggleBtn.style.color = isZoomed ? "var(--accent-blue)" : "#334155";
       applyModelScale(currentBaseScale);
       playSfx('click');
     });
@@ -1227,12 +1410,12 @@
         arLaunchBtnLabel.textContent = "VIEW IN AR";
       }
 
-      loadingText.textContent = `LOADING ${title.toUpperCase()}...`;
-      loadingOverlay.style.display = "flex";
-      loadingOverlay.style.opacity = "1";
+      showLoader(`LOADING ${title.toUpperCase()}`);
 
       isZoomed = false;
       scaleToggleBtn.textContent = "Zoom 2.5x";
+      scaleToggleBtn.style.background = "#f1f5f9";
+      scaleToggleBtn.style.color = "#334155";
       applyModelScale(scale);
 
       const cacheBust = "?v=3";
@@ -1241,8 +1424,6 @@
       const usdzModel = model.replace(/\.glb$/, '.usdz') + cacheBust;
       arViewer.setAttribute('ios-src', usdzModel);
       updateStepButtonLabel(model);
-
-      setTimeout(dismissLoader, 3500);
     }
 
     compItems.forEach(item => {
@@ -1371,7 +1552,7 @@
       playSfx('click');
       isAutoRotating = !isAutoRotating;
       arViewer.autoRotate = isAutoRotating;
-      autoRotateBtn.style.color = isAutoRotating ? "var(--accent-cyan)" : "var(--text-muted)";
+      autoRotateBtn.style.color = isAutoRotating ? "var(--accent-blue)" : "var(--text-muted)";
     });
 
     soundBtn.addEventListener("click", () => {
@@ -1388,7 +1569,7 @@
           text: window.location.href,
           width: 200,
           height: 200,
-          colorDark: "#07090f",
+          colorDark: "#0f172a",
           colorLight: "#ffffff",
           correctLevel: QRCode.CorrectLevel.H
         });
@@ -1408,7 +1589,7 @@
       playSfx('click');
       document.getElementById("specsModalTitle").textContent = activePartTitle.textContent;
       document.getElementById("specsModalBody").innerHTML = `
-        <div style="font-weight: 600; color: var(--accent-cyan);">${activePartDesc.textContent}</div>
+        <div style="font-weight: 600; color: var(--accent-blue);">${activePartDesc.textContent}</div>
         <div style="margin-top: 6px;">- Physical Dimensions: ${dimText.textContent}</div>
         <div>- 1:1 True-to-Life metric scale calibrated for tabletop and room floor placement</div>
         <div>- Assembly Mode: Progressive snap-fit installation directly into chassis</div>
