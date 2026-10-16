@@ -6,14 +6,14 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Nethuna-WebAR – 1:1 True Physical Scale PC Hardware & Auto-Assembly</title>
+  <title>Nethuna-WebAR – 1:1 True Physical Scale PC Hardware &amp; Auto-Assembly</title>
   <meta name="description" content="Build, assemble, and inspect custom PC hardware in true 1:1 physical scale inside Augmented Reality.">
   <meta name="theme-color" content="#07090f">
 
   <!-- Google Fonts: Orbitron & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Orbitron:wght@700;800;900&amp;display=swap" rel="stylesheet">
 
   <!-- Official Google Model Viewer WebAR Engine -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
@@ -692,7 +692,7 @@
 <body>
 
   <!-- Live Camera Video Feed for Pass-Through WebAR -->
-  <video id="cameraFeed" autoplay playsinline muted></video>
+  <video id="cameraFeed" playsinline muted></video>
 
   <!-- Ambient Glows -->
   <div class="ambient-glow-1"></div>
@@ -813,7 +813,7 @@
   <div class="bottom-selector-wrap">
     <div class="active-spec-pill">
       <span class="spec-name" id="activePartTitle">Nethuna Gaming Rig (Fully Built)</span>
-      <span class="spec-desc" id="activePartDesc">42.5 x 45.0 x 21.3 cm - Fully Assembled with RTX 4080 & Z790</span>
+      <span class="spec-desc" id="activePartDesc">42.5 x 45.0 x 21.3 cm - Fully Assembled with RTX 4080 &amp; Z790</span>
     </div>
 
     <div class="component-strip" id="compStrip">
@@ -837,7 +837,7 @@
            data-scale="0.46"
            data-dims="42.5 x 45.0 x 21.3 cm"
            data-title="Assembly Stage 3: Cooling" 
-           data-desc="Kraken Elite 360 Radiator & Fans Mounted in Case">
+           data-desc="Kraken Elite 360 Radiator &amp; Fans Mounted in Case">
         <span class="comp-item-icon">
           <!-- Cooling Turbine Fan Icon -->
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-10a2 2 0 1 0 2 2 2 2 0 0 0-2-2z"/></svg>
@@ -1241,6 +1241,7 @@
             audio: false
           });
           cameraFeed.srcObject = cameraStream;
+          await cameraFeed.play().catch(() => {});
           cameraFeed.classList.add("active");
           cameraPassToggleBtn.classList.add("active");
           camPassLabel.textContent = "EXIT CAMERA";
