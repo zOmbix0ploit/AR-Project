@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>TitanRig WebAR – 1:1 True Physical Scale PC Hardware</title>
   <meta name="description" content="View and place custom PC hardware in exact 1:1 physical real-world scale in WebAR.">
   <meta name="theme-color" content="#07090f">
@@ -133,6 +136,7 @@
       letter-spacing: 1.2px;
       background: linear-gradient(90deg, #fff 40%, var(--accent-cyan) 100%);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1.1;
     }
@@ -178,7 +182,7 @@
       fill: currentColor;
     }
 
-    /* Top Action Bar: AR Launch & Scale Badge */
+    /* Top Action Bar (AR Camera Launch & Physical Scale HUD) */
     .top-action-bar {
       position: absolute;
       top: calc(4.2rem + var(--safe-top));
@@ -457,7 +461,7 @@
       color: var(--accent-cyan);
     }
 
-    /* Dialogs */
+    /* Dialogs & Modals (Zero Inline Styles) */
     dialog {
       position: fixed;
       top: 50%;
@@ -499,6 +503,33 @@
       font-size: 1.4rem;
     }
     .close-btn:hover { color: #fff; }
+
+    .modal-body-centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 0;
+    }
+    .qr-code-box {
+      background: #fff;
+      padding: 12px;
+      border-radius: 12px;
+    }
+    .modal-hint-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+    .specs-modal-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
 
     /* Mobile Compact Layout Adjustments */
     @media (max-width: 640px) {
@@ -545,11 +576,11 @@
 
     <div class="header-actions">
       <!-- Specs Modal Button -->
-      <button class="btn-icon" id="specsBtn" title="Component Specs">
+      <button class="btn-icon" id="specsBtn" type="button" aria-label="Component Specifications" title="Component Specs">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
       </button>
       <!-- QR Code Modal Button -->
-      <button class="btn-icon" id="qrBtn" title="Open on Smartphone Camera">
+      <button class="btn-icon" id="qrBtn" type="button" aria-label="Open on Smartphone Camera" title="Open on Smartphone Camera">
         <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4V4zm2 2v2h2V6H6zm8-2h6v6h-6V4zm2 2v2h2V6h-2zM4 14h6v6H4v-6zm2 2v2h2v-2H6zm10 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm4 0h2v2h-2v-2zm-2-4h2v2h-2v-2zm2-2h2v2h-2v-2zm-4 0h2v2h-2v-2z"/></svg>
       </button>
     </div>
@@ -557,7 +588,7 @@
 
   <!-- Top Action Bar (AR Camera Launch & Physical Scale HUD) -->
   <div class="top-action-bar">
-    <button class="ar-camera-launch-btn" id="startCameraArBtn">
+    <button class="ar-camera-launch-btn" id="startCameraArBtn" type="button">
       <!-- Camera View AR Vector Icon -->
       <svg viewBox="0 0 24 24"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
       <span>START CAMERA AR</span>
@@ -569,23 +600,23 @@
         <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h3v8z"/></svg>
       </span>
       <span class="dim-tag">1:1 SCALE</span>
-      <span id="dimText">42.5 × 45.0 × 21.3 cm</span>
-      <button class="scale-toggle-btn" id="scaleToggleBtn">Zoom 2.5x</button>
+      <span id="dimText">42.5 x 45.0 x 21.3 cm</span>
+      <button class="scale-toggle-btn" id="scaleToggleBtn" type="button">Zoom 2.5x</button>
     </div>
   </div>
 
   <!-- Left Quick Controls -->
   <div class="left-palette">
     <!-- Camera Reset -->
-    <button class="palette-btn" id="resetCamBtn" title="Reset 3D View">
+    <button class="palette-btn" id="resetCamBtn" type="button" aria-label="Reset 3D Camera View" title="Reset 3D View">
       <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
     </button>
     <!-- Auto-Rotate -->
-    <button class="palette-btn" id="autoRotateBtn" title="Toggle Auto-Rotation">
+    <button class="palette-btn" id="autoRotateBtn" type="button" aria-label="Toggle Auto-Rotation" title="Toggle Auto-Rotation">
       <svg viewBox="0 0 24 24"><path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.6-1.01-2.47zm10.78 5.47l-1.41-1.41c.52-.75.87-1.6 1.01-2.47h2.02c-.17 1.39-.72 2.73-1.62 3.88zM17.91 11h2.02c-.17-1.39-.72-2.73-1.62-3.89l-1.41 1.42c.52.75.87 1.6 1.01 2.47zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
     </button>
     <!-- Sound Effect -->
-    <button class="palette-btn" id="soundBtn" title="Play Power Chime">
+    <button class="palette-btn" id="soundBtn" type="button" aria-label="Play Power Sound Effect" title="Play Power Chime">
       <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
     </button>
   </div>
@@ -617,11 +648,11 @@
     alt="TitanRig 3D Augmented Reality Component">
   </model-viewer>
 
-  <!-- Bottom Hardware Selector Strip (Pure SVG Icons, NO EMOJIS) -->
+  <!-- Bottom Hardware Selector Strip (Pure SVG Icons, Zero Emojis) -->
   <div class="bottom-selector-wrap">
     <div class="active-spec-pill">
       <span class="spec-name" id="activePartTitle">Titan Mid-Tower Chassis</span>
-      <span class="spec-desc" id="activePartDesc">42.5 × 45.0 × 21.3 cm • ATX Dual Chamber</span>
+      <span class="spec-desc" id="activePartDesc">42.5 x 45.0 x 21.3 cm - ATX Dual Chamber</span>
     </div>
 
     <div class="component-strip" id="compStrip">
@@ -629,9 +660,9 @@
       <div class="comp-item active" 
            data-model="models/case.glb" 
            data-scale="0.46"
-           data-dims="42.5 × 45.0 × 21.3 cm"
+           data-dims="42.5 x 45.0 x 21.3 cm"
            data-title="Titan Mid-Tower Chassis" 
-           data-desc="Dual Tempered Glass • SPCC Steel">
+           data-desc="Dual Tempered Glass - SPCC Steel">
         <span class="comp-item-icon">
           <!-- PC Tower Case Icon -->
           <svg viewBox="0 0 24 24"><path d="M4 2h16c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v16h16V4H4zm3 2h10v2H7V6zm0 4h10v2H7v-2zm0 4h5v2H7v-2z"/></svg>
@@ -643,9 +674,9 @@
       <div class="comp-item" 
            data-model="models/gpu.glb" 
            data-scale="0.34"
-           data-dims="33.3 × 11.1 × 18.7 cm"
+           data-dims="33.3 x 11.1 x 18.7 cm"
            data-title="GeForce RTX 4080 Super" 
-           data-desc="Triple Axial-Tech Fans • 16GB GDDR6X">
+           data-desc="Triple Axial-Tech Fans - 16GB GDDR6X">
         <span class="comp-item-icon">
           <!-- GPU Graphics Card Icon -->
           <svg viewBox="0 0 24 24"><path d="M2 7h20v10H2V7zm2 2v6h16V9H4zm3 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-5 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM5 18h14v2H5v-2z"/></svg>
@@ -657,9 +688,9 @@
       <div class="comp-item" 
            data-model="models/motherboard.glb" 
            data-scale="0.31"
-           data-dims="27.3 × 22.1 × 30.3 cm"
+           data-dims="27.3 x 22.1 x 30.3 cm"
            data-title="ROG Maximus Z790 Hero" 
-           data-desc="ATX Form Factor • LGA 1700 • PCIe 5.0">
+           data-desc="ATX Form Factor - LGA 1700 - PCIe 5.0">
         <span class="comp-item-icon">
           <!-- Motherboard / Circuit Icon -->
           <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h4v4H8V8zm0 6h2v2H8v-2zm6-6h2v6h-2V8zm0 8h2v2h-2v-2zm-4 0h2v2h-2v-2z"/></svg>
@@ -671,9 +702,9 @@
       <div class="comp-item" 
            data-model="models/cpu.glb" 
            data-scale="0.05"
-           data-dims="4.7 × 1.0 × 4.9 cm"
+           data-dims="4.7 x 1.0 x 4.9 cm"
            data-title="Intel Core i9-14900K" 
-           data-desc="24 Cores • LGA 1700 Socket Chip">
+           data-desc="24 Cores - LGA 1700 Socket Chip">
         <span class="comp-item-icon">
           <!-- CPU Processor Microchip Icon -->
           <svg viewBox="0 0 24 24"><path d="M6 2h2v2h8V2h2v2h2a2 2 0 0 1 2 2v2h2v2h-2v4h2v2h-2v2a2 2 0 0 1-2 2h-2v2h-2v-2H8v2H6v-2H4a2 2 0 0 1-2-2v-2H0v-2h2v-4H0V8h2V6a2 2 0 0 1 2-2h2V2zm0 4v12h12V6H6zm3 3h6v6H9V9z"/></svg>
@@ -685,9 +716,9 @@
       <div class="comp-item" 
            data-model="models/ram.glb" 
            data-scale="0.03"
-           data-dims="13.4 × 3.5 × 6.2 cm"
+           data-dims="13.4 x 3.5 x 6.2 cm"
            data-title="Dominator Titanium DDR5" 
-           data-desc="64GB 6000MHz CL30 • RGB Lightbar">
+           data-desc="64GB 6000MHz CL30 - RGB Lightbar">
         <span class="comp-item-icon">
           <!-- RAM Memory Stick Icon -->
           <svg viewBox="0 0 24 24"><path d="M2 7h20v10H2V7zm2 2v6h16V9H4zm1 1h2v4H5v-4zm4 0h2v4H9v-4zm4 0h2v4h-2v-4zm4 0h2v4h-2v-4zM3 18h2v2H3v-2zm4 0h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/></svg>
@@ -699,9 +730,9 @@
       <div class="comp-item" 
            data-model="models/cooler.glb" 
            data-scale="0.40"
-           data-dims="39.2 × 19.6 × 36.8 cm"
+           data-dims="39.2 x 19.6 x 36.8 cm"
            data-title="Kraken Elite 360 RGB" 
-           data-desc="360mm Radiator • LCD Waterblock">
+           data-desc="360mm Radiator - LCD Waterblock">
         <span class="comp-item-icon">
           <!-- Liquid Cooler / Fan Turbine Icon -->
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-10a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm-1-5h2v3h-2zm0 11h2v3h-2zm6-6h3v2h-3zm-11 0h3v2H6z"/></svg>
@@ -713,9 +744,9 @@
       <div class="comp-item" 
            data-model="models/psu.glb" 
            data-scale="0.0125"
-           data-dims="15.0 × 19.3 × 8.9 cm"
+           data-dims="15.0 x 19.3 x 8.9 cm"
            data-title="1000W Modular PSU" 
-           data-desc="ATX 3.0 • 80+ Gold Efficiency">
+           data-desc="ATX 3.0 - 80+ Gold Efficiency">
         <span class="comp-item-icon">
           <!-- Power Supply Unit Icon -->
           <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v12h16V6H4zm8 1a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 8h2v2H6V8zm0 6h2v2H6v-2z"/></svg>
@@ -729,11 +760,11 @@
   <dialog id="qrDialog">
     <div class="dialog-header">
       <h3>Open on Smartphone</h3>
-      <button class="close-btn" id="closeQrBtn">&times;</button>
+      <button class="close-btn" id="closeQrBtn" type="button" aria-label="Close QR Modal">&times;</button>
     </div>
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 0.5rem 0;">
-      <div id="qrcode" style="background: #fff; padding: 12px; border-radius: 12px;"></div>
-      <p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
+    <div class="modal-body-centered">
+      <div id="qrcode" class="qr-code-box"></div>
+      <p class="modal-hint-text">
         Scan this QR Code with your smartphone camera to open the WebAR viewer and project the PC directly onto your floor or desk.
       </p>
     </div>
@@ -743,9 +774,9 @@
   <dialog id="specsDialog">
     <div class="dialog-header">
       <h3 id="specsModalTitle">Component Specifications</h3>
-      <button class="close-btn" id="closeSpecsBtn">&times;</button>
+      <button class="close-btn" id="closeSpecsBtn" type="button" aria-label="Close Specifications Modal">&times;</button>
     </div>
-    <div id="specsModalBody" style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem; color: #cbd5e1; line-height: 1.5;"></div>
+    <div id="specsModalBody" class="specs-modal-content"></div>
   </dialog>
 
   <script>
@@ -818,6 +849,36 @@
       arViewer.setAttribute("scale", `${s} ${s} ${s}`);
     }
 
+    function dismissLoader() {
+      loadingOverlay.style.opacity = "0";
+      setTimeout(() => {
+        loadingOverlay.style.display = "none";
+      }, 300);
+    }
+
+    // Model Loading Progress Handler
+    arViewer.addEventListener("progress", (e) => {
+      const pct = Math.round((e.detail.totalProgress || 0) * 100);
+      loadingText.textContent = `CALIBRATING 1:1 SCALE (${pct}%)...`;
+      if (pct >= 100) {
+        dismissLoader();
+      }
+    });
+
+    arViewer.addEventListener("load", () => {
+      dismissLoader();
+    });
+
+    arViewer.addEventListener("error", (e) => {
+      dismissLoader();
+      console.warn("Model notice:", e);
+    });
+
+    // Safety timeout: never let the screen stay stuck on loader
+    setTimeout(() => {
+      dismissLoader();
+    }, 4000);
+
     // Zoom Toggle Button (for macro close-up inspection)
     scaleToggleBtn.addEventListener("click", () => {
       isZoomed = !isZoomed;
@@ -854,10 +915,11 @@
         const scale = item.dataset.scale;
 
         activePartTitle.textContent = title;
-        activePartDesc.textContent = `${dims} • ${desc}`;
+        activePartDesc.textContent = `${dims} - ${desc}`;
         dimText.textContent = dims;
 
         loadingText.textContent = `CALIBRATING ${title.toUpperCase()}...`;
+        loadingOverlay.style.display = "flex";
         loadingOverlay.style.opacity = "1";
 
         // Set Real-World Metric Scale
@@ -866,16 +928,10 @@
         applyModelScale(scale);
 
         arViewer.src = model;
+
+        // Auto dismiss after max 3.5s per switch
+        setTimeout(dismissLoader, 3500);
       });
-    });
-
-    arViewer.addEventListener("load", () => {
-      loadingOverlay.style.opacity = "0";
-    });
-
-    arViewer.addEventListener("error", (e) => {
-      loadingOverlay.style.opacity = "0";
-      console.warn("Model notice:", e);
     });
 
     // Camera Controls
@@ -927,9 +983,9 @@
       document.getElementById("specsModalTitle").textContent = activePartTitle.textContent;
       document.getElementById("specsModalBody").innerHTML = `
         <div style="font-weight: 600; color: var(--accent-cyan);">${activePartDesc.textContent}</div>
-        <div style="margin-top: 6px;">• Physical Dimensions: ${dimText.textContent}</div>
-        <div>• 1:1 True-to-Life metric scale calibrated for tabletop and room floor placement</div>
-        <div>• Touch Gestures: 1-finger move/grab, 2-finger scale, 2-finger rotate</div>
+        <div style="margin-top: 6px;">- Physical Dimensions: ${dimText.textContent}</div>
+        <div>- 1:1 True-to-Life metric scale calibrated for tabletop and room floor placement</div>
+        <div>- Touch Gestures: 1-finger move/grab, 2-finger scale, 2-finger rotate</div>
       `;
       specsDialog.showModal();
     });
