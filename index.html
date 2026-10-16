@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>TitanRig WebAR – Real-World Camera AR PC Visualizer</title>
-  <meta name="description" content="View and place custom PC components in your real room using your smartphone camera in WebAR.">
+  <title>TitanRig WebAR – 1:1 True Physical Scale PC Hardware</title>
+  <meta name="description" content="View custom PC hardware in exact 1:1 physical real-world scale in WebAR.">
   <meta name="theme-color" content="#07090f">
 
   <!-- Google Fonts: Orbitron & Inter -->
@@ -61,7 +61,7 @@
       z-index: 1;
     }
 
-    /* Ambient Tech Lighting Gradients */
+    /* Ambient Tech Gradients */
     .ambient-glow-1 {
       position: fixed;
       top: -100px;
@@ -83,14 +83,14 @@
       z-index: 0;
     }
 
-    /* Top Header Bar */
+    /* Top Navigation Header */
     header {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       z-index: 20;
-      padding: 1rem 1.25rem;
+      padding: 0.85rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -104,9 +104,9 @@
       gap: 0.6rem;
     }
     .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
       display: flex;
       align-items: center;
@@ -120,7 +120,7 @@
     }
     .brand-text h1 {
       font-family: var(--font-display);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 900;
       letter-spacing: 1.5px;
       background: linear-gradient(90deg, #fff 40%, var(--accent-cyan) 100%);
@@ -128,7 +128,7 @@
       -webkit-text-fill-color: transparent;
     }
     .brand-text span {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: var(--accent-cyan);
       text-transform: uppercase;
       letter-spacing: 2px;
@@ -139,7 +139,7 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
 
     .btn-icon {
@@ -148,8 +148,8 @@
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--border-cyan);
       color: var(--text-main);
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -163,30 +163,30 @@
       transform: translateY(-2px);
     }
     .btn-icon svg {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       fill: currentColor;
     }
 
-    /* Big Glowing Camera AR Button (Center Top / Action Hero) */
+    /* Big Glowing Camera AR Launch Button */
     .ar-camera-launch-btn {
       position: absolute;
-      top: 4.8rem;
+      top: 4.5rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 25;
       background: linear-gradient(135deg, #00f0ff, #8b5cf6);
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.6);
-      padding: 0.85rem 1.75rem;
+      padding: 0.8rem 1.6rem;
       border-radius: 30px;
       font-family: var(--font-display);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 900;
       letter-spacing: 1.2px;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.7rem;
       cursor: pointer;
       box-shadow: 0 10px 30px var(--glow-cyan), 0 0 20px rgba(0, 240, 255, 0.4);
       animation: pulseArBtn 2.2s infinite;
@@ -198,8 +198,8 @@
       box-shadow: 0 12px 40px rgba(0, 240, 255, 0.8);
     }
     .ar-camera-launch-btn svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       fill: #fff;
     }
     @keyframes pulseArBtn {
@@ -211,25 +211,50 @@
       }
     }
 
-    /* Hand Gesture Instruction Badge (Under AR Button) */
-    .gesture-hint {
+    /* Scale & Dimension Status Badge */
+    .dimension-badge {
       position: absolute;
-      top: 8.4rem;
+      top: 8rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 15;
-      background: rgba(13, 17, 30, 0.75);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 240, 255, 0.2);
+      background: rgba(13, 17, 30, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-cyan);
       border-radius: 20px;
-      padding: 0.4rem 1rem;
+      padding: 0.35rem 1rem;
       font-size: 0.72rem;
       color: var(--accent-cyan);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       white-space: nowrap;
-      pointer-events: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+    .dim-tag {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent-green);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.65rem;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    /* Scale Toggle Mode Button (1:1 vs 5x Close-up) */
+    .scale-toggle-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.68rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .scale-toggle-btn:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.2);
     }
 
     /* Bottom Component Selector Strip */
@@ -316,7 +341,7 @@
       white-space: nowrap;
     }
 
-    /* Left Side Quick Palette (Auto-Rotate & Sound & Reset) */
+    /* Left Side Quick Palette */
     .left-palette {
       position: absolute;
       left: 1.25rem;
@@ -435,9 +460,9 @@
         top: auto;
         bottom: 8.5rem;
         font-size: 0.82rem;
-        padding: 0.8rem 1.4rem;
+        padding: 0.75rem 1.4rem;
       }
-      .gesture-hint {
+      .dimension-badge {
         top: auto;
         bottom: 6.8rem;
         font-size: 0.68rem;
@@ -462,7 +487,7 @@
       </div>
       <div class="brand-text">
         <h1>TITANRIG AR</h1>
-        <span>Real-World Camera WebAR</span>
+        <span>1:1 True Physical Scale</span>
       </div>
     </div>
 
@@ -484,9 +509,11 @@
     <span>📱 START CAMERA AR</span>
   </button>
 
-  <!-- Touch & Hand Gesture Guidance -->
-  <div class="gesture-hint">
-    <span>🖐️ 1 finger drag to move • 2 finger pinch to scale • 2 finger twist to rotate</span>
+  <!-- Real Physical Dimensions Badge -->
+  <div class="dimension-badge">
+    <span class="dim-tag">1:1 REAL SIZE</span>
+    <span id="dimText">📏 42.5 × 45.0 × 21.3 cm</span>
+    <button class="scale-toggle-btn" id="scaleToggleBtn">Zoom 2x</button>
   </div>
 
   <!-- Left Quick Controls -->
@@ -508,13 +535,14 @@
   <!-- Loading Overlay -->
   <div class="loading-overlay" id="loadingOverlay">
     <div class="spinner"></div>
-    <div class="loading-text" id="loadingText">LOADING 3D HARDWARE...</div>
+    <div class="loading-text" id="loadingText">CALIBRATING 1:1 SCALE...</div>
   </div>
 
-  <!-- Full-Screen Google Model-Viewer (Direct WebAR Engine) -->
+  <!-- Full-Screen Google Model-Viewer with 1:1 Metric Real-World Scale -->
   <model-viewer
     id="arViewer"
     src="models/case.glb"
+    scale="0.46 0.46 0.46"
     ar
     ar-modes="scene-viewer webxr quick-look"
     ar-scale="auto"
@@ -534,43 +562,78 @@
   <!-- Bottom Hardware Selector -->
   <div class="bottom-selector-wrap">
     <div class="active-spec-pill">
-      <span class="spec-name" id="activePartTitle">Titan Mid-Tower Case</span>
-      <span class="spec-desc" id="activePartDesc">Floor Surface Tracking • 1:1 Scale</span>
+      <span class="spec-name" id="activePartTitle">Titan Mid-Tower Chassis</span>
+      <span class="spec-desc" id="activePartDesc">42.5 × 45.0 × 21.3 cm • ATX Dual Chamber</span>
     </div>
 
     <div class="component-strip" id="compStrip">
       <!-- 1. Case -->
-      <div class="comp-item active" data-model="models/case.glb" data-title="Titan Mid-Tower Chassis" data-desc="Dual Tempered Glass • 450mm True Scale">
+      <div class="comp-item active" 
+           data-model="models/case.glb" 
+           data-scale="0.46"
+           data-dims="42.5 × 45.0 × 21.3 cm"
+           data-title="Titan Mid-Tower Chassis" 
+           data-desc="Dual Tempered Glass • SPCC Steel">
         <span class="comp-item-icon">🖥️</span>
         <span class="comp-item-text">PC Case</span>
       </div>
       <!-- 2. GPU -->
-      <div class="comp-item" data-model="models/gpu.glb" data-title="GeForce RTX 4080 Super" data-desc="Triple-Fan Cooling • 16GB GDDR6X">
+      <div class="comp-item" 
+           data-model="models/gpu.glb" 
+           data-scale="0.34"
+           data-dims="33.3 × 11.1 × 18.7 cm"
+           data-title="GeForce RTX 4080 Super" 
+           data-desc="Triple Axial-Tech Fans • 16GB GDDR6X">
         <span class="comp-item-icon">🎮</span>
         <span class="comp-item-text">RTX 4080 GPU</span>
       </div>
       <!-- 3. Motherboard -->
-      <div class="comp-item" data-model="models/motherboard.glb" data-title="ROG Maximus Z790 Hero" data-desc="LGA 1700 • PCIe 5.0 • VRM Heatsinks">
+      <div class="comp-item" 
+           data-model="models/motherboard.glb" 
+           data-scale="0.31"
+           data-dims="27.3 × 22.1 × 30.3 cm"
+           data-title="ROG Maximus Z790 Hero" 
+           data-desc="ATX Form Factor • LGA 1700 • PCIe 5.0">
         <span class="comp-item-icon">⚡</span>
         <span class="comp-item-text">Motherboard</span>
       </div>
       <!-- 4. CPU -->
-      <div class="comp-item" data-model="models/cpu.glb" data-title="Intel Core i9-14900K" data-desc="24 Cores • 6.0 GHz Turbo Boost">
+      <div class="comp-item" 
+           data-model="models/cpu.glb" 
+           data-scale="0.05"
+           data-dims="4.7 × 1.0 × 4.9 cm"
+           data-title="Intel Core i9-14900K" 
+           data-desc="24 Cores • LGA 1700 Socket Chip">
         <span class="comp-item-icon">🧠</span>
         <span class="comp-item-text">Core i9 CPU</span>
       </div>
       <!-- 5. RAM -->
-      <div class="comp-item" data-model="models/ram.glb" data-title="Dominator Titanium DDR5" data-desc="64GB 6000MHz • CAPELLIX RGB">
+      <div class="comp-item" 
+           data-model="models/ram.glb" 
+           data-scale="0.03"
+           data-dims="13.4 × 3.5 × 6.2 cm"
+           data-title="Dominator Titanium DDR5" 
+           data-desc="64GB 6000MHz CL30 • RGB Lightbar">
         <span class="comp-item-icon">💾</span>
         <span class="comp-item-text">DDR5 RAM</span>
       </div>
       <!-- 6. Cooler -->
-      <div class="comp-item" data-model="models/cooler.glb" data-title="Kraken Elite 360 RGB" data-desc="360mm Radiator • LCD Liquid Block">
+      <div class="comp-item" 
+           data-model="models/cooler.glb" 
+           data-scale="0.40"
+           data-dims="39.2 × 19.6 × 36.8 cm"
+           data-title="Kraken Elite 360 RGB" 
+           data-desc="360mm Radiator • LCD Waterblock">
         <span class="comp-item-icon">❄️</span>
         <span class="comp-item-text">AIO Cooler</span>
       </div>
       <!-- 7. PSU -->
-      <div class="comp-item" data-model="models/psu.glb" data-title="1000W Modular PSU" data-desc="80+ Gold Efficiency • ATX 3.0">
+      <div class="comp-item" 
+           data-model="models/psu.glb" 
+           data-scale="0.0125"
+           data-dims="15.0 × 19.3 × 8.9 cm"
+           data-title="1000W Modular PSU" 
+           data-desc="ATX 3.0 • 80+ Gold Efficiency">
         <span class="comp-item-icon">🔌</span>
         <span class="comp-item-text">1000W PSU</span>
       </div>
@@ -608,6 +671,8 @@
     const compItems = document.querySelectorAll(".comp-item");
     const activePartTitle = document.getElementById("activePartTitle");
     const activePartDesc = document.getElementById("activePartDesc");
+    const dimText = document.getElementById("dimText");
+    const scaleToggleBtn = document.getElementById("scaleToggleBtn");
     const resetCamBtn = document.getElementById("resetCamBtn");
     const autoRotateBtn = document.getElementById("autoRotateBtn");
     const soundBtn = document.getElementById("soundBtn");
@@ -620,6 +685,8 @@
 
     let isAutoRotating = true;
     let audioCtx = null;
+    let currentBaseScale = 0.46;
+    let isZoomed = false;
 
     // Web Audio Sound Synthesizer
     function playSfx(type) {
@@ -658,14 +725,29 @@
       } catch (e) {}
     }
 
+    // Apply Exact Physical Scale
+    function applyModelScale(baseFactor) {
+      currentBaseScale = parseFloat(baseFactor);
+      const mult = isZoomed ? 2.5 : 1.0;
+      const s = (currentBaseScale * mult).toFixed(4);
+      arViewer.setAttribute("scale", `${s} ${s} ${s}`);
+    }
+
+    // Zoom Toggle Button (for macro close-up inspection)
+    scaleToggleBtn.addEventListener("click", () => {
+      isZoomed = !isZoomed;
+      scaleToggleBtn.textContent = isZoomed ? "Reset 1:1" : "Zoom 2.5x";
+      scaleToggleBtn.style.background = isZoomed ? "rgba(0, 240, 255, 0.3)" : "rgba(255, 255, 255, 0.08)";
+      applyModelScale(currentBaseScale);
+      playSfx('click');
+    });
+
     // DIRECT CAMERA AR LAUNCH
     startCameraArBtn.addEventListener("click", () => {
       playSfx('boot');
       if (arViewer.canActivateAR) {
-        // Direct native AR activation (Opens Camera + Scene Viewer / AR Quick Look / WebXR)
         arViewer.activateAR();
       } else {
-        // If on Desktop PC without camera ARCore, show QR Code to scan on mobile
         qrDialog.showModal();
         generateQr();
       }
@@ -683,12 +765,20 @@
         const model = item.dataset.model;
         const title = item.dataset.title;
         const desc = item.dataset.desc;
+        const dims = item.dataset.dims;
+        const scale = item.dataset.scale;
 
         activePartTitle.textContent = title;
-        activePartDesc.textContent = desc;
+        activePartDesc.textContent = `${dims} • ${desc}`;
+        dimText.textContent = `📏 ${dims}`;
 
-        loadingText.textContent = `LOADING ${title.toUpperCase()}...`;
+        loadingText.textContent = `CALIBRATING ${title.toUpperCase()}...`;
         loadingOverlay.style.opacity = "1";
+
+        // Set Real-World Metric Scale
+        isZoomed = false;
+        scaleToggleBtn.textContent = "Zoom 2.5x";
+        applyModelScale(scale);
 
         arViewer.src = model;
       });
@@ -700,7 +790,7 @@
 
     arViewer.addEventListener("error", (e) => {
       loadingOverlay.style.opacity = "0";
-      console.warn("Model status notice:", e);
+      console.warn("Model notice:", e);
     });
 
     // Camera Controls
@@ -752,9 +842,9 @@
       document.getElementById("specsModalTitle").textContent = activePartTitle.textContent;
       document.getElementById("specsModalBody").innerHTML = `
         <div style="font-weight: 600; color: var(--accent-cyan);">${activePartDesc.textContent}</div>
-        <div style="margin-top: 6px;">• Native WebAR Surface Placement (Google Scene Viewer & Quick Look)</div>
+        <div style="margin-top: 6px;">• Physical Dimensions: ${dimText.textContent}</div>
+        <div>• 1:1 True-to-Life metric scale calibrated for tabletop and room floor placement</div>
         <div>• Touch Gestures: 1-finger move/grab, 2-finger scale, 2-finger rotate</div>
-        <div>• Real-world physical scale calibrated for tabletop and floor environments</div>
       `;
       specsDialog.showModal();
     });
