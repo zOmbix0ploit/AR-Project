@@ -3,6 +3,7 @@ import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/control
 import { TransformControls } from 'https://esm.sh/three@0.160.0/examples/jsm/controls/TransformControls.js';
 import { GLTFLoader } from 'https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 import { GLTFExporter } from 'https://esm.sh/three@0.160.0/examples/jsm/exporters/GLTFExporter.js';
+import { saveRigToDB, deleteRigFromDB, getCachedTransforms } from './webar_db.js';
 
 // DOM References
 const openStudioBtn = document.getElementById("openStudioBtn");
@@ -32,6 +33,8 @@ const inpScaleZ = document.getElementById("inpScaleZ");
 // Action buttons
 const studioApplyBtn = document.getElementById("studioApplyBtn");
 const studioExportBtn = document.getElementById("studioExportBtn");
+const studioCopyConfigBtn = document.getElementById("studioCopyConfigBtn");
+const studioResetAllBtn = document.getElementById("studioResetAllBtn");
 const resetPartTransformBtn = document.getElementById("resetPartTransformBtn");
 
 // Snap buttons
@@ -188,6 +191,7 @@ function handleResize() {
 
 function loadAllParts() {
   studioPartsList.innerHTML = '';
+  const savedTransforms = getCachedTransforms();
 
   PARTS_CONFIG.forEach((cfg) => {
     // Create UI item
@@ -230,10 +234,21 @@ function loadAllParts() {
       partRoot.name = `Studio_${cfg.id}`;
       partRoot.userData = { partId: cfg.id, config: cfg };
 
-      // Set initial position, rotation, scale
-      partRoot.position.set(...cfg.pos);
-      partRoot.rotation.set(...cfg.rot);
-      partRoot.scale.set(...cfg.scale);
+      // Apply saved position, rotation, scale if user previously customized it
+      const saved = savedTransforms && savedTransforms[cfg.id];
+      if (saved) {
+        partRoot.position.set(...saved.pos);
+        partRoot.rotation.set(...saved.rot);
+        partRoot.scale.set(...saved.scale);
+        if (typeof saved.visible === 'boolean') {
+          partRoot.visible = saved.visible;
+          visBtn.classList.toggle('visible', saved.visible);
+        }
+      } else {
+        partRoot.position.set(...cfg.pos);
+        partRoot.rotation.set(...cfg.rot);
+        partRoot.scale.set(...cfg.scale);
+      }
 
       scene.add(partRoot);
       partsRegistry[cfg.id] = partRoot;
@@ -398,25 +413,37 @@ function getExportableScene() {
   return exportGroup;
 }
 
-// APPLY TO WEBAR VIEWER BUTTON
+// APPLY & PERMANENTLY SAVE TO WEBAR (IndexedDB + LocalStorage)
 studioApplyBtn.addEventListener('click', async () => {
   const origText = studioApplyBtn.innerHTML;
-  studioApplyBtn.innerHTML = 'GENERATING WEBAR...';
+  studioApplyBtn.innerHTML = 'SAVING PERMANENT RIG...';
   studioApplyBtn.disabled = true;
 
   try {
     const exportScene = getExportableScene();
     exporter.parse(
       exportScene,
-      (gltfBinary) => {
+      async (gltfBinary) => {
         const blob = new Blob([gltfBinary], { type: 'model/gltf-binary' });
         const blobUrl = URL.createObjectURL(blob);
 
-        const arViewer = document.getElementById("arViewer");
-        if (arViewer) {
-          arViewer.src = blobUrl;
-          arViewer.cameraOrbit = "45deg 75deg 105%";
-        }
+        // Collect all transforms across parts
+        const currentTransforms = {};
+        Object.entries(partsRegistry).forEach(([id, obj]) => {
+          currentTransforms[id] = {
+            pos: [obj.position.x, obj.position.y, obj.position.z],
+            rot: [obj.rotation.x, obj.rotation.y, obj.rotation.z],
+            scale: [obj.scale.x, obj.scale.y, obj.scale.z],
+            visible: obj.visible
+          };
+        });
+
+        // Save into IndexedDB & localStorage
+        await saveRigToDB(blob, currentTransforms);
+
+        // Broadcast to main page & viewer
+        window.__customRigBlobUrl = blobUrl;
+        window.dispatchEvent(new CustomEvent('custom-rig-updated', { detail: { blobUrl, transforms: currentTransforms } }));
 
         closeStudio();
         studioApplyBtn.innerHTML = origText;
@@ -425,9 +452,9 @@ studioApplyBtn.addEventListener('click', async () => {
         const toastBanner = document.getElementById("toastBanner");
         const toastMsg = document.getElementById("toastMsg");
         if (toastBanner && toastMsg) {
-          toastMsg.textContent = "CUSTOM 3D CALIBRATION APPLIED TO WEBAR!";
+          toastMsg.textContent = "CUSTOM RIG SAVED PERMANENTLY IN BROWSER!";
           toastBanner.classList.add("show");
-          setTimeout(() => toastBanner.classList.remove("show"), 3000);
+          setTimeout(() => toastBanner.classList.remove("show"), 4000);
         }
       },
       (err) => {
@@ -445,7 +472,7 @@ studioApplyBtn.addEventListener('click', async () => {
   }
 });
 
-// DOWNLOAD GLB BUTTON
+// DOWNLOAD ASSEMBLED_PC GLB BUTTON
 studioExportBtn.addEventListener('click', () => {
   const origText = studioExportBtn.innerHTML;
   studioExportBtn.innerHTML = 'EXPORTING...';
@@ -459,7 +486,7 @@ studioExportBtn.addEventListener('click', () => {
         const blob = new Blob([gltfBinary], { type: 'model/gltf-binary' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'nethuna_custom_webar_rig.glb';
+        link.download = 'assembled_pc.glb';
         link.click();
         URL.revokeObjectURL(link.href);
 
@@ -479,11 +506,97 @@ studioExportBtn.addEventListener('click', () => {
   }
 });
 
+// COPY CONFIG JSON BUTTON
+if (studioCopyConfigBtn) {
+  studioCopyConfigBtn.addEventListener('click', () => {
+    const exportData = PARTS_CONFIG.map(cfg => {
+      const obj = partsRegistry[cfg.id];
+      if (obj) {
+        return {
+          id: cfg.id,
+          name: cfg.name,
+          pos: [+obj.position.x.toFixed(4), +obj.position.y.toFixed(4), +obj.position.z.toFixed(4)],
+          rotDeg: [
+            +THREE.MathUtils.radToDeg(obj.rotation.x).toFixed(1),
+            +THREE.MathUtils.radToDeg(obj.rotation.y).toFixed(1),
+            +THREE.MathUtils.radToDeg(obj.rotation.z).toFixed(1)
+          ],
+          scale: [+obj.scale.x.toFixed(3), +obj.scale.y.toFixed(3), +obj.scale.z.toFixed(3)],
+          visible: obj.visible
+        };
+      }
+      return cfg;
+    });
+
+    const jsonStr = JSON.stringify(exportData, null, 2);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(jsonStr).then(() => {
+        const toastBanner = document.getElementById("toastBanner");
+        const toastMsg = document.getElementById("toastMsg");
+        if (toastBanner && toastMsg) {
+          toastMsg.textContent = "CALIBRATION CONFIG COPIED TO CLIPBOARD!";
+          toastBanner.classList.add("show");
+          setTimeout(() => toastBanner.classList.remove("show"), 3000);
+        }
+      }).catch(() => {
+        prompt("Copy Calibration JSON:", jsonStr);
+      });
+    } else {
+      prompt("Copy Calibration JSON:", jsonStr);
+    }
+  });
+}
+
+// RESET ALL PARTS TO FACTORY POSITIONS
+if (studioResetAllBtn) {
+  studioResetAllBtn.addEventListener('click', async () => {
+    if (!confirm("Reset all 3D hardware components back to original factory positions?")) return;
+
+    PARTS_CONFIG.forEach(cfg => {
+      const obj = partsRegistry[cfg.id];
+      if (obj) {
+        obj.position.set(...cfg.pos);
+        obj.rotation.set(...cfg.rot);
+        obj.scale.set(...cfg.scale);
+        obj.visible = true;
+      }
+    });
+
+    await deleteRigFromDB();
+    window.__customRigBlobUrl = null;
+    window.dispatchEvent(new CustomEvent('custom-rig-cleared'));
+    if (selectedObject) updateInspectorFromObject(selectedObject);
+
+    const toastBanner = document.getElementById("toastBanner");
+    const toastMsg = document.getElementById("toastMsg");
+    if (toastBanner && toastMsg) {
+      toastMsg.textContent = "STUDIO RESET TO FACTORY POSITIONS";
+      toastBanner.classList.add("show");
+      setTimeout(() => toastBanner.classList.remove("show"), 3000);
+    }
+  });
+}
+
 function openStudio() {
   studioModal.classList.add('open');
   isStudioActive = true;
   initStudio();
   setTimeout(handleResize, 100);
+
+  // If already initialized, synchronize parts with latest saved positions
+  const saved = getCachedTransforms();
+  if (saved && isInitialized) {
+    Object.entries(saved).forEach(([id, t]) => {
+      const obj = partsRegistry[id];
+      if (obj) {
+        obj.position.set(...t.pos);
+        obj.rotation.set(...t.rot);
+        obj.scale.set(...t.scale);
+        if (typeof t.visible === 'boolean') obj.visible = t.visible;
+      }
+    });
+    if (selectedObject) updateInspectorFromObject(selectedObject);
+  }
 
   const arViewer = document.getElementById("arViewer");
   if (arViewer) arViewer.autoRotate = false;
