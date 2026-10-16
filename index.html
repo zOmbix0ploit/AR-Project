@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>TitanRig 3D – Interactive WebAR PC Building Simulator</title>
+  <meta name="description" content="Build your custom gaming PC from scratch in 3D and Augmented Reality (WebAR). Step-by-step modular PC assembly.">
+  <meta name="theme-color" content="#07090f">
+
+  <!-- Google Fonts: Orbitron & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+
+  <!-- Three.js & Loaders (Industry standard 3D Engine for multi-model assembly) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <!-- Google Model Viewer (For Native Smartphone Camera WebAR) -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <!-- QRCode.js for mobile instant QR code -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #07090f;
+      --bg-panel: rgba(13, 17, 30, 0.78);
+      --border-cyan: rgba(0, 240, 255, 0.28);
+      --glow-cyan: rgba(0, 240, 255, 0.5);
+      --accent-cyan: #00f0ff;
+      --accent-magenta: #ff007f;
+      --accent-green: #10b981;
+      --accent-purple: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-display: 'Orbitron', -apple-system, sans-serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 3D WebGL Canvas */
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Ambient Tech Background Gradients */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -150px;
+      left: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -150px;
+      right: 10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255, 0, 127, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Navigation Header */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(7, 9, 15, 0.9) 0%, rgba(7, 9, 15, 0) 100%);
+      pointer-events: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px var(--glow-cyan);
+    }
+    .brand-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+    }
+    .brand-text h1 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      background: linear-gradient(90deg, #fff 40%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-text span {
+      font-size: 0.68rem;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-icon {
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-cyan);
+      color: var(--text-main);
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-icon:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 14px var(--glow-cyan);
+      transform: translateY(-2px);
+    }
+    .btn-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Top Instruction Guidance Banner */
+    .guide-banner {
+      position: absolute;
+      top: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      background: var(--bg-panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 30px;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      animation: pulseGlow 2.5s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { border-color: rgba(0, 240, 255, 0.3); }
+      50% { border-color: rgba(0, 240, 255, 0.9); box-shadow: 0 0 16px var(--glow-cyan); }
+    }
+
+    /* Left Sidebar: Step-By-Step PC Assembly Checklist */
+    .build-checklist-card {
+      position: absolute;
+      top: 5.5rem;
+      left: 1.5rem;
+      z-index: 15;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 14px;
+      padding: 1.25rem;
+      width: 280px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .checklist-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.6rem;
+    }
+    .checklist-title h2 {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      letter-spacing: 1px;
+      color: var(--accent-cyan);
+    }
+    .build-progress-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.15);
+      padding: 2px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .step-item:hover {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: var(--border-cyan);
+    }
+    .step-item.installed {
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.08);
+    }
+    .step-item.active {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+    }
+    .step-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .step-icon {
+      font-size: 1rem;
+    }
+    .step-status {
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .status-pending { color: var(--text-muted); }
+    .status-done { color: var(--accent-green); }
+
+    /* Bottom Assembly Control Dock */
+    .bottom-dock {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 0;
+      right: 0;
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0 1rem;
+    }
+
+    .active-info-pill {
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 12px;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+    .info-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .info-value {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-family: var(--font-display);
+    }
+
+    .dock-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .primary-action-btn {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 0.85rem 1.75rem;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 8px 25px var(--glow-cyan);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .primary-action-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 35px rgba(0, 240, 255, 0.6);
+    }
+    .primary-action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .secondary-action-btn {
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-cyan);
+      color: var(--text-main);
+      padding: 0.85rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.25s ease;
+    }
+    .secondary-action-btn:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    /* Power ON Big Glowing Button */
+    .power-btn {
+      background: linear-gradient(135deg, #ff007f, #8b5cf6);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 25px rgba(255, 0, 127, 0.5);
+    }
+    .power-btn:hover {
+      box-shadow: 0 0 35px rgba(255, 0, 127, 0.8);
+    }
+
+    /* WebAR Launch Floating Button (Top Right) */
+    .webar-btn {
+      position: absolute;
+      top: 5.5rem;
+      right: 1.5rem;
+      z-index: 20;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.85), rgba(139, 92, 246, 0.85));
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      box-shadow: 0 8px 25px var(--glow-cyan);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .webar-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.6);
+    }
+
+    /* Loading Progress Overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 9, 15, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      z-index: 50;
+      transition: opacity 0.6s ease;
+    }
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(0, 240, 255, 0.15);
+      border-top-color: var(--accent-cyan);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: var(--accent-cyan);
+    }
+    .loading-progress-bar {
+      width: 240px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .loading-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+      transition: width 0.3s ease;
+    }
+
+    /* Modals & Dialogs */
+    dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(10, 14, 26, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-cyan);
+      border-radius: 18px;
+      padding: 2rem;
+      color: var(--text-main);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px var(--glow-cyan);
+      max-width: 90vw;
+      width: 450px;
+      z-index: 100;
+      outline: none;
+    }
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+    }
+    .dialog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .dialog-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--accent-cyan);
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.4rem;
+    }
+    .close-btn:hover { color: #fff; }
+
+    /* Model Viewer AR Modal Overlay (For Mobile Camera View) */
+    #arModal model-viewer {
+      width: 100%;
+      height: 380px;
+      --poster-color: transparent;
+      outline: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .build-checklist-card {
+        top: auto;
+        bottom: 9.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92vw;
+        max-height: 25vh;
+        overflow-y: auto;
+      }
+      .webar-btn {
+        top: auto;
+        bottom: 6.5rem;
+        right: 50%;
+        transform: translateX(50%);
+      }
+      .guide-banner {
+        top: 4.2rem;
+        font-size: 0.72rem;
+        width: 90vw;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Light Background -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- 3D WebGL Canvas -->
+  <div id="canvas-container"></div>
+
+  <!-- Loading Screen -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-title" id="loadingTitle">PREPARING PC COMPONENTS...</div>
+    <div class="loading-progress-bar">
+      <div class="loading-progress-fill" id="loadingProgress"></div>
+    </div>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h2v2H6zm4-4h8v2h-8zm0 4h5v2h-5z"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>TITANRIG 3D</h1>
+        <span>WebAR PC Building Simulator</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Auto Build / Play All -->
+      <button class="btn-icon" id="autoBuildBtn" title="Auto Assemble All Parts">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+
+      <!-- Reset / Disassemble -->
+      <button class="btn-icon" id="resetBuildBtn" title="Disassemble / Reset Build">
+        <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+      </button>
+
+      <!-- Hardware Specs Modal -->
+      <button class="btn-icon" id="specsBtn" title="Hardware Specifications">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      </button>
+
+      <!-- QR Code for Mobile WebAR -->
+      <button class="btn-icon" id="qrBtn" title="Scan QR for Smartphone AR">
+        <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4V4zm2 2v2h2V6H6zm8-2h6v6h-6V4zm2 2v2h2V6h-2zM4 14h6v6H4v-6zm2 2v2h2v-2H6zm10 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm4 0h2v2h-2v-2zm-2-4h2v2h-2v-2zm2-2h2v2h-2v-2zm-4 0h2v2h-2v-2z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Top Guidance Banner -->
+  <div class="guide-banner" id="guideBanner">
+    <span>💡 Tap "INSTALL NEXT PART" to assemble your PC step-by-step!</span>
+  </div>
+
+  <!-- Launch WebAR Button -->
+  <button class="webar-btn" id="launchArBtn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-4-4 1.41-1.41L12 14.17l5.59-5.59L19 10l-7 7z"/></svg>
+    <span>VIEW IN WEBAR</span>
+  </button>
+
+  <!-- Left Sidebar: Step-By-Step PC Assembly Checklist -->
+  <div class="build-checklist-card">
+    <div class="checklist-title">
+      <h2>BUILD CHECKLIST</h2>
+      <span class="build-progress-pill" id="progressPill">0 / 6 Done</span>
+    </div>
+    <div class="step-list" id="stepList">
+      <!-- Steps generated via JS -->
+    </div>
+  </div>
+
+  <!-- Bottom Assembly Control Dock -->
+  <div class="bottom-dock">
+    <div class="active-info-pill">
+      <div>
+        <div class="info-label">Active Part</div>
+        <div class="info-value" id="activePartName">Empty Gaming Case</div>
+      </div>
+      <div>
+        <div class="info-label">Status</div>
+        <div class="info-value" id="activePartStatus" style="color: var(--accent-cyan);">Ready for Assembly</div>
+      </div>
+    </div>
+
+    <div class="dock-controls">
+      <button class="secondary-action-btn" id="prevPartBtn">‹ Previous</button>
+      <button class="primary-action-btn" id="installPartBtn">
+        <span>⚡ INSTALL NEXT PART</span>
+      </button>
+      <button class="secondary-action-btn" id="nextPartBtn">Next ›</button>
+    </div>
+  </div>
+
+  <!-- WebAR Mobile Modal Dialog -->
+  <dialog id="arDialog">
+    <div class="dialog-header">
+      <h3>📱 Smartphone WebAR View</h3>
+      <button class="close-btn" id="closeArDialogBtn">&times;</button>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+      <model-viewer
+        id="modalArViewer"
+        src="models/case.glb"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        ar-scale="auto"
+        camera-controls
+        auto-rotate
+        shadow-intensity="1.5"
+        style="width: 100%; height: 280px; background: rgba(0,0,0,0.2); border-radius: 12px;">
+      </model-viewer>
+      <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
+        Tap <strong>"View in your space"</strong> below to place the PC in your room with your phone camera!
+      </p>
+    </div>
+  </dialog>
+
+  <!-- QR Code Modal Dialog -->
+  <dialog id="qrDialog">
+    <div class="dialog-header">
+      <h3>📱 Open on Mobile</h3>
+      <button class="close-btn" id="closeQrBtn">&times;</button>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1rem 0;">
+      <div id="qrcode" style="background: #fff; padding: 12px; border-radius: 12px;"></div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
+        Scan with your smartphone camera to open TitanRig WebAR instantly on your phone!
+      </p>
+    </div>
+  </dialog>
+
+  <!-- Hardware Specifications Dialog -->
+  <dialog id="specsDialog">
+    <div class="dialog-header">
+      <h3 id="specsTitle">Hardware Specs</h3>
+      <button class="close-btn" id="closeSpecsBtn">&times;</button>
+    </div>
+    <div id="specsBody" style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; line-height: 1.5; color: #cbd5e1;"></div>
+  </dialog>
+
+  <script>
+    // 1. Component Registry with Assembly Target Transforms
+    const BUILD_STEPS = [
+      {
+        id: "psu",
+        name: "Power Supply (1000W)",
+        icon: "🔌",
+        file: "models/psu.glb",
+        scale: 0.05,
+        workbenchPos: [-2.2, 0.4, 1.2],
+        workbenchRot: [0, Math.PI / 4, 0],
+        installedPos: [-0.02, 0.15, -0.05],
+        installedRot: [0, 0, 0],
+        desc: "80+ Gold Modular 1000W Power Supply mounted into the lower PSU shroud compartment."
+      },
+      {
+        id: "motherboard",
+        name: "Gaming Motherboard",
+        icon: "⚡",
+        file: "models/motherboard.glb",
+        scale: 0.7,
+        workbenchPos: [-2.2, 1.3, 0.8],
+        workbenchRot: [Math.PI / 2, 0, 0],
+        installedPos: [0.0, 0.55, 0.02],
+        installedRot: [Math.PI / 2, 0, 0],
+        desc: "ROG Maximus Z790 ATX Motherboard screwed onto brass chassis standoffs."
+      },
+      {
+        id: "cpu",
+        name: "Intel Core i9 CPU",
+        icon: "🧠",
+        file: "models/cpu.glb",
+        scale: 0.35,
+        workbenchPos: [-2.0, 1.8, 0.6],
+        workbenchRot: [Math.PI / 2, 0, 0],
+        installedPos: [0.0, 0.68, 0.05],
+        installedRot: [Math.PI / 2, 0, 0],
+        desc: "Intel Core i9-14900K 24-core CPU seated into the LGA 1700 socket with tension lever locked."
+      },
+      {
+        id: "ram",
+        name: "DDR5 RGB RAM",
+        icon: "💾",
+        file: "models/ram.glb",
+        scale: 0.22,
+        workbenchPos: [-1.6, 2.0, 0.4],
+        workbenchRot: [0, Math.PI / 2, 0],
+        installedPos: [0.15, 0.68, 0.05],
+        installedRot: [0, Math.PI / 2, 0],
+        desc: "64GB (2x32GB) Dominator Titanium DDR5 RAM snapped into dual-channel DIMM slots."
+      },
+      {
+        id: "cooler",
+        name: "RGB Liquid AIO Cooler",
+        icon: "❄️",
+        file: "models/cooler.glb",
+        scale: 0.65,
+        workbenchPos: [-2.2, 0.5, -1.2],
+        workbenchRot: [0, 0, 0],
+        installedPos: [0.0, 0.68, 0.08],
+        installedRot: [0, 0, 0],
+        desc: "Kraken 360mm Radiator mounted to top exhaust and AIO pump clamped onto CPU."
+      },
+      {
+        id: "gpu",
+        name: "RTX 4080 Graphics Card",
+        icon: "🎮",
+        file: "models/gpu.glb",
+        scale: 0.8,
+        workbenchPos: [-2.2, 1.1, -1.2],
+        workbenchRot: [0, -Math.PI / 4, 0],
+        installedPos: [0.05, 0.42, 0.08],
+        installedRot: [0, 0, 0],
+        desc: "NVIDIA GeForce RTX 4080 Super 16GB slotted into primary PCIe 5.0 x16 slot."
+      }
+    ];
+
+    // State
+    let scene, camera, renderer, controls;
+    let loadedModels = {};
+    let isInstalled = {};
+    let currentStepIndex = 0;
+    let isPoweredOn = false;
+    let rgbLight1, rgbLight2;
+    let audioCtx = null;
+
+    // Web Audio Sound Synthesizer
+    function playSfx(type) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'snap') {
+          // Hardware click/snap
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(600, now);
+          osc.frequency.exponentialRampToValueAtTime(100, now + 0.09);
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } else if (type === 'boot') {
+          // PC Startup Chime
+          [392, 523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = 'sine';
+            o.frequency.setValueAtTime(freq, now + idx * 0.09);
+            g.gain.setValueAtTime(0, now + idx * 0.09);
+            g.gain.linearRampToValueAtTime(0.25, now + idx * 0.09 + 0.04);
+            g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 1.2);
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.start(now + idx * 0.09);
+            o.stop(now + idx * 0.09 + 1.2);
+          });
+        }
+      } catch (e) {
+        console.warn("Audio Context init pending user interaction");
+      }
+    }
+
+    // 2. Initialize Three.js 3D World
+    function init3D() {
+      const container = document.getElementById("canvas-container");
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x07090f);
+
+      // Camera
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(2.8, 2.0, 3.2);
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      // Orbit Controls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2 + 0.1;
+      controls.minDistance = 1.0;
+      controls.maxDistance = 8.0;
+      controls.target.set(0, 0.5, 0);
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+      dirLight.position.set(5, 10, 7);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      // Dynamic RGB Interior Lights
+      rgbLight1 = new THREE.PointLight(0x00f0ff, 0, 3);
+      rgbLight1.position.set(0, 0.6, 0.2);
+      scene.add(rgbLight1);
+
+      rgbLight2 = new THREE.PointLight(0xff007f, 0, 3);
+      rgbLight2.position.set(0, 0.3, -0.2);
+      scene.add(rgbLight2);
+
+      // Tech Floor Grid
+      const grid = new THREE.GridHelper(10, 20, 0x00f0ff, 0x1e293b);
+      grid.position.y = -0.01;
+      scene.add(grid);
+
+      // Floor Shadow Plane
+      const shadowPlaneGeo = new THREE.PlaneGeometry(10, 10);
+      const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.35 });
+      const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.receiveShadow = true;
+      scene.add(shadowPlane);
+
+      // Window Resize Listener
+      window.addEventListener("resize", onWindowResize);
+
+      // Render Loop
+      animate();
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    // Smooth Animation Interpolation
+    let animatingParts = [];
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+
+      // Smoothly interpolate animating parts
+      const delta = 0.08;
+      for (let i = animatingParts.length - 1; i >= 0; i--) {
+        const item = animatingParts[i];
+        item.mesh.position.lerp(item.targetPos, delta);
+        item.mesh.quaternion.slerp(item.targetRot, delta);
+
+        if (item.mesh.position.distanceTo(item.targetPos) < 0.005) {
+          item.mesh.position.copy(item.targetPos);
+          item.mesh.quaternion.copy(item.targetRot);
+          animatingParts.splice(i, 1);
+        }
+      }
+
+      // RGB Breathing Effect when Powered ON
+      if (isPoweredOn) {
+        const time = Date.now() * 0.002;
+        rgbLight1.intensity = 2.5 + Math.sin(time) * 0.8;
+        rgbLight2.intensity = 2.5 + Math.cos(time) * 0.8;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // 3. Load All 3D Models
+    function loadModels() {
+      const loader = new THREE.GLTFLoader();
+      const totalToLoad = 1 + BUILD_STEPS.length; // Case + 6 parts
+      let loadedCount = 0;
+
+      function updateProgress() {
+        loadedCount++;
+        const pct = Math.round((loadedCount / totalToLoad) * 100);
+        document.getElementById("loadingProgress").style.width = pct + "%";
+        document.getElementById("loadingTitle").textContent = `LOADING ASSETS (${loadedCount}/${totalToLoad})...`;
+
+        if (loadedCount >= totalToLoad) {
+          setTimeout(() => {
+            document.getElementById("loadingOverlay").style.opacity = "0";
+            setTimeout(() => {
+              document.getElementById("loadingOverlay").style.display = "none";
+            }, 600);
+          }, 400);
+        }
+      }
+
+      // Load Case First
+      loader.load("models/case.glb", (gltf) => {
+        const caseMesh = gltf.scene;
+        caseMesh.position.set(0, 0, 0);
+        caseMesh.scale.set(1, 1, 1);
+        caseMesh.traverse((node) => {
+          if (node.isMesh) {
+            node.castShadow = true;
+            node.receiveShadow = true;
+          }
+        });
+        scene.add(caseMesh);
+        loadedModels["case"] = caseMesh;
+        updateProgress();
+      }, undefined, (err) => {
+        console.error("Error loading case:", err);
+        updateProgress();
+      });
+
+      // Load All Components onto the Staging Workbench
+      BUILD_STEPS.forEach((step) => {
+        isInstalled[step.id] = false;
+        loader.load(step.file, (gltf) => {
+          const mesh = gltf.scene;
+          mesh.scale.set(step.scale, step.scale, step.scale);
+          mesh.position.set(...step.workbenchPos);
+          mesh.rotation.set(...step.workbenchRot);
+          mesh.traverse((node) => {
+            if (node.isMesh) {
+              node.castShadow = true;
+              node.receiveShadow = true;
+            }
+          });
+          scene.add(mesh);
+          loadedModels[step.id] = mesh;
+          updateProgress();
+        }, undefined, (err) => {
+          console.error("Error loading component:", step.id, err);
+          updateProgress();
+        });
+      });
+    }
+
+    // 4. Component Assembly Action
+    function toggleInstallPart(index) {
+      if (index < 0 || index >= BUILD_STEPS.length) return;
+      const step = BUILD_STEPS[index];
+      const mesh = loadedModels[step.id];
+      if (!mesh) return;
+
+      const installed = !isInstalled[step.id];
+      isInstalled[step.id] = installed;
+
+      playSfx('snap');
+
+      const targetPos = new THREE.Vector3(...(installed ? step.installedPos : step.workbenchPos));
+      const targetEuler = new THREE.Euler(...(installed ? step.installedRot : step.workbenchRot));
+      const targetRot = new THREE.Quaternion().setFromEuler(targetEuler);
+
+      // Add to animating queue
+      animatingParts.push({ mesh, targetPos, targetRot });
+
+      // Update UI
+      renderChecklist();
+      updateActivePartInfo();
+
+      // Check if all installed
+      checkAllInstalled();
+    }
+
+    function checkAllInstalled() {
+      const allDone = BUILD_STEPS.every(s => isInstalled[s.id]);
+      const installBtn = document.getElementById("installPartBtn");
+
+      if (allDone) {
+        installBtn.classList.add("power-btn");
+        installBtn.innerHTML = "<span>⚡ POWER ON RIG</span>";
+        document.getElementById("guideBanner").innerHTML = "<span>🎉 ALL PARTS INSTALLED! TAP 'POWER ON' TO BOOT YOUR RIG!</span>";
+      } else {
+        installBtn.classList.remove("power-btn");
+        installBtn.innerHTML = "<span>⚡ INSTALL NEXT PART</span>";
+      }
+    }
+
+    function powerOnRig() {
+      isPoweredOn = true;
+      playSfx('boot');
+      rgbLight1.intensity = 3.0;
+      rgbLight2.intensity = 3.0;
+
+      document.getElementById("activePartName").textContent = "TITANRIG GAMING PC";
+      document.getElementById("activePartStatus").textContent = "ONLINE | 6.0 GHz | 4K READY";
+      document.getElementById("activePartStatus").style.color = "var(--accent-green)";
+
+      alert("⚡ SYSTEM ONLINE!\n\nAll components successfully assembled.\nMotherboard POST: OK\nCPU Temperature: 32°C Normal\nGPU Clock: 2550 MHz\nRGB Sync: ACTIVE");
+    }
+
+    // 5. Checklist UI & Dock Updates
+    function renderChecklist() {
+      const listEl = document.getElementById("stepList");
+      listEl.innerHTML = "";
+      let installedCount = 0;
+
+      BUILD_STEPS.forEach((step, idx) => {
+        const installed = isInstalled[step.id];
+        if (installed) installedCount++;
+
+        const item = document.createElement("div");
+        item.className = `step-item ${installed ? 'installed' : ''} ${idx === currentStepIndex ? 'active' : ''}`;
+        item.innerHTML = `
+          <div class="step-left">
+            <span class="step-icon">${step.icon}</span>
+            <span>${step.name}</span>
+          </div>
+          <span class="step-status ${installed ? 'status-done' : 'status-pending'}">
+            ${installed ? '✓ Mounted' : 'Pending'}
+          </span>
+        `;
+        item.addEventListener("click", () => {
+          currentStepIndex = idx;
+          toggleInstallPart(idx);
+        });
+        listEl.appendChild(item);
+      });
+
+      document.getElementById("progressPill").textContent = `${installedCount} / ${BUILD_STEPS.length} Done`;
+    }
+
+    function updateActivePartInfo() {
+      const step = BUILD_STEPS[currentStepIndex];
+      const installed = isInstalled[step.id];
+      document.getElementById("activePartName").textContent = step.name;
+      document.getElementById("activePartStatus").textContent = installed ? "✓ Installed inside Case" : "Staged on Workbench";
+      document.getElementById("activePartStatus").style.color = installed ? "var(--accent-green)" : "var(--accent-cyan)";
+    }
+
+    // 6. Button Listeners
+    document.getElementById("installPartBtn").addEventListener("click", () => {
+      const allDone = BUILD_STEPS.every(s => isInstalled[s.id]);
+      if (allDone) {
+        powerOnRig();
+      } else {
+        // Find next uninstalled part
+        let nextIdx = BUILD_STEPS.findIndex((s, idx) => idx >= currentStepIndex && !isInstalled[s.id]);
+        if (nextIdx === -1) nextIdx = BUILD_STEPS.findIndex(s => !isInstalled[s.id]);
+        if (nextIdx !== -1) {
+          currentStepIndex = nextIdx;
+          toggleInstallPart(nextIdx);
+        }
+      }
+    });
+
+    document.getElementById("nextPartBtn").addEventListener("click", () => {
+      currentStepIndex = (currentStepIndex + 1) % BUILD_STEPS.length;
+      updateActivePartInfo();
+      renderChecklist();
+    });
+
+    document.getElementById("prevPartBtn").addEventListener("click", () => {
+      currentStepIndex = (currentStepIndex - 1 + BUILD_STEPS.length) % BUILD_STEPS.length;
+      updateActivePartInfo();
+      renderChecklist();
+    });
+
+    // Auto Build All
+    document.getElementById("autoBuildBtn").addEventListener("click", () => {
+      playSfx('snap');
+      BUILD_STEPS.forEach((step, idx) => {
+        setTimeout(() => {
+          if (!isInstalled[step.id]) {
+            currentStepIndex = idx;
+            toggleInstallPart(idx);
+          }
+        }, idx * 450);
+      });
+    });
+
+    // Reset / Disassemble All
+    document.getElementById("resetBuildBtn").addEventListener("click", () => {
+      playSfx('snap');
+      isPoweredOn = false;
+      rgbLight1.intensity = 0;
+      rgbLight2.intensity = 0;
+      BUILD_STEPS.forEach((step, idx) => {
+        if (isInstalled[step.id]) {
+          toggleInstallPart(idx);
+        }
+      });
+      document.getElementById("guideBanner").innerHTML = "<span>💡 Tap 'INSTALL NEXT PART' to assemble your PC step-by-step!</span>";
+    });
+
+    // Launch WebAR Modal
+    const arDialog = document.getElementById("arDialog");
+    document.getElementById("launchArBtn").addEventListener("click", () => {
+      playSfx('snap');
+      arDialog.showModal();
+    });
+    document.getElementById("closeArDialogBtn").addEventListener("click", () => arDialog.close());
+    arDialog.addEventListener("click", (e) => { if (e.target === arDialog) arDialog.close(); });
+
+    // QR Code Modal
+    const qrDialog = document.getElementById("qrDialog");
+    let qrcodeInstance = null;
+    document.getElementById("qrBtn").addEventListener("click", () => {
+      playSfx('snap');
+      qrDialog.showModal();
+      if (!qrcodeInstance) {
+        const qrBox = document.getElementById("qrcode");
+        qrBox.innerHTML = "";
+        qrcodeInstance = new QRCode(qrBox, {
+          text: window.location.href,
+          width: 200,
+          height: 200,
+          colorDark: "#07090f",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      }
+    });
+    document.getElementById("closeQrBtn").addEventListener("click", () => qrDialog.close());
+    qrDialog.addEventListener("click", (e) => { if (e.target === qrDialog) qrDialog.close(); });
+
+    // Specs Modal
+    const specsDialog = document.getElementById("specsDialog");
+    document.getElementById("specsBtn").addEventListener("click", () => {
+      playSfx('snap');
+      const step = BUILD_STEPS[currentStepIndex];
+      document.getElementById("specsTitle").textContent = step.name;
+      document.getElementById("specsBody").innerHTML = `
+        <div style="font-size: 0.95rem; font-weight: 600; color: var(--accent-cyan); padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+          Component Description
+        </div>
+        <div>${step.desc}</div>
+        <div style="margin-top: 1rem; padding: 0.6rem; background: rgba(0,240,255,0.08); border-radius: 8px; border: 1px dashed var(--border-cyan); font-size: 0.8rem; color: var(--accent-cyan);">
+          🔧 Interactive assembly step calibrated to physical chassis dimensions.
+        </div>
+      `;
+      specsDialog.showModal();
+    });
+    document.getElementById("closeSpecsBtn").addEventListener("click", () => specsDialog.close());
+    specsDialog.addEventListener("click", (e) => { if (e.target === specsDialog) specsDialog.close(); });
+
+    // Keyboard ESC
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        if (arDialog.open) arDialog.close();
+        if (qrDialog.open) qrDialog.close();
+        if (specsDialog.open) specsDialog.close();
+      }
+    });
+
+    // Start App
+    window.addEventListener("DOMContentLoaded", () => {
+      init3D();
+      loadModels();
+      renderChecklist();
+      updateActivePartInfo();
+    });
+  </script>
+</body>
+</html>
