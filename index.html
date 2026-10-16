@@ -829,9 +829,10 @@
   <model-viewer
     id="arViewer"
     src="models/assembled_pc.glb"
+    ios-src="models/assembled_pc.usdz"
     scale="0.46 0.46 0.46"
     ar
-    ar-modes="scene-viewer webxr quick-look"
+    ar-modes="quick-look scene-viewer webxr"
     ar-scale="auto"
     ar-placement="floor"
     camera-controls
@@ -1235,6 +1236,8 @@
       applyModelScale(scale);
 
       arViewer.src = model;
+      const usdzModel = model.replace(/\.glb$/, '.usdz');
+      arViewer.setAttribute('ios-src', usdzModel);
       updateStepButtonLabel(model);
 
       setTimeout(dismissLoader, 3500);
