@@ -177,7 +177,7 @@ function initStudio() {
 }
 
 function handleResize() {
-  if (!studioModal || studioModal.style.display === 'none' || !camera || !renderer) return;
+  if (!studioModal || !studioModal.classList.contains('open') || !camera || !renderer) return;
   const rect = studioCanvas.parentElement.getBoundingClientRect();
   const width = rect.width || window.innerWidth;
   const height = rect.height || (window.innerHeight - 52);
@@ -480,7 +480,7 @@ studioExportBtn.addEventListener('click', () => {
 });
 
 function openStudio() {
-  studioModal.style.display = 'flex';
+  studioModal.classList.add('open');
   isStudioActive = true;
   initStudio();
   setTimeout(handleResize, 100);
@@ -490,7 +490,7 @@ function openStudio() {
 }
 
 function closeStudio() {
-  studioModal.style.display = 'none';
+  studioModal.classList.remove('open');
   isStudioActive = false;
 }
 
