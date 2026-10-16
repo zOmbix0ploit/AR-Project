@@ -285,6 +285,36 @@
       flex-shrink: 0;
     }
 
+    /* Step-by-Step Install Next Part Button */
+    .step-build-btn {
+      background: linear-gradient(135deg, #10b981, #00f0ff);
+      color: #07090f;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      padding: 0.65rem 1.15rem;
+      border-radius: 26px;
+      font-family: var(--font-display);
+      font-size: clamp(0.70rem, 2.4vw, 0.78rem);
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .step-build-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.75);
+    }
+    .step-build-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #07090f;
+      flex-shrink: 0;
+    }
+
     /* Live Pass-through Camera Toggle Button */
     .camera-live-toggle-btn {
       background: var(--bg-panel);
@@ -733,14 +763,21 @@
         <span id="arLaunchBtnLabel">VIEW FULL RIG IN AR</span>
       </button>
 
-      <!-- 2. Auto-Build Rig Sequencer -->
+      <!-- 2. Interactive Step-by-Step Part Installation Button -->
+      <button class="step-build-btn" id="stepBuildBtn" type="button" aria-label="Install next hardware part into chassis">
+        <!-- Plus Vector Icon -->
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        <span id="stepBuildBtnLabel">+ INSTALL MOTHERBOARD</span>
+      </button>
+
+      <!-- 3. Auto-Build Rig Sequencer -->
       <button class="auto-build-btn" id="autoBuildBtn" type="button" aria-label="Auto Assemble Complete PC">
         <!-- Lightning Bolt Assembly Vector Icon -->
         <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
-        <span>AUTO-BUILD PC</span>
+        <span>AUTO-BUILD ALL</span>
       </button>
 
-      <!-- 3. In-Browser Live Camera WebAR Pass-Through -->
+      <!-- 4. In-Browser Live Camera WebAR Pass-Through -->
       <button class="camera-live-toggle-btn" id="cameraPassToggleBtn" type="button" aria-label="Toggle Live Room Camera Background">
         <!-- Camera Vector Icon -->
         <svg viewBox="0 0 24 24"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
@@ -822,6 +859,7 @@
            data-model="models/assembled_pc.glb" 
            data-scale="0.46"
            data-dims="42.5 x 45.0 x 21.3 cm"
+           data-step="6"
            data-title="Nethuna Gaming Rig (Fully Built)" 
            data-desc="All Components Installed: Z790 + RTX 4080 + Kraken 360 + DDR5 + i9">
         <span class="comp-item-icon">
@@ -831,46 +869,79 @@
         <span class="comp-item-text">Full Built PC</span>
       </div>
 
-      <!-- 1. Stage 3: Liquid Cooling Installed -->
-      <div class="comp-item" 
-           data-model="models/stage3_cooling.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
-           data-title="Assembly Stage 3: Cooling" 
-           data-desc="Kraken Elite 360 Radiator &amp; Fans Mounted in Case">
-        <span class="comp-item-icon">
-          <!-- Cooling Turbine Fan Icon -->
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-10a2 2 0 1 0 2 2 2 2 0 0 0-2-2z"/></svg>
-        </span>
-        <span class="comp-item-text">Stage 3: Cooler</span>
-      </div>
-
-      <!-- 2. Stage 2: Mobo + CPU + RAM Installed -->
-      <div class="comp-item" 
-           data-model="models/stage2_mobo.glb" 
-           data-scale="0.46"
-           data-dims="42.5 x 45.0 x 21.3 cm"
-           data-title="Assembly Stage 2: Core Platform" 
-           data-desc="ROG Z790 + Core i9 + DDR5 RAM Installed in Case">
-        <span class="comp-item-icon">
-          <!-- Motherboard Circuit Icon -->
-          <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h4v4H8V8zm0 6h2v2H8v-2zm6-6h2v6h-2V8z"/></svg>
-        </span>
-        <span class="comp-item-text">Stage 2: Mobo Core</span>
-      </div>
-
-      <!-- 3. Stage 1: Empty Case -->
+      <!-- 1. Step 1: Chassis (Empty) -->
       <div class="comp-item" 
            data-model="models/case.glb" 
            data-scale="0.46"
            data-dims="42.5 x 45.0 x 21.3 cm"
-           data-title="Assembly Stage 1: Chassis" 
+           data-step="1"
+           data-title="Build Step 1: Chassis (Empty)" 
            data-desc="Nethuna Mid-Tower Chassis - Dual Tempered Glass (Empty)">
         <span class="comp-item-icon">
           <!-- PC Tower Case Icon -->
           <svg viewBox="0 0 24 24"><path d="M4 2h16c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v16h16V4H4zm3 2h10v2H7V6zm0 4h10v2H7v-2zm0 4h5v2H7v-2z"/></svg>
         </span>
-        <span class="comp-item-text">Stage 1: Chassis</span>
+        <span class="comp-item-text">Step 1: Chassis</span>
+      </div>
+
+      <!-- 2. Step 2: + Motherboard -->
+      <div class="comp-item" 
+           data-model="models/stage2_mobo.glb" 
+           data-scale="0.46"
+           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-step="2"
+           data-title="Build Step 2: Motherboard Installed" 
+           data-desc="ROG Z790 Hero ATX Board Mounted to Chassis Standoffs">
+        <span class="comp-item-icon">
+          <!-- Motherboard Circuit Icon -->
+          <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h4v4H8V8zm0 6h2v2H8v-2zm6-6h2v6h-2V8z"/></svg>
+        </span>
+        <span class="comp-item-text">Step 2: + Mobo</span>
+      </div>
+
+      <!-- 3. Step 3: + CPU & RAM -->
+      <div class="comp-item" 
+           data-model="models/stage3_cpu_ram.glb" 
+           data-scale="0.46"
+           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-step="3"
+           data-title="Build Step 3: CPU &amp; RAM Inserted" 
+           data-desc="Intel Core i9-14900K in Socket + Dominator DDR5 in Slots">
+        <span class="comp-item-icon">
+          <!-- CPU Processor Microchip Icon -->
+          <svg viewBox="0 0 24 24"><path d="M6 2h2v2h8V2h2v2h2a2 2 0 0 1 2 2v2h2v2h-2v4h2v2h-2v2a2 2 0 0 1-2 2h-2v2h-2v-2H8v2H6v-2H4a2 2 0 0 1-2-2v-2H0v-2h2v-4H0V8h2V6a2 2 0 0 1 2-2h2V2zm0 4v12h12V6H6zm3 3h6v6H9V9z"/></svg>
+        </span>
+        <span class="comp-item-text">Step 3: + CPU/RAM</span>
+      </div>
+
+      <!-- 4. Step 4: + 360mm Cooler -->
+      <div class="comp-item" 
+           data-model="models/stage4_cooler.glb" 
+           data-scale="0.46"
+           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-step="4"
+           data-title="Build Step 4: 360mm Cooler Mounted" 
+           data-desc="Kraken Elite 360 Radiator &amp; Fans Mounted on Top Ceiling">
+        <span class="comp-item-icon">
+          <!-- Cooling Turbine Fan Icon -->
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-10a2 2 0 1 0 2 2 2 2 0 0 0-2-2z"/></svg>
+        </span>
+        <span class="comp-item-text">Step 4: + Cooler</span>
+      </div>
+
+      <!-- 5. Step 5: + RTX 4080 GPU -->
+      <div class="comp-item" 
+           data-model="models/stage5_gpu.glb" 
+           data-scale="0.46"
+           data-dims="42.5 x 45.0 x 21.3 cm"
+           data-step="5"
+           data-title="Build Step 5: RTX 4080 GPU Slotted" 
+           data-desc="Triple Axial-Fan GPU Locked into Primary PCIe 5.0 Slot">
+        <span class="comp-item-icon">
+          <!-- GPU Graphics Card Icon -->
+          <svg viewBox="0 0 24 24"><path d="M2 7h20v10H2V7zm2 2v6h16V9H4zm3 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-5 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM5 18h14v2H5v-2z"/></svg>
+        </span>
+        <span class="comp-item-text">Step 5: + GPU</span>
       </div>
 
       <!-- 4. Individual Part: GPU -->
@@ -1164,6 +1235,7 @@
       applyModelScale(scale);
 
       arViewer.src = model;
+      updateStepButtonLabel(model);
 
       setTimeout(dismissLoader, 3500);
     }
@@ -1174,44 +1246,71 @@
       });
     });
 
-    // AUTO-BUILD SEQUENCE (Automated 4-Step Assembly of Full PC)
+    const stepBuildBtn = document.getElementById("stepBuildBtn");
+    const stepBuildBtnLabel = document.getElementById("stepBuildBtnLabel");
+    let currentBuildStep = 6;
+
+    const buildSteps = [
+      { step: 1, model: "models/case.glb", nextBtn: "+ INSTALL MOTHERBOARD", toast: "STEP 1: EMPTY CHASSIS READY" },
+      { step: 2, model: "models/stage2_mobo.glb", nextBtn: "+ INSERT CPU & RAM", toast: "STEP 2: MOTHERBOARD INSTALLED!" },
+      { step: 3, model: "models/stage3_cpu_ram.glb", nextBtn: "+ MOUNT 360MM COOLER", toast: "STEP 3: CORE i9 & DDR5 RAM INSERTED!" },
+      { step: 4, model: "models/stage4_cooler.glb", nextBtn: "+ SLOT-IN RTX 4080", toast: "STEP 4: 360MM LIQUID COOLER MOUNTED!" },
+      { step: 5, model: "models/stage5_gpu.glb", nextBtn: "+ CONNECT 1000W PSU", toast: "STEP 5: GEFORCE RTX 4080 LOCKED IN!" },
+      { step: 6, model: "models/assembled_pc.glb", nextBtn: "RESET TO EMPTY CHASSIS", toast: "STEP 6: PSU CONNECTED - BUILD COMPLETE!" }
+    ];
+
+    function updateStepButtonLabel(modelSrc) {
+      const match = buildSteps.find(s => modelSrc.includes(s.model.replace("models/", "")));
+      if (match) {
+        currentBuildStep = match.step;
+        stepBuildBtnLabel.textContent = match.nextBtn;
+      } else {
+        stepBuildBtnLabel.textContent = "+ INSTALL INTO CHASSIS";
+      }
+    }
+
+    stepBuildBtn.addEventListener("click", () => {
+      let targetStepNum;
+      if (currentBuildStep >= 6) {
+        targetStepNum = 1;
+      } else {
+        targetStepNum = currentBuildStep + 1;
+      }
+      const targetStep = buildSteps.find(s => s.step === targetStepNum);
+      if (targetStep) {
+        const item = document.querySelector(`.comp-item[data-model="${targetStep.model}"]`);
+        if (item) {
+          loadComponent(item, true);
+          showToast(targetStep.toast);
+        }
+      }
+    });
+
+    // AUTO-BUILD SEQUENCE (Automated 6-Step Assembly of Full PC)
     autoBuildBtn.addEventListener("click", () => {
       playSfx('boot');
-      showToast("STARTING AUTO-ASSEMBLY...");
+      showToast("STARTING COMPLETE 6-STEP AUTO-ASSEMBLY...");
 
       if (autoBuildTimer) clearTimeout(autoBuildTimer);
 
-      // Sequence: Stage 1 (Chassis) -> Stage 2 (Mobo/Core) -> Stage 3 (Cooling) -> Full Rig
-      const stageItems = [
-        document.querySelector('.comp-item[data-model="models/case.glb"]'),
-        document.querySelector('.comp-item[data-model="models/stage2_mobo.glb"]'),
-        document.querySelector('.comp-item[data-model="models/stage3_cooling.glb"]'),
-        document.querySelector('.comp-item[data-model="models/assembled_pc.glb"]')
-      ];
-
-      const stageLabels = [
-        "STAGE 1: CHASSIS PREPARED",
-        "STAGE 2: MOTHERBOARD, CPU & RAM INSTALLED!",
-        "STAGE 3: 360MM LIQUID COOLER FITTED!",
-        "STAGE 4: RTX 4080 & PSU SNAPPED IN - BUILD COMPLETE!"
-      ];
-
-      let currentStep = 0;
-      function nextStep() {
-        if (currentStep < stageItems.length) {
-          if (stageItems[currentStep]) {
-            loadComponent(stageItems[currentStep], true);
-            showToast(stageLabels[currentStep]);
+      let stepIdx = 0;
+      function runAutoStep() {
+        if (stepIdx < buildSteps.length) {
+          const s = buildSteps[stepIdx];
+          const item = document.querySelector(`.comp-item[data-model="${s.model}"]`);
+          if (item) {
+            loadComponent(item, true);
+            showToast(s.toast);
           }
-          currentStep++;
-          autoBuildTimer = setTimeout(nextStep, 2200);
+          stepIdx++;
+          autoBuildTimer = setTimeout(runAutoStep, 2000);
         } else {
           playSfx('boot');
-          showToast("PC FULLY BUILT & READY FOR AR!");
+          showToast("TITAN RIG FULLY ASSEMBLED & READY FOR AR!");
         }
       }
 
-      nextStep();
+      runAutoStep();
     });
 
     // IN-BROWSER LIVE ROOM CAMERA PASS-THROUGH (Interactive AR on Camera)
