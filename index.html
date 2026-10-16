@@ -2160,14 +2160,32 @@
   <!-- QR Code Modal Dialog -->
   <dialog id="qrDialog">
     <div class="dialog-header">
-      <h3>Open on Smartphone</h3>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="display: inline-flex; width: 10px; height: 10px; border-radius: 50%; background: #2563eb; box-shadow: 0 0 10px #2563eb;"></span>
+        <h3 style="margin: 0; font-size: 1.05rem;">Scan to View Rig in AR</h3>
+      </div>
       <button class="close-btn" id="closeQrBtn" type="button" aria-label="Close QR Modal">&times;</button>
     </div>
     <div class="modal-body-centered">
-      <div id="qrcode" class="qr-code-box"></div>
-      <p class="modal-hint-text">
-        Scan this QR Code with your smartphone camera to open the WebAR viewer and project the fully assembled PC directly onto your floor or desk.
-      </p>
+      <div class="qr-code-box" style="padding: 14px; background: #ffffff; border-radius: 16px; box-shadow: 0 8px 24px rgba(15,23,42,0.08); border: 2px solid #e2e8f0; display: flex; flex-direction: column; align-items: center;">
+        <img src="tripo_images/webar_studio_qr.png" id="webarQrImg" alt="WebAR Studio QR Code" style="width: 220px; height: 220px; object-fit: contain; border-radius: 8px; image-rendering: crisp-edges;" />
+        <div id="qrcode" style="display: none;"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; text-align: center;">
+        <p class="modal-hint-text" style="font-size: 0.85rem; color: #475569; margin: 0; line-height: 1.45;">
+          Scan with your smartphone camera (iPhone / Android) to open the <strong>WebAR Mobile Experience</strong> and place the assembled PC in your room!
+        </p>
+        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 4px;">
+          <a href="https://clip.web-ar.studio/425a5d5e16/?&user_id=2797576773&project_id=533786" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1.1rem; border-radius: 10px; background: linear-gradient(135deg, #2563eb, #4f46e5); color: #ffffff; text-decoration: none; font-size: 0.82rem; font-weight: 700; box-shadow: 0 4px 14px rgba(37,99,235,0.35);">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+            Open WebAR Link
+          </a>
+          <button type="button" id="copyArLinkBtn" style="display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1rem; border-radius: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
+            <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; fill: currentColor;"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            <span id="copyLinkText">Copy Link</span>
+          </button>
+        </div>
+      </div>
     </div>
   </dialog>
 
@@ -2504,16 +2522,33 @@
       showToast("SCALE RESET TO 100% (1:1 LIFE SIZE)");
     });
 
-    // DIRECT NATIVE AR WEBVIEWER APP LAUNCH (WebXR / Google Scene Viewer / Apple Quick Look)
-    startCameraArBtn.addEventListener("click", () => {
+    // DIRECT WEBAR STUDIO APP LAUNCH / QR MODAL
+    const WEBAR_STUDIO_APP_URL = "https://clip.web-ar.studio/425a5d5e16/?&user_id=2797576773&project_id=533786";
+
+    function isMobileClient() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+      const isMobileUA = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(ua);
+      const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 1);
+      const isSmallScreen = window.innerWidth <= 820;
+      return isMobileUA || (isTouch && isSmallScreen);
+    }
+
+    function openWebArExperience() {
       playSfx('boot');
-      if (arViewer.canActivateAR) {
-        arViewer.activateAR();
+      if (isMobileClient()) {
+        showToast("LAUNCHING WEBAR APP...");
+        window.location.href = WEBAR_STUDIO_APP_URL;
       } else {
-        qrDialog.showModal();
-        generateQr();
+        openArQrModal();
       }
-    });
+    }
+
+    function openArQrModal() {
+      playSfx('click');
+      qrDialog.showModal();
+    }
+
+    startCameraArBtn.addEventListener("click", openWebArExperience);
 
     // Load a Component / Assembly Stage
     function loadComponent(item, playSound = true) {
@@ -2890,9 +2925,8 @@
           if (arViewer.canActivateAR) {
             arViewer.activateAR();
           } else {
-            showToast("CAMERA ACCESS DENIED OR UNAVAILABLE - SCAN QR FOR MOBILE AR");
-            qrDialog.showModal();
-            generateQr();
+            showToast("CAMERA ACCESS DENIED OR UNAVAILABLE - SCAN QR FOR WEBAR");
+            openArQrModal();
           }
         }
       }
@@ -3055,30 +3089,49 @@
       playSfx('boot');
     });
 
-    // QR Code Generator
-    let qrcodeInstance = null;
-    function generateQr() {
-      if (!qrcodeInstance) {
-        const qrBox = document.getElementById("qrcode");
-        qrBox.innerHTML = "";
-        qrcodeInstance = new QRCode(qrBox, {
-          text: window.location.href,
-          width: 200,
-          height: 200,
-          colorDark: "#0f172a",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      }
-    }
-
+    // QR Code Modal & WebAR Studio Controls
     qrBtn.addEventListener("click", () => {
-      playSfx('click');
-      qrDialog.showModal();
-      generateQr();
+      openArQrModal();
     });
     closeQrBtn.addEventListener("click", () => qrDialog.close());
     qrDialog.addEventListener("click", (e) => { if (e.target === qrDialog) qrDialog.close(); });
+
+    const copyArLinkBtn = document.getElementById("copyArLinkBtn");
+    const copyLinkText = document.getElementById("copyLinkText");
+    if (copyArLinkBtn) {
+      copyArLinkBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(WEBAR_STUDIO_APP_URL);
+          playSfx('snap');
+          if (copyLinkText) copyLinkText.textContent = "Copied!";
+          showToast("WEBAR LINK COPIED TO CLIPBOARD!");
+          setTimeout(() => { if (copyLinkText) copyLinkText.textContent = "Copy Link"; }, 2000);
+        } catch (e) {
+          if (copyLinkText) copyLinkText.textContent = "Copied!";
+          setTimeout(() => { if (copyLinkText) copyLinkText.textContent = "Copy Link"; }, 2000);
+        }
+      });
+    }
+
+    const webarQrImg = document.getElementById("webarQrImg");
+    if (webarQrImg) {
+      webarQrImg.onerror = () => {
+        webarQrImg.style.display = "none";
+        const qrBox = document.getElementById("qrcode");
+        if (qrBox) {
+          qrBox.style.display = "block";
+          qrBox.innerHTML = "";
+          new QRCode(qrBox, {
+            text: WEBAR_STUDIO_APP_URL,
+            width: 220,
+            height: 220,
+            colorDark: "#0f172a",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        }
+      };
+    }
 
     // Specs Modal
     specsBtn.addEventListener("click", () => {
