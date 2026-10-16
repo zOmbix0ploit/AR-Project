@@ -1753,14 +1753,14 @@
             data-normal="0m 1m 0m" 
             type="button" 
             aria-label="Install ROG Motherboard to Chassis Tray">
-      <div class="hotspot-pulse"></div>
-      <div class="hotspot-pin">
+      <span class="hotspot-pulse"></span>
+      <span class="hotspot-pin">
         <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h4v4H8V8zm0 6h2v2H8v-2zm6-6h2v6h-2V8z"/></svg>
-      </div>
-      <div class="hotspot-annotation">
+      </span>
+      <span class="hotspot-annotation">
         <span class="hotspot-action">+ TAP TO INSTALL</span>
         <span class="hotspot-title">ROG Maximus Z790 Motherboard</span>
-      </div>
+      </span>
     </button>
 
     <!-- Slot 2: CPU & RAM Sockets -->
@@ -1772,14 +1772,14 @@
             type="button" 
             hidden 
             aria-label="Insert Core i9 CPU and DDR5 RAM">
-      <div class="hotspot-pulse"></div>
-      <div class="hotspot-pin">
+      <span class="hotspot-pulse"></span>
+      <span class="hotspot-pin">
         <svg viewBox="0 0 24 24"><path d="M6 2h2v2h8V2h2v2h2a2 2 0 0 1 2 2v2h2v2h-2v4h2v2h-2v2a2 2 0 0 1-2 2h-2v2h-2v-2H8v2H6v-2H4a2 2 0 0 1-2-2v-2H0v-2h2v-4H0V8h2V6a2 2 0 0 1 2-2h2V2zm0 4v12h12V6H6zm3 3h6v6H9V9z"/></svg>
-      </div>
-      <div class="hotspot-annotation">
+      </span>
+      <span class="hotspot-annotation">
         <span class="hotspot-action">+ TAP TO INSERT</span>
         <span class="hotspot-title">Core i9 CPU &amp; DDR5 RAM</span>
-      </div>
+      </span>
     </button>
 
     <!-- Slot 3: Top Radiator Cooler Mount -->
@@ -1791,14 +1791,14 @@
             type="button" 
             hidden 
             aria-label="Mount 360mm Liquid CPU Cooler">
-      <div class="hotspot-pulse"></div>
-      <div class="hotspot-pin">
+      <span class="hotspot-pulse"></span>
+      <span class="hotspot-pin">
         <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm0-10a2 2 0 1 0 2 2 2 2 0 0 0-2-2z"/></svg>
-      </div>
-      <div class="hotspot-annotation">
+      </span>
+      <span class="hotspot-annotation">
         <span class="hotspot-action">+ TAP TO MOUNT</span>
         <span class="hotspot-title">Kraken 360 Liquid Cooler</span>
-      </div>
+      </span>
     </button>
 
     <!-- Slot 4: PCIe 5.0 GPU Lane -->
@@ -1810,14 +1810,14 @@
             type="button" 
             hidden 
             aria-label="Slot-in GeForce RTX 4080 GPU">
-      <div class="hotspot-pulse"></div>
-      <div class="hotspot-pin">
+      <span class="hotspot-pulse"></span>
+      <span class="hotspot-pin">
         <svg viewBox="0 0 24 24"><path d="M2 7h20v10H2V7zm2 2v6h16V9H4zm3 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-5 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM5 18h14v2H5v-2z"/></svg>
-      </div>
-      <div class="hotspot-annotation">
+      </span>
+      <span class="hotspot-annotation">
         <span class="hotspot-action">+ TAP TO SLOT IN</span>
         <span class="hotspot-title">GeForce RTX 4080 GPU</span>
-      </div>
+      </span>
     </button>
 
     <!-- Slot 5: PSU Shroud & ARGB Fans -->
@@ -1829,14 +1829,14 @@
             type="button" 
             hidden 
             aria-label="Connect 1000W PSU & 7x ARGB Fans">
-      <div class="hotspot-pulse"></div>
-      <div class="hotspot-pin">
+      <span class="hotspot-pulse"></span>
+      <span class="hotspot-pin">
         <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v12h16V6H4zm8 1a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 8h2v2H6V8zm0 6h2v2H6v-2z"/></svg>
-      </div>
-      <div class="hotspot-annotation">
+      </span>
+      <span class="hotspot-annotation">
         <span class="hotspot-action">+ TAP TO CONNECT</span>
         <span class="hotspot-title">1000W PSU &amp; 7x ARGB Fans</span>
-      </div>
+      </span>
     </button>
   </model-viewer>
 
@@ -2093,7 +2093,7 @@
           <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
           RESET ALL
         </button>
-        <button type="button" class="studio-btn close" id="closeStudioBtn" title="Close Studio">
+        <button type="button" class="studio-btn close" id="closeStudioBtn" title="Close Studio" aria-label="Close Studio">
           <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
         </button>
       </div>
