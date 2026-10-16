@@ -107,18 +107,11 @@
     body.camera-active .ambient-glow-2 {
       display: none !important;
     }
-    body.camera-active #startCameraArBtn {
+    body.camera-active #cameraPassToggleBtn {
       background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
       border-color: #34d399 !important;
       box-shadow: 0 4px 18px rgba(5, 150, 105, 0.45) !important;
       color: #ffffff !important;
-    }
-    body.camera-active #startCameraArBtn svg {
-      animation: pulseArIcon 1.5s infinite ease-in-out;
-    }
-    @keyframes pulseArIcon {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.18); }
     }
 
     /* Ambient Soft Studio Highlights */
@@ -714,6 +707,110 @@
       .hotspot-title {
         font-size: 0.68rem;
       }
+    }
+
+    /* Native In-AR WebViewer Assembly HUD (Active inside WebXR AR Mode) */
+    .in-ar-overlay {
+      position: absolute;
+      bottom: calc(1.5rem + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      pointer-events: auto;
+      display: none;
+      width: min(92vw, 380px);
+    }
+    /* Display whenever model-viewer is presenting an active AR session */
+    model-viewer[ar-status="session-started"] .in-ar-overlay,
+    model-viewer[ar-status="object-placed"] .in-ar-overlay {
+      display: block !important;
+    }
+    .in-ar-card {
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(59, 130, 246, 0.7);
+      border-radius: 20px;
+      padding: 0.85rem 1.15rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(37, 99, 235, 0.35);
+      color: #ffffff;
+      font-family: var(--font-body);
+    }
+    .in-ar-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+    .in-ar-badge {
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 1px;
+    }
+    .in-ar-step {
+      font-family: var(--font-display);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .in-ar-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.65rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .in-ar-btn-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .in-ar-btn-install {
+      flex: 1;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border: 1px solid #60a5fa;
+      color: #ffffff;
+      padding: 0.65rem 0.95rem;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      outline: none;
+    }
+    .in-ar-btn-install svg {
+      width: 16px;
+      height: 16px;
+      fill: #ffffff;
+    }
+    .in-ar-btn-reset {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      outline: none;
+      flex-shrink: 0;
+    }
+    .in-ar-btn-reset svg {
+      width: 18px;
+      height: 18px;
+      fill: #ffffff;
     }
 
     /* Bottom Hardware Selector Strip (Mobile Optimized) */
@@ -1729,6 +1826,8 @@
     ar-modes="webxr scene-viewer quick-look"
     ar-scale="auto"
     camera-controls
+    autoplay
+    animation-name="Rig_Assembly_Sequence"
     touch-action="none"
     min-camera-orbit="auto 0deg auto"
     max-camera-orbit="auto 180deg auto"
@@ -1838,6 +1937,26 @@
         <span class="hotspot-title">1000W PSU &amp; 7x ARGB Fans</span>
       </span>
     </button>
+
+    <!-- In-AR Interactive Assembly HUD (Active inside Native WebXR AR App) -->
+    <div id="inArAssemblyOverlay" class="in-ar-overlay">
+      <div class="in-ar-card">
+        <div class="in-ar-meta">
+          <span class="in-ar-badge">WEBAR BUILDER</span>
+          <span class="in-ar-step" id="inArStepText">STEP 1 / 6</span>
+        </div>
+        <div class="in-ar-title" id="inArPartTitle">PC Chassis (Empty)</div>
+        <div class="in-ar-btn-group">
+          <button type="button" class="in-ar-btn-install" id="inArNextBtn" aria-label="Install Next Component in AR">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <span id="inArNextLabel">+ INSTALL MOTHERBOARD</span>
+          </button>
+          <button type="button" class="in-ar-btn-reset" id="inArResetBtn" aria-label="Reset to Step 1 Chassis" title="Reset Chassis">
+            <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </model-viewer>
 
   <!-- Bottom Hardware Selector Strip (Pure SVG Icons, Zero Emojis) -->
@@ -2385,9 +2504,15 @@
       showToast("SCALE RESET TO 100% (1:1 LIFE SIZE)");
     });
 
-    // INTERACTIVE ROOM CAMERA AR LAUNCH (Tap slots & casing to assemble live)
+    // DIRECT NATIVE AR WEBVIEWER APP LAUNCH (WebXR / Google Scene Viewer / Apple Quick Look)
     startCameraArBtn.addEventListener("click", () => {
-      toggleRoomCamera();
+      playSfx('boot');
+      if (arViewer.canActivateAR) {
+        arViewer.activateAR();
+      } else {
+        qrDialog.showModal();
+        generateQr();
+      }
     });
 
     // Load a Component / Assembly Stage
@@ -2408,12 +2533,14 @@
       activePartDesc.textContent = `${dims} - ${desc}`;
       dimText.textContent = dims;
 
-      if (isCameraPassActive) {
-        arLaunchBtnLabel.textContent = "EXIT CAMERA AR";
-      } else if (model.includes("assembled_pc")) {
+      if (model.includes("assembled_pc")) {
         arLaunchBtnLabel.textContent = "VIEW FULL RIG IN AR";
       } else {
         arLaunchBtnLabel.textContent = "VIEW IN AR";
+      }
+
+      if (typeof updateInArOverlay === "function") {
+        updateInArOverlay();
       }
 
       showLoader(`LOADING ${title.toUpperCase()}`);
@@ -2597,6 +2724,71 @@
 
     // Initialize assembly hotspots on casing
     updateAssemblyHotspots("models/case.glb");
+
+    // In-AR WebViewer Assembly Controller (Active inside WebXR DOM Overlay & Scene Viewer)
+    const inArAssemblyOverlay = document.getElementById("inArAssemblyOverlay");
+    const inArStepText = document.getElementById("inArStepText");
+    const inArPartTitle = document.getElementById("inArPartTitle");
+    const inArNextBtn = document.getElementById("inArNextBtn");
+    const inArNextLabel = document.getElementById("inArNextLabel");
+    const inArResetBtn = document.getElementById("inArResetBtn");
+
+    if (inArAssemblyOverlay) {
+      inArAssemblyOverlay.addEventListener("beforexrselect", (e) => {
+        e.preventDefault(); // Prevents touch events on In-AR buttons from displacing the 3D model in AR space
+      });
+    }
+
+    const inArStageOrder = [
+      { model: "case.glb", step: 1, title: "Build Step 1: Chassis (Empty)", next: "models/stage2_mobo.glb", nextLabel: "+ INSTALL MOTHERBOARD", toast: "STEP 2: MOTHERBOARD INSTALLED!" },
+      { model: "stage2_mobo.glb", step: 2, title: "Build Step 2: Motherboard Mounted", next: "models/stage3_cpu_ram.glb", nextLabel: "+ INSERT CPU & RAM", toast: "STEP 3: CORE i9 & DDR5 RAM INSERTED!" },
+      { model: "stage3_cpu_ram.glb", step: 3, title: "Build Step 3: CPU & RAM Inserted", next: "models/stage4_cooler.glb", nextLabel: "+ MOUNT 360MM COOLER", toast: "STEP 4: 360MM COOLER MOUNTED!" },
+      { model: "stage4_cooler.glb", step: 4, title: "Build Step 4: 360mm Cooler Mounted", next: "models/stage5_gpu.glb", nextLabel: "+ SLOT RTX 4080 GPU", toast: "STEP 5: GEFORCE RTX 4080 LOCKED IN!" },
+      { model: "stage5_gpu.glb", step: 5, title: "Build Step 5: RTX 4080 GPU Slotted", next: "models/assembled_pc.glb", nextLabel: "+ CONNECT PSU & 7x FANS", toast: "STEP 6: PSU & 7x ARGB FANS ASSEMBLED - BUILD COMPLETE!" },
+      { model: "assembled_pc.glb", step: 6, title: "Build Step 6: Full Built Gaming Rig", next: "models/case.glb", nextLabel: "RESET TO EMPTY CHASSIS", toast: "RESET TO STEP 1: CHASSIS READY!" }
+    ];
+
+    function updateInArOverlay() {
+      const currentSrc = arViewer.src || "";
+      const filename = currentSrc.split("?")[0].replace("models/", "");
+      const match = inArStageOrder.find(s => filename.includes(s.model)) || inArStageOrder[0];
+
+      if (inArStepText) inArStepText.textContent = `STEP ${match.step} / 6`;
+      if (inArPartTitle) inArPartTitle.textContent = match.title;
+      if (inArNextLabel) inArNextLabel.textContent = match.nextLabel;
+    }
+
+    if (inArNextBtn) {
+      inArNextBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const currentSrc = arViewer.src || "";
+        const filename = currentSrc.split("?")[0].replace("models/", "");
+        const match = inArStageOrder.find(s => filename.includes(s.model)) || inArStageOrder[0];
+        if (match && match.next) {
+          advanceToNextStage(match.next, match.toast);
+          updateInArOverlay();
+        }
+      });
+    }
+
+    if (inArResetBtn) {
+      inArResetBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        advanceToNextStage("models/case.glb", "RESET TO STEP 1: CHASSIS READY FOR ASSEMBLY!");
+        updateInArOverlay();
+      });
+    }
+
+    // Native WebViewer AR App Status Event Listener
+    arViewer.addEventListener('ar-status', (event) => {
+      const status = event.detail.status;
+      if (status === 'session-started' || status === 'object-placed') {
+        showToast("AR APP ACTIVE: TAP GLOWING SLOTS OR BUTTON TO ASSEMBLE PARTS!");
+        updateInArOverlay();
+      }
+    });
+
+    updateInArOverlay();
 
     // AUTO-BUILD SEQUENCE (Automated 6-Step Assembly of Full PC)
     const buildSteps = [
